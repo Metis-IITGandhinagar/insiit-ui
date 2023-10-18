@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'mess.dart';
+import '../screens/outlets.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,8 +11,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
@@ -44,8 +49,8 @@ class _HomePageState extends State<HomePage> {
         //   height: 10,
         // ),
         Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          height: size.height,
+          width: size.width,
           child: ListView(
             children: [
               Container(
@@ -55,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Container(
                       height: 120,
-                      width: MediaQuery.of(context).size.width / 2 -
+                      width: size.width / 2 -
                           32, // minus 32 due to the margin
                       margin: EdgeInsets.all(16.0),
                       padding: EdgeInsets.all(16.0),
@@ -82,31 +87,34 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                    Container(
-                      height: 120,
-                      width: MediaQuery.of(context).size.width / 2 -
-                          32, // minus 32 due to the margin
-                      margin: EdgeInsets.all(16.0),
-                      padding: EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color:
-                            Color(0xFFFFD8C4), // background color of the cards
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      ),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(Icons.restaurant_menu_outlined,
-                              color: Color.fromARGB(255, 127, 57, 0)),
-                          Text(
-                            "Outlets",
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Color.fromARGB(255, 127, 57, 0),
-                            ),
-                          )
-                        ],
+                    InkWell(
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const OutletScreen())),
+                      child: Container(
+                        height: 120,
+                        width: size.width / 2 -
+                            32, // minus 32 due to the margin
+                        margin: EdgeInsets.all(16.0),
+                        padding: EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color:
+                              Color(0xFFFFD8C4), // background color of the cards
+                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        ),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(Icons.restaurant_menu_outlined,
+                                color: Color.fromARGB(255, 127, 57, 0)),
+                            Text(
+                              "Outlets",
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Color.fromARGB(255, 127, 57, 0),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -145,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Container(
                       height: 120,
-                      width: MediaQuery.of(context).size.width / 2 -
+                      width: size.width / 2 -
                           32, // minus 32 due to the margin
                       margin: EdgeInsets.all(16.0),
                       padding: EdgeInsets.all(16.0),
@@ -173,37 +181,35 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.notifications_none_outlined),
-                color: Colors.black,
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+              InkWell(
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (_) => const MealsDisplayScreen())),
+                child: Container(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    width: double.infinity,
+                    color: Colors.white,
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(width: 10),
+                            Text("What's in the Mess?",
+                                style: TextStyle(fontSize: 20)),
+                          ],
+                        )
+                      ],
+                    )
+                    // const ListTile(
+              
+                    //   leading: Icon(Icons.food_bank_outlined),
+                    //   title: Text("What is in the Mess?"),
+                    //   trailing: IconButton(onPressed: (), icon: icon)
+                    // ),
+                    ),
               ),
-              Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(width: 10),
-                          Text("What's in the Mess?",
-                              style: TextStyle(fontSize: 20)),
-                        ],
-                      )
-                    ],
-                  )
-                  // const ListTile(
-
-                  //   leading: Icon(Icons.food_bank_outlined),
-                  //   title: Text("What is in the Mess?"),
-                  //   trailing: IconButton(onPressed: (), icon: icon)
-                  // ),
-                  ),
             ],
           ),
         ),
