@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'mess.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,7 +13,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(children: [
+      resizeToAvoidBottomInset: false,
+      body: ListView(children: [
         Container(
           padding: const EdgeInsets.all(20),
           child: Row(
@@ -38,72 +40,176 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        const SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          height: 500,
-          width: double.infinity,
-          child: GridView.count(
-            crossAxisCount: 2,
+        // const SizedBox(
+        //   height: 10,
+        // ),
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: ListView(
             children: [
-              Card(
-                color: const Color.fromARGB(255, 131, 97, 189),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const ListTile(
-                  leading: Icon(Icons.directions_bus_filled),
-                  title: Text("Bus Schedule"),
+              Container(
+                height: 200,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      height: 120,
+                      width: MediaQuery.of(context).size.width / 2 -
+                          32, // minus 32 due to the margin
+                      margin: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(16.0),
+
+                      decoration: const BoxDecoration(
+                        color:
+                            Color(0xFFE4D7FF), // background color of the cards
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      ),
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment
+                            .center, // posion the everything to the bottom
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.directions_bus_filled_outlined,
+                            color: Color(0xFF5B33AC),
+                          ),
+                          Text("Bus Schedule",
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                color: Color(0xFF5B33AC),
+                              )),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 120,
+                      width: MediaQuery.of(context).size.width / 2 -
+                          32, // minus 32 due to the margin
+                      margin: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color:
+                            Color(0xFFFFD8C4), // background color of the cards
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      ),
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.restaurant_menu_outlined,
+                              color: Color.fromARGB(255, 127, 57, 0)),
+                          Text(
+                            "Outlets",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color.fromARGB(255, 127, 57, 0),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Card(
-                color: const Color.fromARGB(255, 226, 140, 78),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const ListTile(
-                  leading: Icon(Icons.restaurant_menu),
-                  title: Text("Outlets"),
+              Container(
+                height: 200,
+                child: Row(
+                  children: [
+                    Container(
+                      height: 120,
+                      width: MediaQuery.of(context).size.width / 2 -
+                          32, // minus 32 due to the margin
+                      margin: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color:
+                            Color(0xFFD7F1FF), // background color of the cards
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      ),
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.pending_actions_outlined,
+                              color: Color(0xFF398AB7)),
+                          Text(
+                            "Complaints",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color(0xFF398AB7),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 120,
+                      width: MediaQuery.of(context).size.width / 2 -
+                          32, // minus 32 due to the margin
+                      margin: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color:
+                            Color(0xFFFFF7B3), // background color of the cards
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      ),
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.contact_emergency_outlined,
+                              color: Color.fromARGB(255, 141, 130, 25)),
+                          Text(
+                            "Important Contacts",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color.fromARGB(255, 141, 130, 25),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Card(
-                color: const Color.fromARGB(255, 122, 194, 220),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const ListTile(
-                  leading: Icon(Icons.mail_outline),
-                  title: Text("Complaints"),
-                ),
+              IconButton(
+                icon: const Icon(Icons.notifications_none_outlined),
+                color: Colors.black,
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => const MealsDisplayScreen())),
               ),
-              Card(
-                color: const Color.fromARGB(255, 247, 179, 1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const ListTile(
-                  leading: Icon(Icons.search),
-                  title: Text("Search InsIIT"),
-                ),
-              ),
+              Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(width: 10),
+                          Text("What's in the Mess?",
+                              style: TextStyle(fontSize: 20)),
+                        ],
+                      )
+                    ],
+                  )
+                  // const ListTile(
+
+                  //   leading: Icon(Icons.food_bank_outlined),
+                  //   title: Text("What is in the Mess?"),
+                  //   trailing: IconButton(onPressed: (), icon: icon)
+                  // ),
+                  ),
             ],
           ),
         ),
+
         const SizedBox(
-          height: 10,
-        ),
-        Container(
-          width: double.infinity,
-          color: Colors.white,
-          child: const ListTile(
-            leading: Icon(Icons.food_bank_outlined),
-            title: Text("What is in the Mess?"),
-            trailing: Icon(Icons.arrow_forward_ios),
-          ),
-        ),
-        const SizedBox(
-          height: 10,
+          height: 14,
         ),
       ]),
     );
