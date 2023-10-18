@@ -14,10 +14,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const LoginScreen(),
+      home: const HomeScreen(),
       theme: ThemeData(
-        hintColor: const Color.fromARGB(198, 161, 126, 18),
+        useMaterial3: true,
+        colorSchemeSeed: Colors.deepPurple[600]
       ),
-    );
+    );  
   }
 }

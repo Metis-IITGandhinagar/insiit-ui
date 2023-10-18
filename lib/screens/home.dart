@@ -19,24 +19,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.qr_code),
             color: Colors.black,
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const QRDisplay())),
+            onPressed: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => const QRDisplay())),
           ),
           const SizedBox(
             width: 20,
           ),
           IconButton(
-            icon: const Icon(Icons.notifications_active_outlined),
+            icon: const Icon(Icons.notifications_none_outlined),
             color: Colors.black,
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const NotificationScreen())),
+            onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const NotificationScreen())),
           ),
           const SizedBox(
             width: 20,
@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           color: Colors.white,
           alignment: Alignment.center,
-          child: const MessPage(),
+          child: const MealsDisplayScreen(),
         ),
         Container(
           color: Colors.white,
@@ -61,25 +61,26 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ][currentPageIndex],
       bottomNavigationBar: NavigationBar(
-        backgroundColor: const Color.fromARGB(255, 251, 254, 1),
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
           });
         },
-        indicatorColor: const Color.fromARGB(127, 129, 98, 137),
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.restaurant_rounded),
+            icon: Icon(Icons.dining_outlined),
+            selectedIcon: Icon(Icons.dining),
             label: 'Mess',
           ),
           NavigationDestination(
-            icon: Icon(Icons.directions_bus),
+            icon: Icon(Icons.directions_bus_filled_outlined),
+            selectedIcon: Icon(Icons.directions_bus_filled),
             label: 'Bus',
           ),
         ],
