@@ -27,11 +27,6 @@ class _MapPageState extends State<MapPage> {
         controller:mapController,
         osmOption: OSMOption(
               showZoomController: true,
-              userTrackingOption: const UserTrackingOption(
-              enableTracking: true,
-              unFollowUser: false,
-              
-            ),
             zoomOption: const ZoomOption(
                   initZoom: 17,
                   minZoomLevel: 10,
@@ -41,8 +36,8 @@ class _MapPageState extends State<MapPage> {
             userLocationMarker: UserLocationMaker(
                 personMarker: const MarkerIcon(
                     icon: Icon(
-                        Icons.location_history_rounded,
-                        color: Colors.red,
+                        Icons.location_on_outlined,
+                        color: Color.fromARGB(255, 255, 105, 94),
                         size: 48,
                     ),
                 ),
