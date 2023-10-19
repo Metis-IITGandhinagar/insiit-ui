@@ -161,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                           Icon(Icons.contact_emergency_outlined,
                               color: Color.fromARGB(255, 141, 130, 25)),
                           Text(
-                            "Important Contacts",
+                            "Representatives",
                             style: TextStyle(
                               fontSize: 15,
                               color: Color.fromARGB(255, 141, 130, 25),
@@ -173,30 +173,34 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.notifications_none_outlined),
-                color: Colors.black,
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => const MealsDisplayScreen())),
-              ),
               Container(
                   margin:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   width: double.infinity,
                   color: Colors.white,
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(width: 10),
-                          Text("What's in the Mess?",
-                              style: TextStyle(fontSize: 20)),
-                        ],
-                      )
-                    ],
-                  )
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(width: 10),
+                            Text("What's in the Mess?",
+                                style: TextStyle(fontSize: 20)),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) =>
+                                          const MealsDisplayScreen()));
+                                },
+                                icon: const Icon(Icons.arrow_forward_ios))
+                          ],
+                        ),
+                      ])
                   // const ListTile(
 
                   //   leading: Icon(Icons.food_bank_outlined),
