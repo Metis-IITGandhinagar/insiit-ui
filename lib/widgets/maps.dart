@@ -11,6 +11,7 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
    MapController mapController = MapController(
     initPosition: GeoPoint(latitude: 23.21049 , longitude: 72.68475),
+    
     areaLimit: BoundingBox(
           north: 23.22817602890616,
           east: 72.70700454711915,
@@ -24,6 +25,7 @@ class _MapPageState extends State<MapPage> {
       body:  Stack(
         children: <Widget>[
           OSMFlutter( 
+        mapIsLoading: Center(child: SizedBox(height: 30,width: 30,child: CircularProgressIndicator(semanticsLabel:"Loading",),)),
         controller:mapController,
         osmOption: OSMOption(
               showZoomController: true,
