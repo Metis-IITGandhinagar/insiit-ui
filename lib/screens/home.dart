@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:insiit/widgets/maps.dart';
+import 'package:insiit/widgets/more.dart';
 
 import '../widgets/home.dart';
 import '../widgets/mess.dart';
@@ -52,13 +54,18 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           color: Colors.white,
           alignment: Alignment.center,
-          child: const MealsDisplayScreen(),
+          child: const BusPage(),
         ),
         Container(
           color: Colors.white,
           alignment: Alignment.center,
-          child: const BusPage(),
+          child: const MapPage(),
         ),
+         Container(
+          color: Colors.white,
+          alignment: Alignment.center,
+          child: const MorePage(),
+        )
       ][currentPageIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
@@ -73,15 +80,21 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedIcon: Icon(Icons.home),
             label: 'Home',
           ),
-          NavigationDestination(
-            icon: Icon(Icons.dining_outlined),
-            selectedIcon: Icon(Icons.dining),
-            label: 'Mess',
-          ),
+         
           NavigationDestination(
             icon: Icon(Icons.directions_bus_filled_outlined),
             selectedIcon: Icon(Icons.directions_bus_filled),
             label: 'Bus',
+          ),
+           NavigationDestination(
+            icon: Icon(Icons.map_outlined),
+            selectedIcon: Icon(Icons.map_sharp),
+            label: 'Campus Map',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.more_horiz_outlined),
+            selectedIcon: Icon(Icons.more_horiz),
+            label: 'More',
           ),
         ],
       ),

@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+    
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -41,6 +42,12 @@ dependencies:
   google_fonts: ^4.0.4
   rotating_icon_button: ^1.0.0
   intl: ^0.18.1
+  flutter_osm_plugin: ^0.60.5
+  http: ^0.13.5
+  firebase_core: ^2.19.0
+  firebase_messaging: ^14.7.1
+  flutter_local_notifications: ^16.1.0
+  font_awesome_flutter: ^10.6.0
 
 dev_dependencies:
   flutter_test:
@@ -65,9 +72,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  # - assets/images/image2.png
-  #   - images/a_dot_ham.jpeg
+
+  assets:
+    - assets/more.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

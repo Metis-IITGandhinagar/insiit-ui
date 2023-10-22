@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 
-class BusPage extends StatefulWidget {
-  const BusPage({super.key});
+class BusPageStandalone extends StatefulWidget {
+  const BusPageStandalone({super.key});
 
   @override
-  State<BusPage> createState() => _BusPageState();
+  State<BusPageStandalone> createState() => _BusPageStandaloneState();
 }
 
-class _BusPageState extends State<BusPage> {
+class _BusPageStandaloneState extends State<BusPageStandalone> {
   final TextEditingController colorController = TextEditingController();
   final TextEditingController iconController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Bus Schedule"),
+        centerTitle:true),
         body: ListView(
       children: [
         SizedBox(
