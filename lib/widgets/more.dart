@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:insiit/TLBooking/tl.dart';
 import 'package:insiit/screens/about_insiit.dart';
 import 'package:insiit/screens/imp_contacts.dart';
 import 'package:insiit/screens/post.dart';
@@ -52,7 +53,7 @@ class _MorePageState extends State<MorePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const RepresentativesPage()),
+                            builder: (context) => TLBookingPage()),
                       );
                     },
                     child: SizedBox(
@@ -88,7 +89,7 @@ class _MorePageState extends State<MorePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const RepresentativesPage()),
+                            builder: (context) =>  RepresentativesPage()),
                       );
                     },
                     child: SizedBox(
@@ -195,7 +196,7 @@ class _MorePageState extends State<MorePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const RepresentativesPage()),
+                          builder: (context) => RepresentativesPage()),
                     );
                   },
                   child: Text("Know You Representatives"),
@@ -224,6 +225,24 @@ class _MorePageState extends State<MorePage> {
                 ),
               ),
             ],
+          ),
+            SizedBox(
+              height: 10,
+            ),
+          
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [SizedBox(
+              height: 40,
+              child: Container(
+              
+                child: Text(
+                  
+                  "v 1.1"
+                ),
+              ),
+            )],
           )
         ],
       ),
