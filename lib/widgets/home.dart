@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:insiit/screens/representatives.dart';
 import 'mess.dart';
+import '../screens/outlets.dart';
 import 'bus_standalone.dart';
 import '../screens/complaints.dart';
+import '../screens/animation.dart';
+import 'package:animations/animations.dart';
+import 'events.dart';
+
 
 
 class HomePage extends StatefulWidget {
@@ -16,10 +21,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       body: ListView(children: [
-        Container(
+        Padding(
           padding: const EdgeInsets.all(20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -48,8 +52,8 @@ class _HomePageState extends State<HomePage> {
         //   height: 10,
         // ),
         Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height /1.5,
+
           child: ListView(
             children: [
               Container(
@@ -65,10 +69,11 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.all(Radius.circular(16.0)),
                           splashColor: Color.fromARGB(103, 159, 111, 255),
                           onTap: () {
-                           Navigator.push(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const BusPageStandalone()),
+                                  builder: (context) =>
+                                      const BusPageStandalone()),
                             );
                           },
                           child: SizedBox(
@@ -106,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const MealsDisplayScreen()),
+                                  builder: (context) => const OutletScreen()),
                             );
                           },
                           child: SizedBox(
@@ -133,40 +138,6 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         )),
-
-                    // InkWell(
-                    //   // borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    //   //  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    //   //     builder: (_) => const OutletsPage())),
-                    //   child:
-                    //   Container(
-                    //     //       height: 120,
-                    //     width: MediaQuery.of(context).size.width / 2 -
-                    //         32, // minus 32 due to the margin
-                    //     margin: EdgeInsets.all(16.0),
-                    //     padding: EdgeInsets.all(16.0),
-                    //     decoration: BoxDecoration(
-                    //       color: Color(
-                    //           0xFFFFD8C4), // background color of the cards
-                    //       borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    //     ),
-                    //     child: const Column(
-                    //       mainAxisAlignment: MainAxisAlignment.center,
-                    //       crossAxisAlignment: CrossAxisAlignment.center,
-                    //       children: [
-                    //         Icon(Icons.restaurant_menu_outlined,
-                    //             color: Color.fromARGB(255, 127, 57, 0)),
-                    //         Text(
-                    //           "Outlets",
-                    //           style: TextStyle(
-                    //             fontSize: 15,
-                    //             color: Color.fromARGB(255, 127, 57, 0),
-                    //           ),
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -181,10 +152,11 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.all(Radius.circular(16.0)),
                           splashColor: Color.fromARGB(173, 194, 233, 255),
                           onTap: () {
-                           Navigator.push(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const ComplainsPage()),
+                                  builder: (context) =>
+                                      const FadeThroughTransitionDemo()),
                             );
                           },
                           child: SizedBox(
@@ -217,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.all(Radius.circular(16.0)),
                           splashColor: Color.fromARGB(144, 224, 216, 146),
                           onTap: () {
-                         Navigator.push(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => RepresentativesPage()),
@@ -295,14 +267,69 @@ class _HomePageState extends State<HomePage> {
                     // ),
                     ),
               ),
+              SizedBox(
+                height: 90,
+              ),
+              InkWell(
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const EventWidget()),
+                  );
+                },
+                child: Container(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    width: double.infinity,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(width: 10),
+                              Text("What's on the Campus?",
+                                  style: TextStyle(fontSize: 20)),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                const EventWidget()));
+                                  },
+                                  icon: const Icon(Icons.arrow_forward_ios))
+                            ],
+                          ),
+                        ],
+                   
+                        )
+                    // const ListTile(
+
+                    //   leading: Icon(Icons.food_bank_outlined),
+                    //   title: Text("What is in the Mess?"),
+                    //   trailing: IconButton(onPressed: (), icon: icon)
+                    // ),
+                    ),
+              ),
             ],
           ),
         ),
 
         const SizedBox(
-          height: 14,
+          height: 40,
         ),
-      ]),
+          
+       
+      ]
+      
+      ),
+      
     );
   }
 }

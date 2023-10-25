@@ -44,13 +44,13 @@ class _LoginScreenState extends State<LoginScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              backgroundColor: Colors.red[300],
+              backgroundColor: const Color.fromARGB(255, 255, 229, 229),
             ),
             onPressed: () => Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (_) => const HomeScreen()),
                 (route) => false),
-            child: const Text('Login with IITGN email'),
+            child: const Text('Login with IITGN email',style: TextStyle(color: Color.fromRGBO(198, 40, 40, 1)),),
           ),
           const SizedBox(
             height: 15,

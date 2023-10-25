@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:insiit/widgets/maps.dart';
 import 'package:insiit/widgets/more.dart';
@@ -16,8 +17,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int currentPageIndex = 0;
+  @override
+  void initState() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed){
+      if(!isAllowed){
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
 
+    });
+    super.initState();
+  }
+  triggerNotification(){
+    AwesomeNotifications().createNotification(content: NotificationContent(id: 1, channelKey: 'basic_channel', title: "InsIIT Notification Test", body: "This is a test notification"));
+  }
+  int currentPageIndex = 0;
+  
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -37,8 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.notifications_none_outlined),
             color: Colors.black,
-            onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const NotificationScreen())),
+            onPressed: triggerNotification,
+            //  () => Navigator.of(context).push(
+            //     MaterialPageRoute(builder: (_) => const NotificationScreen())),
           ),
           const SizedBox(
             width: 20,

@@ -68,7 +68,7 @@ class _OutletScreenState extends State<OutletScreen> {
                     style: TextStyle(
                       color: Color(0xFF000000),
                       fontSize: 28,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w500,
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -80,7 +80,7 @@ class _OutletScreenState extends State<OutletScreen> {
                     style: TextStyle(
                       color: Color(0xFF000000),
                       fontSize: 16,
-                      fontWeight: FontWeight.w200,
+                      fontWeight: FontWeight.w300,
                     ),
                   ),
                 ],
