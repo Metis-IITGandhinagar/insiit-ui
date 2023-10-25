@@ -99,7 +99,7 @@ List<dynamic> studentCouncilData = [];
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Student Council PORs"),
+        title: Text("Know your Representatives"),
       ),
       body: ListView.builder(
         itemCount: studentCouncilData.length,

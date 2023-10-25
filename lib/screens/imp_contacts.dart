@@ -20,6 +20,7 @@ class ImportantContactsState extends State<ImportantContacts> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Icon(Icons.abc_outlined),
             Text(
               "Medical Facility",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -35,6 +36,8 @@ class ImportantContactsState extends State<ImportantContacts> {
             ),
             SizedBox(height: 10),
             DataTable(
+              clipBehavior: Clip.none,
+              dataRowMinHeight: 20.0,
               columns: [
                 DataColumn(label: Text("Doctor")),
                 DataColumn(label: Text("Timing")),

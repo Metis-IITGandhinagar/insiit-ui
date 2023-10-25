@@ -218,7 +218,7 @@ class _MorePageState extends State<MorePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const PostPage()),
+                          builder: (context) => InsIITAbout()),
                     );
                   },
                   child: Text("About InsIIT"),
