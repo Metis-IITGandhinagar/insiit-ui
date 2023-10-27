@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/material.dart';
 import '../screens/home.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -46,10 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               backgroundColor: const Color.fromARGB(255, 255, 229, 229),
             ),
-            onPressed: () => Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
-                (route) => false),
+            onPressed: () => googleSignIn(),
             child: const Text('Login with IITGN email',style: TextStyle(color: Color.fromRGBO(198, 40, 40, 1)),),
           ),
           const SizedBox(
@@ -79,4 +78,19 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+}
+
+googleSignIn() async{
+
+GoogleSignInAccount? googleUser = await GoogleSignIn(hostedDomain: 'iitgn.ac.in').signIn();
+
+GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+  AuthCredential credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken
+  );
+UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+print(userCredential.user);
+
 }
