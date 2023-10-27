@@ -1,5 +1,8 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:insiit/widgets/maps.dart';
 import 'package:insiit/widgets/more.dart';
 
@@ -46,17 +49,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 .push(MaterialPageRoute(builder: (_) => const QRDisplay())),
           ),
           const SizedBox(
-            width: 20,
+            width: 0,
           ),
           IconButton(
             icon: const Icon(Icons.notifications_none_outlined),
             color: Colors.black,
             onPressed: triggerNotification,
-            //  () => Navigator.of(context).push(
-            //     MaterialPageRoute(builder: (_) => const NotificationScreen())),
+          ),
+             IconButton(
+            icon: const Icon(Icons.logout_sharp),
+            color: Colors.black,
+            onPressed:() async{
+              await GoogleSignIn().signOut();
+              FirebaseAuth.instance.signOut();
+            }
+           
           ),
           const SizedBox(
-            width: 20,
+            width: 15,
           ),
         ],
       ),

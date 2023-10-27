@@ -67,7 +67,7 @@ class _MorePageState extends State<MorePage> {
                         children: [
                          
                           Text(
-                            "Tinkerers' Lab",
+                                  "Tinkerers' Lab",
                             style: TextStyle(
                               fontSize: 15,
                               color: Color.fromARGB(255, 74, 86, 137),
