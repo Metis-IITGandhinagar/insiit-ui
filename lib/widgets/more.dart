@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:insiit/TLBooking/tl.dart';
 import 'package:insiit/screens/about_insiit.dart';
+import 'package:insiit/screens/complaints.dart';
 import 'package:insiit/screens/imp_contacts.dart';
 import 'package:insiit/screens/post.dart';
 import 'package:insiit/screens/quick_links.dart';
@@ -89,7 +90,7 @@ class _MorePageState extends State<MorePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>  RepresentativesPage()),
+                            builder: (context) =>  ComplainsPage()),
                       );
                     },
                     child: SizedBox(
@@ -103,7 +104,7 @@ class _MorePageState extends State<MorePage> {
                         children: [
                        
                           Text(
-                            "Classroom Booking",
+                            "Complaints",
                             style: TextStyle(
                               fontSize: 15,
                               color: Color(0xFF6B3131),

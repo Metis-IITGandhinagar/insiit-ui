@@ -10,6 +10,10 @@ import 'package:animations/animations.dart';
 import 'events.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../model/events.dart';
+import 'dart:async';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +27,18 @@ var nameArray = name?.split(" ");
 
 class _HomePageState extends State<HomePage> {
   final controller = PageController(viewportFraction: 0.8, keepPage: true);
+  
+  Future<List<Event>> postsFuture = getPosts();
+
+  static Future<List<Event>> getPosts() async {
+    var url = Uri.parse(
+        "https://usableordinaryinformationtechnology--kumaranmol2.repl.co/events");
+    final response =
+        await http.get(url, headers: {"Content-Type": "application/json"});
+    final List body = json.decode(response.body);
+    return body.map((e) => Event.fromJson(e)).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final pages = List.generate(
@@ -34,7 +50,7 @@ class _HomePageState extends State<HomePage> {
               ),
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               child: Container(
-                height: 280,
+                height: 180,
                 child: Center(
                     child: Text(
                   "Event $index",
@@ -197,33 +213,93 @@ class _HomePageState extends State<HomePage> {
                 // ),
                 ),
           ),
-                  SafeArea(
-              child: SingleChildScrollView(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  const SizedBox(height: 1),
-                  SizedBox(
-                    height: 140,
-                    child: PageView.builder(
-                      controller: controller,
-                      // itemCount: pages.length,
-                      itemBuilder: (_, index) {
-                        return pages[index % pages.length];
-                      },
+                 SafeArea(
+            child: FutureBuilder<List<Event>>(
+              future: postsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text("Error: ${snapshot.error}"),
+                  );
+                } else {
+                  final events = snapshot.data;
+
+                  return SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(height: 16),
+                        SizedBox(
+                          height: 180,
+                          child: PageView.builder(
+                            controller: controller,
+                            itemCount:
+                                events?.length, // Use the length of events
+                            itemBuilder: (_, index) {
+                              final event = events?[index];
+                              return Container(
+                                decoration: BoxDecoration(
+                                  // color: Colors.grey.shade300,
+                                  image: const DecorationImage(
+                                      image: NetworkImage(
+                                          "https://picsum.photos/200/300"),
+                                      fit: BoxFit.cover),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 4),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      gradient: LinearGradient(
+                                          begin: Alignment.center,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.black.withOpacity(0),
+                                            Colors.black.withOpacity(.5),
+                                          ])),
+                                  height: 280,
+                                  child: Center(
+                                    child: Text(
+                                      event?.name ??
+                                          'Events Not Available', // Display event name
+                                      style: TextStyle(
+                                          color: const Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4, bottom: 12),
+                          
+                        ),
+                        SmoothPageIndicator(
+                          controller: controller,
+                          count:
+                              events?.length ?? 0, // Use the length of events
+                          effect: const WormEffect(
+                            dotHeight: 6,
+                            dotWidth: 6,
+                            type: WormType.normal,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  SmoothPageIndicator(
-                    controller: controller,
-                    count: pages.length,
-                    effect: const WormEffect(
-                      dotHeight: 6,
-                      dotWidth: 6,
-                      type: WormType.normal,
-                    ),
-                  ),
-                ]),
-          )),
+                  );
+                }
+              },
+            ),
+          ),
               //  Row(
               //     children: [
               //       Card(
@@ -324,7 +400,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               SizedBox(width: 10),
                               Text("What's in the Mess?",
-                                  style: TextStyle(fontSize: 20)),
+                                  style: TextStyle(fontSize: 18)),
                             ],
                           ),
                           Column(
@@ -350,53 +426,6 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(
                 height: 90,
-              ),
-              InkWell(
-                borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const EventWidget()),
-                  );
-                },
-                child: Container(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    width: double.infinity,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(width: 10),
-                              Text("What's on the Campus?",
-                                  style: TextStyle(fontSize: 20)),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              IconButton(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (_) =>
-                                                const EventWidget()));
-                                  },
-                                  icon: const Icon(Icons.arrow_forward_ios))
-                            ],
-                          ),
-                        ],
-                   
-                        )
-                    // const ListTile(
-
-                    //   leading: Icon(Icons.food_bank_outlined),
-                    //   title: Text("What is in the Mess?"),
-                    //   trailing: IconButton(onPressed: (), icon: icon)
-                    // ),
-                    ),
               ),
             ],
           ),

@@ -3,7 +3,6 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  awesome_notifications
   firebase_auth
   firebase_core
   flutter_secure_storage_windows

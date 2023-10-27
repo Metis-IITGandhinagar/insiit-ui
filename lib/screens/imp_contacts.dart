@@ -37,7 +37,7 @@ class ImportantContactsState extends State<ImportantContacts> {
             SizedBox(height: 10),
             DataTable(
               clipBehavior: Clip.none,
-              dataRowMinHeight: 20.0,
+              dataRowMinHeight: 30.0,
               columns: [
                 DataColumn(label: Text("Doctor")),
                 DataColumn(label: Text("Timing")),
@@ -45,27 +45,27 @@ class ImportantContactsState extends State<ImportantContacts> {
               rows: [
                 DataRow(cells: [
                   DataCell(Text("Dr. K V Mehta")),
-                  DataCell(Text("09:30 AM to 11:30 AM")),
+                  DataCell(Text("09:30 AM - 11:30 AM")),
                 ]),
                 DataRow(cells: [
                   DataCell(Text("Dr. Deepa Shah")),
-                  DataCell(Text("01:30 PM to 04:30 PM")),
+                  DataCell(Text("01:30 PM - 04:30 PM")),
                 ]),
                 DataRow(cells: [
                   DataCell(Text("Dr. Bhavesh Panchal")),
-                  DataCell(Text("04:00 PM to 06:00 PM")),
+                  DataCell(Text("04:00 PM - 06:00 PM")),
                 ]),
                 DataRow(cells: [
                   DataCell(Text("Dr. Mira Butani (Gynaecologist)")),
-                  DataCell(Text("01:30 PM to 02:30 PM\n(Monday & Thursday)")),
+                  DataCell(Text("01:30 PM - 02:30 PM\n(Monday & Thursday)")),
                 ]),
                 DataRow(cells: [
                   DataCell(Text("Dr. Arvind Chauhan (Physiotherapy)")),
-                  DataCell(Text("05:30 PM to 07:30 PM")),
+                  DataCell(Text("05:30 PM - 07:30 PM")),
                 ]),
                 DataRow(cells: [
                   DataCell(Text("Mrs. Priyam Sharma Khanna (Dietician)")),
-                  DataCell(Text("02:00 PM to 04:00 PM\n(Tuesday & Friday)")),
+                  DataCell(Text("02:00 PM - 04:00 PM\n(Tuesday & Friday)")),
                 ]),
               ],
             ),
