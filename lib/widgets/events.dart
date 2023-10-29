@@ -189,6 +189,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class EventWidget extends StatefulWidget {
   const EventWidget({super.key});
+ 
 
   @override
   State<EventWidget> createState() => _EventWidgetState();
@@ -242,38 +243,54 @@ class _EventWidgetState extends State<EventWidget> {
                         itemCount: events?.length, // Use the length of events
                         itemBuilder: (_, index) {
                           final event = events?[index];
-                          return Container(
-                            decoration: BoxDecoration(
-                              // color: Colors.grey.shade300,
-                              image: const DecorationImage(image: NetworkImage("https://picsum.photos/200/300"),
-                              fit: BoxFit.cover),
-                              borderRadius: BorderRadius.circular(16),
-                              
-                            ),
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 4),
-                            child: Container(
-                               decoration: BoxDecoration(
-                                   borderRadius: BorderRadius.circular(16),
-                                gradient: LinearGradient(
-                                   begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                  colors: [
-                                Colors.black.withOpacity(.1),
-                                Colors.black.withOpacity(.7),])),
-                              height: 280,
-                              child: Center(
-                                child: Text(
-                                  event?.name ??
-                                      'Events Not Available', // Display event name
-                                  style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255),
-                                      fontWeight:FontWeight.bold, fontSize: 20),
+                          return  InkWell(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(16.0)),
+                              splashColor:
+                                  const Color.fromARGB(103, 159, 111, 255),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const EventWidget()),
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  // color: Colors.grey.shade300,
+                                  image: const DecorationImage(
+                                      image: NetworkImage(
+                                          "https://picsum.photos/200/300"),
+                                      fit: BoxFit.cover),
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
-                              ),
-                              
-                            ),
-                         
-                          );
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 4),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      gradient: LinearGradient(
+                                          begin: Alignment.center,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.black.withOpacity(0),
+                                            Colors.black.withOpacity(.5),
+                                          ])),
+                                  height: 280,
+                                  child: Center(
+                                    child: Text(
+                                      event?.name ??
+                                          'Events Not Available', // Display event name
+                                      style: TextStyle(
+                                          color: const Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                  ),
+                                ),
+                              ));
                         },
                       ),
                     ),

@@ -1,6 +1,7 @@
 // import 'package:awesome_notifications/awesome_notifications.dart';
+// ignore_for_file: unused_import
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:insiit/widgets/maps.dart';
@@ -47,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(Icons.qr_code),
             color: Colors.black,
             onPressed: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => const QRDisplay())),
+                .push(MaterialPageRoute(builder: (_) => QRDisplay())),
           ),
           const SizedBox(
             width: 0,

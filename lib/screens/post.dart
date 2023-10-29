@@ -79,7 +79,6 @@
 
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -121,7 +120,7 @@ class _PostPageState extends State<PostPage> {
   }
 
   void search() async {
-    String url = 'https://usableordinaryinformationtechnology--kumaranmol2.repl.co/buses?from=${src}&to=${des}';
+    String url = 'https://usableordinaryinformationtechnology--kumaranmol2.repl.co/buses?from=$src&to=$des';
     Response response = await get(Uri.parse(url));
     print(response.body);
     setState(() {
@@ -138,7 +137,7 @@ class _PostPageState extends State<PostPage> {
     fetchTowns();
     return Scaffold(
       appBar: AppBar(
-        title: Text("widget.title"),
+        title: const Text("widget.title"),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,

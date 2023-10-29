@@ -1,21 +1,18 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:insiit/widgets/home.dart';
-import 'package:insiit/widgets/more.dart';
+
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './authentication/login.dart';
 import './screens/home.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
 
-  // AwesomeNotifications().initialize(null,[
-  //   NotificationChannel(channelKey: 'basic_channel', channelName: "InsIIT Notification", channelDescription: "Default Notification Channel for InsIIT")
-  // ],debug: true);
     WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
   runApp(const MyApp());
   
 }

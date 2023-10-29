@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:insiit/TLBooking/tl.dart';
 import 'package:insiit/screens/about_insiit.dart';
 import 'package:insiit/screens/complaints.dart';
+import 'package:insiit/screens/foods.dart';
 import 'package:insiit/screens/imp_contacts.dart';
 import 'package:insiit/screens/post.dart';
 import 'package:insiit/screens/quick_links.dart';
@@ -37,7 +38,7 @@ class _MorePageState extends State<MorePage> {
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
           Row(
@@ -45,16 +46,16 @@ class _MorePageState extends State<MorePage> {
             children: [
         Card(
                   surfaceTintColor: Colors.white,
-                  color: Color(0xFFD2DAFF),
-                  margin: EdgeInsets.all(16.0),
+                  color: const Color(0xFFD2DAFF),
+                  margin: const EdgeInsets.all(16.0),
                   child: InkWell(
-                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                    splashColor: Color(0x85839ED8),
+                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                    splashColor: const Color(0x85839ED8),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => TLBookingPage()),
+                            builder: (context) => const TLBookingPage()),
                       );
                     },
                     child: SizedBox(
@@ -81,16 +82,16 @@ class _MorePageState extends State<MorePage> {
 
                   Card(
                   surfaceTintColor: Colors.white,
-                  color: Color(0xFFFFDFDF),
-                  margin: EdgeInsets.all(16.0),
+                  color: const Color(0xFFFFDFDF),
+                  margin: const EdgeInsets.all(16.0),
                   child: InkWell(
-                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                    splashColor: Color.fromARGB(92, 234, 119, 188),
+                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                    splashColor: const Color.fromARGB(92, 234, 119, 188),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>  ComplainsPage()),
+                            builder: (context) =>  const ComplainsPage()),
                       );
                     },
                     child: SizedBox(
@@ -116,7 +117,7 @@ class _MorePageState extends State<MorePage> {
                   )),
        ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
         Row(
@@ -133,13 +134,13 @@ class _MorePageState extends State<MorePage> {
                           builder: (context) => const ImportantContacts()),
                     );
                   },
-                 child: Text("Important Contacts"),
+                 child: const Text("Medical Facility"),
                 ),
             ),
              
           ],
         ),
-         SizedBox(
+         const SizedBox(
             height: 20,
           ),
          Row(
@@ -156,12 +157,12 @@ class _MorePageState extends State<MorePage> {
                           builder: (context) => const DevelopersPage()),
                     );
                   },
-                  child: Text("Team InsIIT"),
+                  child: const Text("Team InsIIT"),
                 ),
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
            Row(
@@ -178,12 +179,12 @@ class _MorePageState extends State<MorePage> {
                           builder: (context) => const QuickLinks()),
                     );
                   },
-                  child: Text("Quick Links"),
+                  child: const Text("Quick Links"),
                 ),
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
            Row(
@@ -200,12 +201,12 @@ class _MorePageState extends State<MorePage> {
                           builder: (context) => RepresentativesPage()),
                     );
                   },
-                  child: Text("Know You Representatives"),
+                  child: const Text("Know You Representatives"),
                 ),
               ),
             ],
           ), 
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
            Row(
@@ -219,29 +220,26 @@ class _MorePageState extends State<MorePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => InsIITAbout()),
+                          builder: (context) => const InsIITAbout()),
                     );
                   },
-                  child: Text("About InsIIT"),
+                  child: const Text("About InsIIT"),
                 ),
               ),
             ],
           ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
           
-          Row(
+          const Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [SizedBox(
               height: 40,
-              child: Container(
-              
-                child: Text(
-                  
-                  "v 1.1"
-                ),
+              child: Text(
+                
+                "v 1.1"
               ),
             )],
           )

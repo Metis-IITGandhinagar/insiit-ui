@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:firebase_auth/firebase_auth.dart';
 class TLBookingPage extends StatefulWidget {
   const TLBookingPage({super.key});
 
   @override
   State<TLBookingPage> createState() => _TLBookingPageState();
 }
+var user = FirebaseAuth.instance.currentUser!;
 
 class _TLBookingPageState extends State<TLBookingPage> {
   final TextEditingController nameController = TextEditingController();
@@ -18,7 +19,12 @@ class _TLBookingPageState extends State<TLBookingPage> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController statusController = TextEditingController();
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  @override
+  void initState() {
+    nameController.text = user.displayName!;
+    emailController.text = user.email!;
+    return super.initState();
+  }
    Future<void> submitForm() async {
     final String apiUrl = 'http://localhost:3000/proceed_form';
 

@@ -13,9 +13,9 @@ class InsIITAboutState extends State<InsIITAbout> {
     return Scaffold(
         appBar: AppBar(
            centerTitle: true,
-          title: Text("About InsIIT"),
+          title: const Text("About InsIIT"),
         ),
-        body: Center(
+        body: const Center(
           child: Text(
             "About InsIIT",
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
