@@ -13,7 +13,7 @@ class _ComplainsPageState extends State<ComplainsPage> {
     return Scaffold(
         appBar: AppBar(
            centerTitle: true,
-          title: Text("Complaints"),
+          title:const Text("Complaints"),
         ),
         body: const Center(
           child: Text(

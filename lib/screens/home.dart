@@ -1,11 +1,12 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
+// import 'package:awesome_notifications/awesome_notifications.dart';
+// ignore_for_file: unused_import
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:insiit/widgets/maps.dart';
 import 'package:insiit/widgets/more.dart';
-
+import '../services/messaging_service.dart';
 import '../widgets/home.dart';
 import '../widgets/mess.dart';
 import '../widgets/bus.dart';
@@ -20,19 +21,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed){
-      if(!isAllowed){
-        AwesomeNotifications().requestPermissionToSendNotifications();
-      }
+   final _messagingService = MessagingService(); 
 
-    });
-    super.initState();
-  }
-  triggerNotification(){
-    AwesomeNotifications().createNotification(content: NotificationContent(id: 1, channelKey: 'basic_channel', title: "InsIIT Notification Test", body: "This is a test notification"));
-  }
+  // void initState() {
+  //   AwesomeNotifications().isNotificationAllowed().then((isAllowed){
+  //     if(!isAllowed){
+  //       AwesomeNotifications().requestPermissionToSendNotifications();
+  //     }
+
+  //   });
+  //   super.initState();
+  // }
+  // triggerNotification(){
+  //   AwesomeNotifications().createNotification(content: NotificationContent(id: 1, channelKey: 'basic_channel', title: "InsIIT Notification Test", body: "This is a test notification"));
+  // }
   int currentPageIndex = 0;
   
   @override
@@ -46,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(Icons.qr_code),
             color: Colors.black,
             onPressed: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => const QRDisplay())),
+                .push(MaterialPageRoute(builder: (_) => QRDisplay())),
           ),
           const SizedBox(
             width: 0,
@@ -54,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.notifications_none_outlined),
             color: Colors.black,
-            onPressed: triggerNotification,
+            onPressed: (){},
           ),
              IconButton(
             icon: const Icon(Icons.logout_sharp),
@@ -124,5 +126,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+
+  }
+   @override
+  void initState() {
+    super.initState();
+    _messagingService
+        .init(context); // Initialize MessagingService to handle notifications
   }
 }
+

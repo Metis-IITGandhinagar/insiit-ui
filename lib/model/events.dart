@@ -1,7 +1,8 @@
 class Event {
   String? date;
-  String? id;
+  int? id;
   String? name;
+  String? image;
 
 
   Event(
@@ -9,6 +10,7 @@ class Event {
     this.date,
         this.id,
       this.name,
+      this.image
   
   });
 
@@ -16,6 +18,7 @@ class Event {
      date = json['date'];
     id = json['id'];
     name = json['name'];
+    image = json['image'];
   
  
   }

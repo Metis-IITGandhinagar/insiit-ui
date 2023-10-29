@@ -1,24 +1,18 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:insiit/widgets/home.dart';
-import 'package:insiit/widgets/more.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './authentication/login.dart';
 import './screens/home.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
 
-  AwesomeNotifications().initialize(null,[
-    NotificationChannel(channelKey: 'basic_channel', channelName: "InsIIT Notification", channelDescription: "Default Notification Channel for InsIIT")
-  ],debug: true);
     WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
   runApp(const MyApp());
   
 }
@@ -30,7 +24,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: const LoginScreen(),
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder:(BuildContext context, AsyncSnapshot snapshot){
@@ -45,7 +38,7 @@ class MyApp extends StatelessWidget {
             return const HomeScreen();
           }
         }
-         return Center(child: CircularProgressIndicator());
+         return const Center(child: CircularProgressIndicator());
         } ),
       theme: ThemeData(
         fontFamily: GoogleFonts.dmSans().fontFamily,
