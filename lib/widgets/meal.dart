@@ -21,7 +21,7 @@ class MealCard extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    meal.title,
+                    meal.name,
                     style:
                         const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                   ),
@@ -29,17 +29,17 @@ class MealCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.star_border_outlined),
                       Text(
-                        "${meal.reviews}",
+                        "${meal.cal}",
                         style: const TextStyle(fontSize: 14),
                       )
                     ],
                   ),
                   Text(
-                    "Rs. ${meal.cost}",
+                    "Rs. ${meal.price}",
                     style: const TextStyle(fontSize: 14),
                   ),
                   Text(
-                    meal.outlet,
+                    getOutletName(meal.outletid),
                     style:
                         const TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
                   ),
@@ -48,7 +48,7 @@ class MealCard extends StatelessWidget {
             ),
             SizedBox(
               width: 20,
-              child: Image(image: AssetImage(meal.imageUrl)),
+              child: Image(image: AssetImage(meal.image)),
             ),
           ],
         ),

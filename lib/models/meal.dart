@@ -1,21 +1,46 @@
+// Instead of giving numeric ids we could give enum ids.
+enum OutletName{
+  vs,
+  go,
+  dawat,
+}
+
 class Meal {
   const Meal({
     required this.id,
-    required this.categories,
-    required this.title,
-    required this.cost,
-    required this.outlet,
-    required this.imageUrl,
-    required this.isVeg,
-    required this.reviews,
+    required this.name,
+    required this.price,
+    required this.description,
+    // required this.isVeg,
+    required this.rating,
+    required this.size,
+    required this.cal,
+    required this.image,
+    required this.outletid,
   });
 
   final String id;
-  final List<String> categories;
-  final String title;
-  final int cost;
-  final String outlet;
-  final String imageUrl;
-  final bool isVeg;
-  final double reviews;
+  final String name;
+  final int price;
+  final String description;
+  // final bool isVeg;
+  final Map<String, double> rating;
+  final String size;
+  final int cal;
+  final String image;
+  final int outletid;
+}
+
+String getOutletName(int outletid) {
+  switch (outletid) {
+    case 1:
+      return "VS Fastfood";
+    case 2:
+      return "Dawat Foods";
+    case 3:
+      return "Go Insta Cafe";
+    // Add more cases for additional outlets
+    default:
+      return "Unknown Outlet";
+  }
 }

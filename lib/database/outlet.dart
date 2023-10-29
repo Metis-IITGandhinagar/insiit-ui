@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-
-import '../models/meal.dart';
-
+// import 'package:flutter/material.dart';
+// 
+// import '../models/meal.dart';
+// 
 // // Constants in Dart should be written in lowerCamelcase.
 // const availableCategories = [
 //   Category(
@@ -55,56 +55,56 @@ import '../models/meal.dart';
 //     color: Colors.teal,
 //   ),
 // ];
-
-const dummyMeals = [
-  Meal(
-    id: 'm1',
-    categories: [
-      'c1',
-      'c2',
-    ],
-    title: 'Italian Pizza',
-    cost: 70,
-    outlet: 'VS Fastfood',
-    imageUrl: "assets/images/image2.png",
-    isVeg: true,
-    reviews: 4.0,
-  ),
-  Meal(
-    id: 'm2',
-    categories: [
-      'c2',
-    ],
-    title: 'Cold Mocha',
-    cost: 50,
-    outlet: 'Go Insta',
-    imageUrl: "assets/images/image2.png",
-    isVeg: true,
-    reviews: 4.3,
-  ),
-  Meal(
-    id: 'm3',
-    categories: [
-      'c2',
-      'c3',
-    ],
-    title: 'Vada Pav',
-    cost: 40,
-    outlet: 'VS Fastfood',
-    imageUrl: "assets/images/image2.png",
-    isVeg: true,
-    reviews: 4.0,
-  ),
-  Meal(
-    id: 'm4',
-    categories: [
-      'c4',
-    ],
-    title: 'Chilly Chicken',
-    cost: 80,
-    outlet: 'Just Chill',
-    imageUrl: "assets/images/image2.png",
-    isVeg: true,
-    reviews: 4.0,
-  ),
-];
+// 
+// const dummyMeals = [
+//   Meal(
+//     id: 'm1',
+//     categories: [
+//       'c1',
+//       'c2',
+//     ],
+//     title: 'Italian Pizza',
+//     cost: 70,
+//     outlet: 'VS Fastfood',
+//     imageUrl: "assets/images/image2.png",
+//     isVeg: true,
+//     reviews: 4.0,
+//   ),
+//   Meal(
+//     id: 'm2',
+//     categories: [
+//       'c2',
+//     ],
+//     title: 'Cold Mocha',
+//     cost: 50,
+//     outlet: 'Go Insta',
+//     imageUrl: "assets/images/image2.png",
+//     isVeg: true,
+//     reviews: 4.3,
+//   ),
+//   Meal(
+//     id: 'm3',
+//     categories: [
+//       'c2',
+//       'c3',
+//     ],
+//     title: 'Vada Pav',
+//     cost: 40,
+//     outlet: 'VS Fastfood',
+//     imageUrl: "assets/images/image2.png",
+//     isVeg: true,
+//     reviews: 4.0,
+//   ),
+//   Meal(
+//     id: 'm4',
+//     categories: [
+//       'c4',
+//     ],
+//     title: 'Chilly Chicken',
+//     cost: 80,
+//     outlet: 'Just Chill',
+//     imageUrl: "assets/images/image2.png",
+//     isVeg: true,
+//     reviews: 4.0,
+//   ),
+// ];
