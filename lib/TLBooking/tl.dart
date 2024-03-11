@@ -26,7 +26,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return super.initState();
   }
    Future<void> submitForm() async {
-    final String apiUrl = 'http://localhost:3000/proceed_form';
+    const String apiUrl = 'http://localhost:3000/proceed_form';
 
     final Map<String, dynamic> formData = {
       "user": nameController.text,
@@ -45,7 +45,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     );
 
     if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Form submitted successfully"),
       ));
       // Form submission successfully
@@ -64,7 +64,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return  Scaffold(
        key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Form Submission"),
+        title: const Text("Form Submission"),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -75,50 +75,50 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
                 TextField(
                   
                     controller: nameController,
-                    decoration: InputDecoration(icon: Icon(Icons.person_2_outlined),
+                    decoration: const InputDecoration(icon: Icon(Icons.person_2_outlined),
                         border: OutlineInputBorder(), labelText: 'Name')),
-                SizedBox(height: 15,),
+                const SizedBox(height: 15,),
                  TextField(
                   
                     controller: emailController,
-                    decoration: InputDecoration(icon: Icon(Icons.email_outlined),border: OutlineInputBorder(), labelText: 'Email')),
-                SizedBox(height: 15,),
+                    decoration: const InputDecoration(icon: Icon(Icons.email_outlined),border: OutlineInputBorder(), labelText: 'Email')),
+                const SizedBox(height: 15,),
                  TextField(
                   
                     controller: mobileController,
-                    decoration: InputDecoration(icon: Icon(Icons.phone),border: OutlineInputBorder(), labelText: 'Mobile')),
-               SizedBox(height: 15,),
+                    decoration: const InputDecoration(icon: Icon(Icons.phone),border: OutlineInputBorder(), labelText: 'Mobile')),
+               const SizedBox(height: 15,),
                  TextField(
                   
                     controller: machineController,
-                    decoration: InputDecoration(icon: Icon(Icons.precision_manufacturing_sharp),border: OutlineInputBorder(), labelText: 'Machine')),
-                SizedBox(height: 15,),
+                    decoration: const InputDecoration(icon: Icon(Icons.precision_manufacturing_sharp),border: OutlineInputBorder(), labelText: 'Machine')),
+                const SizedBox(height: 15,),
                  TextField(
                   
                     controller: startTimeController,
-                    decoration: InputDecoration(icon: Icon(Icons.av_timer_outlined),border: OutlineInputBorder(), labelText: 'Start Time')),
-                SizedBox(height: 15,),
+                    decoration: const InputDecoration(icon: Icon(Icons.av_timer_outlined),border: OutlineInputBorder(), labelText: 'Start Time')),
+                const SizedBox(height: 15,),
                  TextField(
                   
                     controller: endTimeController,
-                    decoration: InputDecoration(icon: Icon(Icons.av_timer_outlined),border: OutlineInputBorder(), labelText: 'End Time')),
-                SizedBox(height: 15,),
+                    decoration: const InputDecoration(icon: Icon(Icons.av_timer_outlined),border: OutlineInputBorder(), labelText: 'End Time')),
+                const SizedBox(height: 15,),
                  TextField(
                   
                     controller: descriptionController,
-                    decoration: InputDecoration(icon: Icon(Icons.info_outline),border: OutlineInputBorder(), labelText: 'Description')),
-                SizedBox(height: 15,),
+                    decoration: const InputDecoration(icon: Icon(Icons.info_outline),border: OutlineInputBorder(), labelText: 'Description')),
+                const SizedBox(height: 15,),
                  TextField(
                   
                     controller: statusController,
-                    decoration: InputDecoration(icon: Icon(Icons.notes_outlined),border: OutlineInputBorder(), labelText: 'Status')),
-                SizedBox(height: 20),
+                    decoration: const InputDecoration(icon: Icon(Icons.notes_outlined),border: OutlineInputBorder(), labelText: 'Status')),
+                const SizedBox(height: 20),
                 SizedBox(
                   height: 50,
                   child: FilledButton.icon(
                     
-                    icon: Icon(Icons.done_outline),
-                    label: Text("Submit Form"),
+                    icon: const Icon(Icons.done_outline),
+                    label: const Text("Submit Form"),
                     onPressed: submitForm,
                                
                   ),

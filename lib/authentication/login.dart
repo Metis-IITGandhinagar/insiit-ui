@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
@@ -43,13 +42,17 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              backgroundColor: const Color.fromARGB(255, 255, 229, 229),
-            ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                backgroundColor:
+                    Theme.of(context).colorScheme.tertiaryContainer),
             onPressed: () => googleSignIn(),
-            child: const Text('Login with IITGN email',style: TextStyle(color: Color.fromRGBO(198, 40, 40, 1)),),
+            child: Text(
+              'Login with IITGN email',
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onTertiaryContainer),
+            ),
           ),
           const SizedBox(
             height: 15,
@@ -63,16 +66,22 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              backgroundColor: Colors.blue[200],
-            ),
-            onPressed: () => Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
-                (route) => false),
-            child: const Text('Login as Guest'),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                backgroundColor:
+                    Theme.of(context).colorScheme.secondaryContainer),
+            onPressed: () => signInAnonymously(),
+            child: Text(
+              'Guest Mode',
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSecondaryContainer),
+            )
+          ),
+          SizedBox(height: 150),
+          Text(
+            "Made with ♥️ by Metis, IITGN",
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -80,17 +89,31 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-googleSignIn() async{
+googleSignIn() async {
+  GoogleSignInAccount? googleUser =
+      await GoogleSignIn(hostedDomain: 'iitgn.ac.in').signIn();
 
-GoogleSignInAccount? googleUser = await GoogleSignIn(hostedDomain: 'iitgn.ac.in').signIn();
-
-GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+  GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
   AuthCredential credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken
-  );
-UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-print(userCredential.user);
+      accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+  UserCredential userCredential =
+      await FirebaseAuth.instance.signInWithCredential(credential);
+  print(userCredential.user);
+}
 
+signInAnonymously() async{
+  try {
+  final userCredential =
+      await FirebaseAuth.instance.signInAnonymously();
+  print("Signed in with temporary account.");
+} on FirebaseAuthException catch (e) {
+  switch (e.code) {
+    case "operation-not-allowed":
+      print("Anonymous auth hasn't been enabled for this project.");
+      break;
+    default:
+      print("Unknown error.");
+  }
+}
 }

@@ -25,7 +25,7 @@ class _MapPageState extends State<MapPage> {
       body:  Stack(
         children: <Widget>[
           OSMFlutter( 
-        mapIsLoading: Center(child: SizedBox(height: 30,width: 30,child: CircularProgressIndicator(semanticsLabel:"Loading",),)),
+        mapIsLoading: const Center(child: SizedBox(height: 30,width: 30,child: CircularProgressIndicator(semanticsLabel:"Loading",),)),
         controller:mapController,
         osmOption: OSMOption(
               showZoomController: true,

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -29,7 +28,7 @@ class _BusPageState extends State<BusPage> {
 
   void fetchTowns() async {
     Response response = await get(Uri.parse(
-        'https://usableordinaryinformationtechnology--kumaranmol2.repl.co/towns'));
+        'https://6baa0265-07c2-4b1c-b8bc-8fb7920eb5ee-00-kiqlob58lav7.pike.repl.co/towns'));
     List result = jsonDecode(response.body) as List;
     setState(() {
       towns.clear();
@@ -43,7 +42,7 @@ class _BusPageState extends State<BusPage> {
 
   void search() async {
     String url =
-        'https://usableordinaryinformationtechnology--kumaranmol2.repl.co/buses?from=${src}&to=${des}';
+        'https://6baa0265-07c2-4b1c-b8bc-8fb7920eb5ee-00-kiqlob58lav7.pike.repl.co/buses?from=$src&to=$des';
     Response response = await get(Uri.parse(url));
     print(response.body);
     setState(() {
@@ -114,7 +113,7 @@ class _BusPageState extends State<BusPage> {
               style: TextStyle(color: Color.fromRGBO(94, 53, 177, 1)),
             ),
             style: TextButton.styleFrom(
-              backgroundColor: Color.fromRGBO(212, 212, 255, 1),
+              backgroundColor: const Color.fromRGBO(212, 212, 255, 1),
             ),
           ),
           const SizedBox(

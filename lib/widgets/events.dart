@@ -186,6 +186,7 @@ import 'package:http/http.dart' as http;
 import '../model/events.dart';
 import 'dart:async';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_event_calendar/flutter_event_calendar.dart';
 
 class EventWidget extends StatefulWidget {
   const EventWidget({super.key});
@@ -198,123 +199,181 @@ class EventWidget extends StatefulWidget {
 class _EventWidgetState extends State<EventWidget> {
   final controller = PageController(viewportFraction: 0.8, keepPage: true);
 
-  Future<List<Event>> postsFuture = getPosts();
+  Future<List<Events>> postsFuture = getPosts();
 
-  static Future<List<Event>> getPosts() async {
+  static Future<List<Events>> getPosts() async {
     var url = Uri.parse(
-        "https://usableordinaryinformationtechnology--kumaranmol2.repl.co/events");
+        "https://6baa0265-07c2-4b1c-b8bc-8fb7920eb5ee-00-kiqlob58lav7.pike.repl.co/events");
     final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(response.body);
-    return body.map((e) => Event.fromJson(e)).toList();
+    return body.map((e) => Events.fromJson(e)).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Upcoming Events"),
-      ),
-      body: SafeArea(
-        child: FutureBuilder<List<Event>>(
-          future: postsFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text("Error: ${snapshot.error}"),
-              );
-            } else {
-              final events = snapshot.data;
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     centerTitle: true,
+    //     title: Text("Upcoming Events"),
+    //   ),
+    //   body: SafeArea(
+    //     child: FutureBuilder<List<Events>>(
+    //       future: postsFuture,
+    //       builder: (context, snapshot) {
+    //         if (snapshot.connectionState == ConnectionState.waiting) {
+    //           return const Center(
+    //             child: CircularProgressIndicator(),
+    //           );
+    //         } else if (snapshot.hasError) {
+    //           return Center(
+    //             child: Text("Error: ${snapshot.error}"),
+    //           );
+    //         } else {
+    //           final events = snapshot.data;
 
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(height: 16),
-                    SizedBox(
-                      height: 240,
-                      child: PageView.builder(
-                        controller: controller,
-                        itemCount: events?.length, // Use the length of events
-                        itemBuilder: (_, index) {
-                          final event = events?[index];
-                          return  InkWell(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(16.0)),
-                              splashColor:
-                                  const Color.fromARGB(103, 159, 111, 255),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const EventWidget()),
-                                );
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  // color: Colors.grey.shade300,
-                                  image: const DecorationImage(
-                                      image: NetworkImage(
-                                          "https://picsum.photos/200/300"),
-                                      fit: BoxFit.cover),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 4),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.center,
-                                          end: Alignment.bottomCenter,
-                                          colors: [
-                                            Colors.black.withOpacity(0),
-                                            Colors.black.withOpacity(.5),
-                                          ])),
-                                  height: 280,
-                                  child: Center(
-                                    child: Text(
-                                      event?.name ??
-                                          'Events Not Available', // Display event name
-                                      style: TextStyle(
-                                          color: const Color.fromARGB(
-                                              255, 255, 255, 255),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18),
-                                    ),
-                                  ),
-                                ),
-                              ));
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24, bottom: 12),
+    //           return SingleChildScrollView(
+    //             child: Column(
+    //               crossAxisAlignment: CrossAxisAlignment.center,
+    //               children: <Widget>[
+    //                 SizedBox(height: 16),
+    //                 SizedBox(
+    //                   height: 240,
+    //                   child: PageView.builder(
+    //                     controller: controller,
+    //                     itemCount: events?.length, // Use the length of events
+    //                     itemBuilder: (_, index) {
+    //                       final event = events?[index];
+    //                       return  InkWell(
+    //                           borderRadius:
+    //                               const BorderRadius.all(Radius.circular(16.0)),
+    //                           splashColor:
+    //                               const Color.fromARGB(103, 159, 111, 255),
+    //                           onTap: () {
+    //                             Navigator.push(
+    //                               context,
+    //                               MaterialPageRoute(
+    //                                   builder: (context) =>
+    //                                       const EventWidget()),
+    //                             );
+    //                           },
+    //                           child: Container(
+    //                             decoration: BoxDecoration(
+    //                               // color: Colors.grey.shade300,
+    //                               image: const DecorationImage(
+    //                                   image: NetworkImage(
+    //                                       "https://picsum.photos/200/300"),
+    //                                   fit: BoxFit.cover),
+    //                               borderRadius: BorderRadius.circular(16),
+    //                             ),
+    //                             margin: const EdgeInsets.symmetric(
+    //                                 horizontal: 10, vertical: 4),
+    //                             child: Container(
+    //                               decoration: BoxDecoration(
+    //                                   borderRadius: BorderRadius.circular(16),
+    //                                   gradient: LinearGradient(
+    //                                       begin: Alignment.center,
+    //                                       end: Alignment.bottomCenter,
+    //                                       colors: [
+    //                                         Colors.black.withOpacity(0),
+    //                                         Colors.black.withOpacity(.5),
+    //                                       ])),
+    //                               height: 280,
+    //                               child: Center(
+    //                                 child: Text(
+    //                                   event?.name ??
+    //                                       'Events Not Available', // Display event name
+    //                                   style: TextStyle(
+    //                                       color: const Color.fromARGB(
+    //                                           255, 255, 255, 255),
+    //                                       fontWeight: FontWeight.bold,
+    //                                       fontSize: 18),
+    //                                 ),
+    //                               ),
+    //                             ),
+    //                           ));
+    //                     },
+    //                   ),
+    //                 ),
+    //                 Padding(
+    //                   padding: const EdgeInsets.only(top: 24, bottom: 12),
                       
-                    ),
-                    SmoothPageIndicator(
-                      controller: controller,
-                      count: events?.length ?? 0, // Use the length of events
-                      effect: const WormEffect(
-                        dotHeight: 6,
-                        dotWidth: 10,
-                        type: WormType.normal,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-          },
-        ),
+    //                 ),
+    //                 SmoothPageIndicator(
+    //                   controller: controller,
+    //                   count: events?.length ?? 0, // Use the length of events
+    //                   effect: const WormEffect(
+    //                     dotHeight: 6,
+    //                     dotWidth: 10,
+    //                     type: WormType.normal,
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //           );
+    //         }
+    //       },
+    //     ),
+    //   ),
+    // );
+     return Scaffold(
+      appBar: AppBar(
+        // backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+        title: Text("Events Calender"),
+        centerTitle: true,
       ),
-    );
+      body: EventCalendar(
+      calendarType: CalendarType.GREGORIAN,
+      calendarLanguage: 'en',
+      headerOptions: HeaderOptions(
+        calendarIconColor: Theme.of(context).colorScheme.onSecondaryContainer,
+        navigationColor:Theme.of(context).colorScheme.onSecondaryContainer,
+        headerTextColor:Theme.of(context).colorScheme.onSecondaryContainer,
+        resetDateColor: Theme.of(context).colorScheme.onSecondaryContainer,
+      ),
+      dayOptions: DayOptions(
+        showWeekDay: true,
+        disableDaysBeforeNow: true,
+        disableFadeEffect: true,
+        weekDaySelectedColor: Theme.of(context).colorScheme.onSecondaryContainer,
+        unselectedTextColor: Theme.of(context).colorScheme.onSecondaryContainer,
+        weekDayUnselectedColor: Theme.of(context).colorScheme.onTertiaryContainer,
+        selectedBackgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
+        selectedTextColor: Theme.of(context).colorScheme.onSecondaryContainer,
+        eventCounterColor: Colors.deepPurple),
+        showLoadingForEvent: true,
+      calendarOptions: CalendarOptions(
+      
+        headerMonthBackColor: Theme.of(context).colorScheme.secondaryContainer,
+        headerMonthShadowColor: Theme.of(context).colorScheme.secondaryContainer,
+        bottomSheetBackColor: Theme.of(context).colorScheme.secondaryContainer,
+        toggleViewType: true,
+        viewType: ViewType.DAILY
+      ),
+      eventOptions: EventOptions(
+        emptyIcon: Icons.event_busy_outlined,
+        emptyTextColor: Theme.of(context).colorScheme.secondary,
+        emptyIconColor: Theme.of(context).colorScheme.secondary,
+        emptyText: "No Events Found"
+      ),
+      events: [
+        Event(
+          child: ListTile(
+            leading: Icon(Icons.event_outlined),
+            title: Text("Dummy Title", style: TextStyle(fontWeight: FontWeight.bold)),
+            trailing: Text("08:00 PM",style: TextStyle(fontSize: 16)),
+
+          ),
+          dateTime: CalendarDateTime(
+            year: 2023,
+            month: 11,
+            day: 26,
+            calendarType: CalendarType.GREGORIAN,
+          ),
+        ),
+        
+      ],
+    ),
+     );
   }
 }
-

@@ -14,7 +14,7 @@ class DevelopersPageState extends State<DevelopersPage> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text("InsIIT Developers"),
+          title: const Text("InsIIT Developers"),
         ),
         body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5),

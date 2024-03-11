@@ -1,24 +1,27 @@
-class Event {
+class Events {
   String? date;
   int? id;
   String? name;
   String? image;
+  String? location;
 
 
-  Event(
+  Events(
       {
     this.date,
         this.id,
       this.name,
-      this.image
+      this.image,
+      this.location
   
   });
 
-  Event.fromJson(Map<String, dynamic> json) {
+  Events.fromJson(Map<String, dynamic> json) {
      date = json['date'];
     id = json['id'];
     name = json['name'];
     image = json['image'];
+    location = json['location'];
   
  
   }
