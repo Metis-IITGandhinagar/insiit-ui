@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../models/meal.dart';
 
 class MealCard extends StatelessWidget {
@@ -7,58 +7,97 @@ class MealCard extends StatelessWidget {
 
   final Meal meal;
 
+  String capitalizeWords(String input) {
+    if (input.isEmpty) {
+      return input;
+    }
+
+    List<String> words = input.split(' ');
+
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].isNotEmpty) {
+        words[i] =
+            words[i][0].toUpperCase() + words[i].substring(1).toLowerCase();
+      }
+    }
+
+    return words.join(' ');
+  }
+
+
+  getOutletName(int outletid) {
+    switch (outletid) {
+      case 1:
+        return "VS Fastfood";
+      case 2:
+        return "Dawat Foods";
+      case 3:
+        return "Go Insta Cafe";
+      // Add more cases for additional outlets
+      default:
+        return "Unknown Outlet";
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
-    return 
-    Card(
-      color: Color.fromARGB(255, 255, 255, 255),
+    return Card(
+      margin: EdgeInsets.all(10),
       elevation: 0,
-      margin: const EdgeInsets.all(20),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15),
-      side: BorderSide(
-        color: Colors.blueGrey,
-        width: 0.8
-      )),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 20),
-            child: Column(
-              children: [
-                Text(
-                  
-                  meal.title,
-                  style:
-                      const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                ),
-                Row(
-                  children: [
-                    const Icon(Icons.star_border_outlined),
-                    Text(
-                      "${meal.reviews}",
-                      style: const TextStyle(fontSize: 14),
-                    )
-                  ],
-                ),
-                Text(
-                  "Rs. ${meal.cost}",
-                  style: const TextStyle(fontSize: 14),
-                ),
-                Text(
-                  meal.outlet,
-                  style:
-                      const TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-                ),
-              ],
+      shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 0.6,
+            color: Theme.of(context).colorScheme.outline
+          ),
+          borderRadius: BorderRadius.circular(15)),
+      
+
+      // padding: const EdgeInsets.only(top: 20, bottom: 20),
+      child: ListTile(
+        title: Text(
+          capitalizeWords(meal.name ?? 'Meal Not Available')
+          ,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+        ),
+        
+        subtitle:
+        Row(
+          children: [
+            
+            Text(
+              getOutletName(meal.outletid),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
             ),
-          ),
-          SizedBox(
-            width: 20,
-            child: Image(image: AssetImage(meal.imageUrl)),
-          ),
-        ],
+              SizedBox(
+              height: 10,
+            )
+          ],
+        
+        ),
+         
+        trailing: Text(
+          "Rs. ${meal.price}",
+          style: const TextStyle(fontSize: 14),
+        ),
       ),
     );
+
+    //     Text(
+    //       "Rs. ${meal.price}",
+    //       style: const TextStyle(fontSize: 14),
+    //     ),
+    //     Text(
+    // getOutletName(meal.outletid),
+    //       style: const TextStyle(
+    //           fontSize: 16, fontWeight: FontWeight.w300),
+    //     ),
+
+    // );
+    // );
+
+    // );
+
+    // );
   }
 }

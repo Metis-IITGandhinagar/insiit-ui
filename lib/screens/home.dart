@@ -12,6 +12,8 @@ import '../widgets/mess.dart';
 import '../widgets/bus.dart';
 import './qr.dart';
 import './notification.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -46,24 +48,21 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.qr_code),
-            color: Colors.black,
+          
             onPressed: () => Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => QRDisplay())),
           ),
           const SizedBox(
             width: 0,
           ),
-          IconButton(
-            icon: const Icon(Icons.notifications_none_outlined),
-            color: Colors.black,
-            onPressed: (){},
-          ),
+        
              IconButton(
             icon: const Icon(Icons.logout_sharp),
-            color: Colors.black,
+          
             onPressed:() async{
               await GoogleSignIn().signOut();
               FirebaseAuth.instance.signOut();
+            
             }
            
           ),
@@ -135,4 +134,3 @@ class _HomeScreenState extends State<HomeScreen> {
         .init(context); // Initialize MessagingService to handle notifications
   }
 }
-

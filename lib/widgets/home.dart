@@ -1,6 +1,10 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'events_details.dart';
 import 'mess.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../screens/outlets.dart';
 import 'bus_standalone.dart';
 import 'events.dart';
@@ -17,26 +21,162 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+
 var name = FirebaseAuth.instance.currentUser!.displayName;
 
 var nameArray = name?.split(" ");
 
 class _HomePageState extends State<HomePage> {
+  Map<String, dynamic> weeklyMenu = {};
+  Widget buildMenu(String day, String mealType) {
+    if (weeklyMenu['menu'] != null &&
+        weeklyMenu['menu'][day] != null &&
+        weeklyMenu['menu'][day][mealType] != null) {
+      List<dynamic> meals = weeklyMenu['menu'][day][mealType];
+
+      if (meals != null && meals.isNotEmpty) {
+        return Row(children: [
+          Card(
+              elevation: 0,
+              surfaceTintColor: Color.fromARGB(255, 228, 230, 255),
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              margin: const EdgeInsets.all(16.0),
+              child: InkWell(
+                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                splashColor: const Color.fromARGB(103, 159, 111, 255),
+                child: SizedBox(
+                  height: 220,
+                  width: MediaQuery.of(context).size.width -
+                      32, // minus 32 due to the margin
+
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '$mealType'.toUpperCase(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                        ),
+                      ),
+                      for (var meal in meals)
+                        Text(
+                          meal['name'],
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                          ),
+                        )
+                    ],
+                  ),
+                ),
+              )),
+
+          // return Row(
+
+          //   crossAxisAlignment: CrossAxisAlignment.center,
+          //   children: [
+
+          //     Text(
+          //       '$mealType:'.toUpperCase(),
+          //       style: TextStyle(fontWeight: FontWeight.bold),
+          //     ),
+          //     for (var meal in meals)
+          //     Container(
+          //       margin: EdgeInsets.all(40),
+          //       child: Center(child: Text(meal['name']),),
+          //     ),
+
+          //     // ListTile(
+          //     //   title: Text(meal['name']),
+          //     //   subtitle: Text(meal['description']),
+          //     //   leading: CircleAvatar(
+          //     //     backgroundImage: NetworkImage(meal['image']),
+          //     //   ),
+          //     // ),
+
+          //   ],
+          // );
+        ]);
+      }
+    }
+
+    return Container(); // Return an empty container if there are no meals for the specified day and meal type
+  }
+
+  Future<void> fetchMenu() async {
+    final response = await http
+        .get(Uri.parse('https://insiit-api.onrender.com/mess/2/menu'));
+    final extractedData = json.decode(response.body);
+    print(extractedData);
+    setState(() {
+      weeklyMenu = extractedData;
+      print(weeklyMenu);
+    });
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('weeklyMenu', json.encode(extractedData));
+  }
+
+  Future<Map<String, dynamic>> loadMenuFromPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('weeklyMenu')) {
+      return json.decode(prefs.getString('weeklyMenu')!);
+    } else {
+      return {};
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadMenuFromPrefs().then((data) {
+      if (data.isEmpty) {
+        fetchMenu();
+      } else {
+        setState(() {
+          weeklyMenu = data;
+        });
+      }
+    });
+  }
+
   final controller = PageController(viewportFraction: 0.8, keepPage: true);
 
-  Future<List<Event>> postsFuture = getPosts();
+  Future<List<Events>> postsFuture = getPosts();
 
-  static Future<List<Event>> getPosts() async {
+  static Future<List<Events>> getPosts() async {
     var url = Uri.parse(
-        "https://usableordinaryinformationtechnology--kumaranmol2.repl.co/events");
+        "https://6baa0265-07c2-4b1c-b8bc-8fb7920eb5ee-00-kiqlob58lav7.pike.repl.co/events");
     final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(response.body);
-    return body.map((e) => Event.fromJson(e)).toList();
+    return body.map((e) => Events.fromJson(e)).toList();
   }
 
   @override
   Widget build(BuildContext context) {
+    const days = [
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+      'sunday'
+    ];
+    String today() {
+      return DateFormat('EEEE').format(DateTime.now()).toLowerCase();
+    }
+
+    var todayname = today();
+    final TimeOfDay now = TimeOfDay.now();
+    print(now);
     final pages = List.generate(
       6,
       (index) => Container(
@@ -50,11 +190,14 @@ class _HomePageState extends State<HomePage> {
           child: Center(
               child: Text(
             "Event $index",
-            style: const TextStyle(color: Colors.indigo),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
+            ),
           )),
         ),
       ),
     );
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: ListView(
@@ -87,8 +230,9 @@ class _HomePageState extends State<HomePage> {
 
           Row(children: [
             Card(
-                surfaceTintColor: const Color(0xFFE4D7FF),
-                color: const Color(0xFFE0D0FF),
+                surfaceTintColor:
+                    Theme.of(context).colorScheme.secondaryContainer,
+                color: Theme.of(context).colorScheme.secondaryContainer,
                 margin: const EdgeInsets.all(16.0),
                 child: InkWell(
                   borderRadius: const BorderRadius.all(Radius.circular(16.0)),
@@ -105,19 +249,23 @@ class _HomePageState extends State<HomePage> {
                     width: MediaQuery.of(context).size.width / 2 -
                         32, // minus 32 due to the margin
 
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.directions_bus_filled_outlined,
-                          color: Color(0xFF5B33AC),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
                         ),
                         Text(
                           "Bus Schedule",
                           style: TextStyle(
                             fontSize: 15,
-                            color: Color(0xFF5B33AC),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSecondaryContainer,
                           ),
                         )
                       ],
@@ -126,7 +274,7 @@ class _HomePageState extends State<HomePage> {
                 )),
             Card(
                 surfaceTintColor: Colors.white,
-                color: const Color(0xFFFFD8C4),
+                color: Theme.of(context).colorScheme.tertiaryContainer,
                 margin: const EdgeInsets.all(16.0),
                 child: InkWell(
                   borderRadius: const BorderRadius.all(Radius.circular(16.0)),
@@ -143,19 +291,22 @@ class _HomePageState extends State<HomePage> {
                     width: MediaQuery.of(context).size.width / 2 -
                         32, // minus 32 due to the margin
 
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.restaurant_menu_outlined,
-                          color: Color.fromARGB(255, 127, 57, 0),
+                          color:
+                              Theme.of(context).colorScheme.onTertiaryContainer,
                         ),
                         Text(
                           "Outlets",
                           style: TextStyle(
                             fontSize: 15,
-                            color: Color.fromARGB(255, 127, 57, 0),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onTertiaryContainer,
                           ),
                         )
                       ],
@@ -206,7 +357,7 @@ class _HomePageState extends State<HomePage> {
                 ),
           ),
           SafeArea(
-            child: FutureBuilder<List<Event>>(
+            child: FutureBuilder<List<Events>>(
               future: postsFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -234,7 +385,6 @@ class _HomePageState extends State<HomePage> {
                             itemBuilder: (_, index) {
                               final event = events?[index];
                               return InkWell(
-                              
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(16.0)),
                                   splashColor:
@@ -244,15 +394,16 @@ class _HomePageState extends State<HomePage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const EventWidget()),
+                                              EventDetailsPage(
+                                                  event: events?[index])),
                                     );
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
                                       // color: Colors.grey.shade300,
                                       image: DecorationImage(
-                                          image: NetworkImage(
-                                              "${event?.image}"),
+                                          image:
+                                              NetworkImage("${event?.image}"),
                                           fit: BoxFit.cover),
                                       borderRadius: BorderRadius.circular(16),
                                     ),
@@ -275,7 +426,7 @@ class _HomePageState extends State<HomePage> {
                                           event?.name ??
                                               'Events Not Available', // Display event name
                                           style: const TextStyle(
-                                              color:  Color.fromARGB(
+                                              color: Color.fromARGB(
                                                   255, 255, 255, 255),
                                               fontWeight: FontWeight.bold,
                                               fontSize: 18),
@@ -292,7 +443,7 @@ class _HomePageState extends State<HomePage> {
                         SmoothPageIndicator(
                           controller: controller,
                           count:
-                              events?.length ?? 0, // Use the length of events
+                              events?.length ?? 0, // Using the length of events
                           effect: const WormEffect(
                             dotHeight: 6,
                             dotWidth: 6,
@@ -306,92 +457,13 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-          //  Row(
-          //     children: [
-          //       Card(
-          //           color: Color(0xFFD7F1FF),
-          //           margin: EdgeInsets.all(16.0),
-          //           child: InkWell(
-          //             borderRadius: BorderRadius.all(Radius.circular(16.0)),
-          //             splashColor: Color.fromARGB(173, 194, 233, 255),
-          //             onTap: () {
-          //               Navigator.push(
-          //                 context,
-          //                 MaterialPageRoute(
-          //                     builder: (context) =>
-          //                         const FadeThroughTransitionDemo()),
-          //               );
-          //             },
-          //             child: SizedBox(
-          //               height: 120,
-          //               width: MediaQuery.of(context).size.width / 2 -
-          //                   32, // minus 32 due to the margin
-
-          //               child: const Column(
-          //                 mainAxisAlignment: MainAxisAlignment.center,
-          //                 crossAxisAlignment: CrossAxisAlignment.center,
-          //                 children: [
-          //                   Icon(Icons.pending_actions_outlined,
-          //                       color: Color(0xFF398AB7)),
-          //                   Text(
-          //                     "Complaints",
-          //                     style: TextStyle(
-          //                       fontSize: 15,
-          //                       color: Color(0xFF398AB7),
-          //                     ),
-          //                   )
-          //                 ],
-          //               ),
-          //             ),
-          //           )),
-          //       Card(
-          //           surfaceTintColor: Colors.white,
-          //           color: Color(0xFFFFF6A1),
-          //           margin: EdgeInsets.all(16.0),
-          //           child: InkWell(
-          //             borderRadius: BorderRadius.all(Radius.circular(16.0)),
-          //             splashColor: Color.fromARGB(144, 224, 216, 146),
-          //             onTap: () {
-          //               Navigator.push(
-          //                 context,
-          //                 MaterialPageRoute(
-          //                     builder: (context) => RepresentativesPage()),
-          //               );
-          //             },
-          //             child: SizedBox(
-          //               height: 120,
-          //               width: MediaQuery.of(context).size.width / 2 -
-          //                   32, // minus 32 due to the margin
-
-          //               child: const Column(
-          //                 mainAxisAlignment: MainAxisAlignment.center,
-          //                 crossAxisAlignment: CrossAxisAlignment.center,
-          //                 children: [
-          //                   Icon(
-          //                     Icons.contact_emergency_outlined,
-          //                     color: Color.fromARGB(255, 141, 130, 25),
-          //                   ),
-          //                   Text(
-          //                     "Representatives",
-          //                     style: TextStyle(
-          //                       fontSize: 15,
-          //                       color: Color.fromARGB(255, 141, 130, 25),
-          //                     ),
-          //                   )
-          //                 ],
-          //               ),
-          //             ),
-          //           )),
-          //     ],
-          //   ),
 
           InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(20.0)),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const MealsDisplayScreen()),
+                MaterialPageRoute(builder: (context) => Menu()),
               );
             },
             child: Container(
@@ -412,9 +484,8 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           IconButton(
                               onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) =>
-                                        const MealsDisplayScreen()));
+                                Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (_) => Menu()));
                               },
                               icon: const Icon(Icons.arrow_forward_ios))
                         ],
@@ -428,6 +499,43 @@ class _HomePageState extends State<HomePage> {
                 // ),
                 ),
           ),
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            if (now.hour < 11)
+              Row(
+                children: [
+                  // SizedBox(height: 50),
+                  buildMenu(todayname, 'breakfast'),
+                ],
+              )
+            else if (now.hour < 15)
+              Row(
+                children: [
+                  // SizedBox(height: 50),
+                  buildMenu(todayname, 'lunch'),
+                ],
+              )
+            else if (now.hour < 18)
+              Row(
+                children: [
+                  // SizedBox(height: 50),
+                  buildMenu(todayname, 'snacks'),
+                ],
+              )
+            else if (now.hour < 23)
+              Row(
+                children: [
+                  // SizedBox(height: 50),
+                  buildMenu(todayname, 'dinner'),
+                ],
+              )
+            else
+              Row(
+                children: [
+                  // SizedBox(height: 50),
+                  buildMenu(todayname, 'breakfast'),
+                ],
+              )
+          ]),
           const SizedBox(
             height: 90,
           ),

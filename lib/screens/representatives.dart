@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 
 class RepresentativesPage extends StatefulWidget {
+  const RepresentativesPage({super.key});
+
   @override
   _RepresentativesPageState createState() => _RepresentativesPageState();
 }
@@ -99,7 +101,7 @@ List<dynamic> studentCouncilData = [];
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Know your Representatives"),
+        title: const Text("Know your Representatives"),
       ),
       body: ListView.builder(
         itemCount: studentCouncilData.length,
@@ -110,7 +112,7 @@ List<dynamic> studentCouncilData = [];
           final email = studentCouncilData[index]["Contacts"]["Email"];
 
           return Card(
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             child: ListTile(
               title: Text(position),
               subtitle: Column(
