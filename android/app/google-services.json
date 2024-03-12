@@ -1,51 +1,26 @@
 {
   "project_info": {
-    "project_number": "313416279537",
-    "project_id": "notifyinsiit",
-    "storage_bucket": "notifyinsiit.appspot.com"
+    "project_number": "1083943258514",
+    "project_id": "insiit-production",
+    "storage_bucket": "insiit-production.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:313416279537:android:f1a579cc5fa1a90f07d050",
+        "mobilesdk_app_id": "1:1083943258514:android:1256252a7357527347194b",
         "android_client_info": {
-          "package_name": "com.example.insiit"
+          "package_name": "com.metis.insiit"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "313416279537-7qtqp95mfbi3gavc3pedq7id1gbm3f4l.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.insiit",
-            "certificate_hash": "31b550d25d5e4eb82631e9d2363c2ff36577bcd4"
-          }
-        },
-        {
-          "client_id": "313416279537-6km8n3nuhbsaf9c6mdeg8ls0opcv87pr.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBrRLbXc6_wV33akm2CeTkk7rLo6i4vxDU"
+          "current_key": "AIzaSyCI7fZEKHJ3sqxYTIRyCrpX9cpV6f8OXkg"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "313416279537-04n2i4g0h4ehakejcvahb4enlv3ta9kd.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "313416279537-3b99t51jkiteq7kiknj9hdlpdu6sqqu8.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.insiit.RunnerTests"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
