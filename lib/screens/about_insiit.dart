@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class InsIITAbout extends StatefulWidget {
+class InsIITAbout extends StatelessWidget {
   const InsIITAbout({Key? key}) : super(key: key);
 
   @override
-  State<InsIITAbout> createState() => InsIITAboutState();
-}
-
-class InsIITAboutState extends State<InsIITAbout> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-           centerTitle: true,
-          title: const Text("About InsIIT"),
-        ),
-        body: Padding(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("About InsIIT"),
+      ),
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,25 +22,23 @@ class InsIITAboutState extends State<InsIITAbout> {
             ),
             SizedBox(height: 16),
             Text(
-              'The official students app for IIT Gandhinagar.',
+              'This is the official students application for the students of IIT Gandhinagar.',
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 16),
-            FilledButton.icon(
-              icon: Icon(Icons.control_point_rounded),
+            ElevatedButton.icon(
               onPressed: () {
-                // Handle Contribution button tap
-                // You can navigate to the contribution page or any relevant link
+                _launchURL('https://github.com/Metis-IITGandhinagar/insiit-ui');
               },
+              icon: Icon(Icons.control_point_rounded),
               label: Text('Contribute to the Project'),
             ),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // Handle Metis (Developer) Page button tap
-                // You can navigate to the Metis (Developer) page or any relevant link
+                _launchURL('https://github.com/Metis-IITGandhinagar/');
               },
-              child: Text('Metis IITGN'),
+              child: Text('Visit Metis IITGN'),
             ),
             SizedBox(height: 16),
             Text(
@@ -58,6 +52,14 @@ class InsIITAboutState extends State<InsIITAbout> {
           ],
         ),
       ),
-        );
+    );
+  }
+
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

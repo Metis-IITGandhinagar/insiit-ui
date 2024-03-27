@@ -10,7 +10,7 @@ class BusPageStandalone extends StatefulWidget {
 }
 
 class _BusPageStandaloneState extends State<BusPageStandalone> {
-  List<String> towns = ['ANY','Palaj','Choose'];
+  List<String> towns = ['ANY', 'Palaj', 'Choose'];
   List<Map<String, dynamic>> data = [];
   String src = 'Palaj', des = 'ANY';
 
@@ -27,8 +27,7 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
   }
 
   void fetchTowns() async {
-    Response response = await get(Uri.parse(
-        'https://6baa0265-07c2-4b1c-b8bc-8fb7920eb5ee-00-kiqlob58lav7.pike.repl.co/towns'));
+    Response response = await get(Uri.parse('http://10.7.39.171:3000/api/towns'));
     List result = jsonDecode(response.body) as List;
     setState(() {
       towns.clear();
@@ -41,8 +40,7 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
   }
 
   void search() async {
-    String url =
-        'https://6baa0265-07c2-4b1c-b8bc-8fb7920eb5ee-00-kiqlob58lav7.pike.repl.co/buses?from=$src&to=$des';
+    String url = 'http://10.7.39.171:3000/api/search?source=$src&destination=$des';
     Response response = await get(Uri.parse(url));
     print(response.body);
     setState(() {
@@ -62,9 +60,7 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
         centerTitle: true,
         title: const Text("Bus Schedule"),
       ),
-      body:
-      
-       Column(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           const SizedBox(
@@ -107,11 +103,12 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
               ),
             ],
           ),
-         const SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextButton.icon(
-            icon: const Icon(Icons.search, color: Color.fromRGBO(94, 53, 177, 1)),
+            icon:
+                const Icon(Icons.search, color: Color.fromRGBO(94, 53, 177, 1)),
             onPressed: search,
             label: const Text(
               'Search     ',
@@ -147,7 +144,8 @@ class BusCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 239, 233, 255), borderRadius: BorderRadius.circular(12)),
+            color: const Color.fromARGB(255, 239, 233, 255),
+            borderRadius: BorderRadius.circular(12)),
         width: double.infinity,
         child: Column(
           children: [

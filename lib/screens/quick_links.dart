@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class QuickLinks extends StatefulWidget {
   const QuickLinks({Key? key}) : super(key: key);
@@ -11,49 +12,72 @@ class QuickLinksState extends State<QuickLinks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-           centerTitle: true,
-          title: const Text("Quick Links"),
-        ),
-        body: ListView(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.settings_outlined, color: Colors.blue),
-              title: const Text("Maintenance Portal"),
-              subtitle: const Text("For all maintenance requests, use the online portal\nLink: http://maintenance.iitgn.ac.in"),
-              onTap: () {
-                // Open the maintenance portal in a web browser or navigate to a web page.
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Quick Links"),
+      ),
+      body: ListView(
+        children: [
+          _buildLinkTile(
+            icon: Icons.settings_outlined,
+            title: "Maintenance Portal",
+            subtitle: "For all maintenance requests, use the online portal",
+            url: "http://maintenance.iitgn.ac.in",
+          ),
+          _buildLinkTile(
+            icon: Icons.security_outlined,
+            title: "Campus Security (24x7)",
+            subtitle: "Security supervisor hotline: 7567935473 (available 24x7)",
+          
+          ),
+          _buildLinkTile(
+            icon: Icons.hotel_outlined,
+            subtitle: "For booking guest house rooms",
+            title: "Guest House Booking",
+            url: "https://guesthouse.iitgn.ac.in/booking.php",
+          ),
+          _buildLinkTile(
+            icon: Icons.school_outlined,
+            subtitle: "For all academic requests",
+            title: "Academics Request System",
+            url: "https://academics.iitgn.ac.in/request/",
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLinkTile({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    String? url,
+  }) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      subtitle: Text(subtitle),
+      onTap: () {
+        if (url != null && url.isNotEmpty) {
+          _launchURL(url);
+        }
+      },
+      trailing: url != null && url.isNotEmpty
+          ? IconButton(
+              icon: Icon(Icons.open_in_new),
+              onPressed: () {
+                _launchURL(url);
               },
-            ),
-            const ListTile(
-              leading: Icon(Icons.security_outlined, color: Colors.red),
-              title: Text("Campus Security (24x7)"),
-              // subtitle: Text("Security supervisor hotline: 7567935473 (available 24x7)"),
-            ),
-            Container(
-              child:
-              const Row(children: [
-                Padding(padding: EdgeInsets.all(10)),
-                Text("Security Advisor hot line: 7567935473 (24x7)"),
-              ],)
             )
-            // ListTile(
-            //   leading: Icon(Icons.person, color: Colors.green),
-            //   title: Text("Security supervisor"),
-            //   subtitle: Text("Manubhai Chaudhari | Amrut Rathod | Suresh Singh"),
-            // ),
-            // ListTile(
-            //   leading: Icon(Icons.person, color: Colors.green),
-            //   title: Text("Security officer"),
-            //   subtitle: Text("Sumit Kumar"),
-            // ),
-            // ListTile(
-            //   leading: Icon(Icons.phone, color: Colors.blue),
-            //   title: Text("Contact"),
-            //   subtitle: Text("8690971431"),
-            // ),
-          ],
-        ),
-        );
+          : null,
+    );
+  }
+
+  Future<void> _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

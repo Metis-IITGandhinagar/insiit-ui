@@ -42,7 +42,7 @@ class Meal {
   });
 
   int? id;
-  String? name;
+  String name;
   int? price;
   // String? description;
   // final bool isVeg;

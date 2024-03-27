@@ -28,7 +28,7 @@ class _BusPageState extends State<BusPage> {
 
   void fetchTowns() async {
     Response response = await get(Uri.parse(
-        'https://6baa0265-07c2-4b1c-b8bc-8fb7920eb5ee-00-kiqlob58lav7.pike.repl.co/towns'));
+        'http://10.7.39.171:3000/api/towns'));
     List result = jsonDecode(response.body) as List;
     setState(() {
       towns.clear();
@@ -42,7 +42,7 @@ class _BusPageState extends State<BusPage> {
 
   void search() async {
     String url =
-        'https://6baa0265-07c2-4b1c-b8bc-8fb7920eb5ee-00-kiqlob58lav7.pike.repl.co/buses?from=$src&to=$des';
+        'http://10.7.39.171:3000/api/search?source=$src&destination=$des';
     Response response = await get(Uri.parse(url));
     print(response.body);
     setState(() {
