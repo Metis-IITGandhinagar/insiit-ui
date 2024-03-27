@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import '../model/outlet.dart';
 import 'meal.dart';
+import 'outlet_page.dart';
 
 class OutletExplore extends StatefulWidget {
   @override
@@ -33,31 +34,63 @@ class _OutletExploreState extends State<OutletExplore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-      body: FutureBuilder<List<Outlet>>(
-        future: futureOutlets,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            List<Outlet>? outlets = snapshot.data;
-            return ListView.builder(
-              itemCount: outlets!.length,
-              itemBuilder: (context, index) {
-                return OutletWidget(outlet: outlets[index]);
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(10),
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              child: const Column(
+                children: [
+                  SizedBox(height: 50),
+                  Text(
+                    'Explore Outlets',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                  SizedBox(height: 30),
+                  Text(
+                    'Feeling Hungry? You have come to the right place. Explore and enjoy delicious foods here',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                ],
+              ),
+            ),
+            FutureBuilder<List<Outlet>>(
+              future: futureOutlets,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Outlet>? outlets = snapshot.data;
+                  return ListView.builder(
+                    itemCount: outlets!.length,
+                    itemBuilder: (context, index) {
+                      return OutletWidget(outlet: outlets[index]);
+                    },
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                }
+                // By default, show a loading spinner
+                return Center(child: CircularProgressIndicator());
               },
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          }
-          // By default, show a loading spinner
-          return Center(child: CircularProgressIndicator());
-        },
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
 class OutletWidget extends StatelessWidget {
   final Outlet outlet;
 
@@ -67,10 +100,15 @@ class OutletWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(outlet.name),
-      subtitle: Text(outlet.location.latitude + ', ' + outlet.location.longitude),
+      subtitle:
+          Text(outlet.openTime + ' - ' + outlet.closeTime),
       onTap: () {
-        // Add navigation logic here if needed
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OutletPage(outlet: outlet)),
+        );
       },
     );
   }
 }
+

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class Outlet {
-  final int id;
+  final String id;
   final String name;
   final Location location;
   final String landmark;
@@ -29,7 +29,7 @@ class Outlet {
   final List<MenuItem> menuItems = menuData.map((item) => MenuItem.fromJson(item)).toList();
 
   return Outlet(
-    id: json['id'] ?? 0, // Provide a default value for id if it's null
+    id: json['id'] ?? '', // Provide a default value for id if it's null
     name: json['name'] ?? '',
     location: Location.fromJson(json['location'] ?? {}),
     landmark: json['landmark'] ?? '',
@@ -61,7 +61,7 @@ class Location {
 }
 
 class MenuItem {
-  final int id;
+  final String id;
   final String name;
   final double price;
   final String description;
@@ -83,7 +83,7 @@ class MenuItem {
 
   factory MenuItem.fromJson(Map<String, dynamic> json) {
   return MenuItem(
-    id: json['id'] ?? 0, // Provide a default value for id if it's null
+    id: json['id'] ?? '', // Provide a default value for id if it's null
     name: json['name'] ?? '',
     price: json['price']?.toDouble() ?? 0.0,
     description: json['description'] ?? '',
