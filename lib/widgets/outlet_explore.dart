@@ -22,7 +22,7 @@ class _OutletExploreState extends State<OutletExplore> {
 
   Future<List<Outlet>> fetchOutlets() async {
     final response =
-        await http.get(Uri.parse('http://10.7.39.171:3000/api/outlets'));
+        await http.get(Uri.parse('https://insiit-backend-node.vercel.app/api/outlets'));
     if (response.statusCode == 200) {
       List<dynamic> responseData = json.decode(response.body);
       return responseData.map((data) => Outlet.fromJson(data)).toList();

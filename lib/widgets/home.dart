@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import '../model/events.dart';
 import 'dart:async';
 import 'package:insiit/model/mess_menu.dart';
+import 'dart:math';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,7 +41,7 @@ class _HomePageState extends State<HomePage> {
   Future<List<Events>> postsFuture = getPosts();
 
   static Future<List<Events>> getPosts() async {
-    var url = Uri.parse("http://10.7.39.171:3000/api/events");
+    var url = Uri.parse("https://insiit-backend-node.vercel.app/api/events");
     final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(response.body);
@@ -243,6 +244,26 @@ class _HomePageState extends State<HomePage> {
                   );
                 } else {
                   final events = snapshot.data;
+                  final currentDate = DateTime.now();
+                  final previousDate = currentDate.subtract(Duration(days: 1));
+
+                  final futureEvents = events?.where((event) {
+                    if (event?.date == null) return false;
+                    final eventDate = DateTime.parse(event!.date!);
+                    return eventDate.isAfter(previousDate);
+                  }).toList();
+
+                  final sortedEvents = futureEvents?.where((event) {
+                    if (event?.date == null) return false;
+                    final eventDate = DateTime.parse(event!.date!);
+                    return eventDate.isAfter(previousDate);
+                  }).toList();
+
+                  sortedEvents?.sort((a, b) {
+                    final aDate = DateTime.parse(a.date!);
+                    final bDate = DateTime.parse(b.date!);
+                    return aDate.compareTo(bDate);
+                  });
 
                   return SingleChildScrollView(
                     child: Column(
@@ -253,10 +274,10 @@ class _HomePageState extends State<HomePage> {
                           height: 180,
                           child: PageView.builder(
                             controller: controller,
-                            itemCount:
-                                events?.length, // Use the length of events
+                            itemCount: min(sortedEvents?.length ?? 0,
+                                6), // Use the length of events
                             itemBuilder: (_, index) {
-                              final event = events?[index];
+                              final event = sortedEvents?[index];
                               return InkWell(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(16.0)),
@@ -268,7 +289,7 @@ class _HomePageState extends State<HomePage> {
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               EventDetailsPage(
-                                                  event: events?[index])),
+                                                  event: sortedEvents?[index])),
                                     );
                                   },
                                   child: Container(
@@ -315,8 +336,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                         SmoothPageIndicator(
                           controller: controller,
-                          count:
-                              events?.length ?? 0, // Using the length of events
+                          count: min(sortedEvents?.length ?? 0,
+                              6), // Using the length of events
                           effect: const WormEffect(
                             dotHeight: 6,
                             dotWidth: 6,
@@ -357,8 +378,8 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           IconButton(
                               onPressed: () {
-                                Navigator.of(context).push(
-                                    MaterialPageRoute(builder: (_) => MenuPage()));
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => MenuPage()));
                               },
                               icon: const Icon(Icons.arrow_forward_ios))
                         ],
@@ -458,46 +479,48 @@ class _HomePageState extends State<HomePage> {
         ]));
   }
 
- Widget _buildMealTile(String mealType, String? meal) {
-  return Container(
-    width: MediaQuery.of(context).size.width - 16,
-    height: 330,
-    margin: EdgeInsets.symmetric(vertical: 8),
-    padding: EdgeInsets.all(12),
-    decoration: BoxDecoration(
-      color: Theme.of(context).colorScheme.secondaryContainer, // Light purple color
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            mealType.toUpperCase(),
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onSecondaryContainer,
-            ),
-          ),
-          SizedBox(height: 12),
-          Text(
-            meal ?? 'Not available',
-            style: TextStyle(
-              fontSize: 14,
-              fontStyle: meal == null ? FontStyle.italic : FontStyle.normal,
-              color: meal == null ? Theme.of(context).colorScheme.onSecondaryContainer : Theme.of(context).colorScheme.onSecondaryContainer,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+  Widget _buildMealTile(String mealType, String? meal) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 16,
+      height: 330,
+      margin: EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Theme.of(context)
+            .colorScheme
+            .secondaryContainer, // Light purple color
+        borderRadius: BorderRadius.circular(8),
       ),
-    ),
-  );
-}
-
-
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              mealType.toUpperCase(),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
+              ),
+            ),
+            SizedBox(height: 12),
+            Text(
+              meal ?? 'Not available',
+              style: TextStyle(
+                fontSize: 14,
+                fontStyle: meal == null ? FontStyle.italic : FontStyle.normal,
+                color: meal == null
+                    ? Theme.of(context).colorScheme.onSecondaryContainer
+                    : Theme.of(context).colorScheme.onSecondaryContainer,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   MenuDay? _getTodayMenu(MessMenu? menu) {
     DateTime now = DateTime.now();

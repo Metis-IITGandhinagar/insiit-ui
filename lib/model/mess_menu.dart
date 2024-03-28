@@ -1,5 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class MessMenu {
   final String id;
@@ -50,14 +52,35 @@ class MenuDay {
     );
   }
 }
-
 class MenuService {
   Future<MessMenu?> fetchMenu() async {
-    final response =
-        await http.get(Uri.parse('http://10.7.39.171:3000/api/mess-menu'));
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    
+    // Attempt to fetch cached data
+    final String? cachedData = prefs.getString('cachedMenu');
+    final int? cacheTimestamp = prefs.getInt('cacheTimestamp');
+
+    // Check if cached data exists and if it's not expired
+    if (cachedData != null && cacheTimestamp != null) {
+      final currentTime = DateTime.now().millisecondsSinceEpoch;
+      final difference = currentTime - cacheTimestamp;
+      if (difference < (24 * 60 * 60 * 1000)) { // Check if cache is within 24 hours
+        // Cached data is still valid, return it
+        return MessMenu.fromJson(json.decode(cachedData));
+      }
+    }
+
+    // Fetch data from API if cache is expired or not available
+    final response = await http.get(Uri.parse('https://insiit-backend-node.vercel.app/api/mess-menu'));
     if (response.statusCode == 200) {
-      Map<String, dynamic> responseData = json.decode(response.body);
-      return MessMenu.fromJson(responseData);
+      final responseData = json.decode(response.body);
+      final messMenu = MessMenu.fromJson(responseData);
+      
+      // Cache fetched data
+      await prefs.setString('cachedMenu', response.body);
+      await prefs.setInt('cacheTimestamp', DateTime.now().millisecondsSinceEpoch);
+      
+      return messMenu;
     } else {
       throw Exception('Failed to load menu');
     }

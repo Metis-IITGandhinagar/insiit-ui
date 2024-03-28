@@ -32,7 +32,7 @@
 
 //   Future<void> fetchMenu() async {
 //     final response =
-//         await http.get(Uri.parse('http://10.7.39.171:3000/api/mess-menu'));
+//         await http.get(Uri.parse('https://insiit-backend-node.vercel.app/api/mess-menu'));
 //     final extractedData = json.decode(response.body);
 //     setState(() {
 //       weeklyMenu = extractedData.mess;

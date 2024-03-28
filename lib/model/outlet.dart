@@ -97,7 +97,7 @@ class MenuItem {
 
 Future<Outlet?> fetchOutlet() async {
   final response =
-      await http.get(Uri.parse('http://10.7.39.171:3000/api/outlets'));
+      await http.get(Uri.parse('https://insiit-backend-node.vercel.app/api/outlets'));
   if (response.statusCode == 200) {
     Map<String, dynamic> responseData = json.decode(response.body);
     return Outlet.fromJson(responseData);

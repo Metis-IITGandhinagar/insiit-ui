@@ -28,7 +28,7 @@ class _BusPageState extends State<BusPage> {
 
   void fetchTowns() async {
     Response response = await get(Uri.parse(
-        'http://10.7.39.171:3000/api/towns'));
+        'https://insiit-backend-node.vercel.app/api/towns'));
     List result = jsonDecode(response.body) as List;
     setState(() {
       towns.clear();
@@ -42,7 +42,7 @@ class _BusPageState extends State<BusPage> {
 
   void search() async {
     String url =
-        'http://10.7.39.171:3000/api/search?source=$src&destination=$des';
+        'https://insiit-backend-node.vercel.app/api/search?source=$src&destination=$des';
     Response response = await get(Uri.parse(url));
     print(response.body);
     setState(() {
