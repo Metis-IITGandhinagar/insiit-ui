@@ -56,7 +56,7 @@ class MenuService {
   Future<MessMenu?> fetchMenu() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     
-    // Attempt to fetch cached data
+    // fetch cached data
     final String? cachedData = prefs.getString('cachedMenu');
     final int? cacheTimestamp = prefs.getInt('cacheTimestamp');
 
