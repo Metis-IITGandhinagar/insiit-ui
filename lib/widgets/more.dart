@@ -25,14 +25,13 @@ class _MorePageState extends State<MorePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              
               Column(
                 children: [
-                  Image.asset("assets/more.png",
-                   height: 200,
+                  Image.asset(
+                    "assets/more.png",
+                    height: 200,
                     scale: 2.5,
                   )
-
                 ],
               )
             ],
@@ -40,116 +39,93 @@ class _MorePageState extends State<MorePage> {
           const SizedBox(
             height: 40,
           ),
-      //     Row(
-      //       mainAxisAlignment: MainAxisAlignment.center,
-      //       children: [
-      //   Card(
-                
-      //             color:  Theme.of(context).colorScheme.secondaryContainer,
-      //             margin: const EdgeInsets.all(16.0),
-      //             child: InkWell(
-      //               borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-      //               splashColor: const Color(0x85839ED8),
-      //               onTap: () {
-      //                 Navigator.push(
-      //                   context,
-      //                   MaterialPageRoute(
-      //                       builder: (context) => const TLBookingPage()),
-      //                 );
-      //               },
-      //               child: SizedBox(
-      //                 height: 120,
-      //                 width: MediaQuery.of(context).size.width / 2 -
-      //                     32, // minus 32 due to the margin
+          //     Row(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [
+          //   Card(
 
-      //                 child: Column(
-      //                   mainAxisAlignment: MainAxisAlignment.center,
-      //                   crossAxisAlignment: CrossAxisAlignment.center,
-      //                   children: [
-                         
-      //                     Text(
-      //                             "Tinkerers' Lab",
-      //                       style: TextStyle(
-      //                         fontSize: 15,
-      //                         color:  Theme.of(context)
-      //                             .colorScheme
-      //                             .onSecondaryContainer,
-      //                       ),
-      //                     )
-      //                   ],
-      //                 ),
-      //               ),
-      //             )),
+          //             color:  Theme.of(context).colorScheme.secondaryContainer,
+          //             margin: const EdgeInsets.all(16.0),
+          //             child: InkWell(
+          //               borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+          //               splashColor: const Color(0x85839ED8),
+          //               onTap: () {
+          //                 Navigator.push(
+          //                   context,
+          //                   MaterialPageRoute(
+          //                       builder: (context) => const TLBookingPage()),
+          //                 );
+          //               },
+          //               child: SizedBox(
+          //                 height: 120,
+          //                 width: MediaQuery.of(context).size.width / 2 -
+          //                     32, // minus 32 due to the margin
 
-      //             Card(
-      //             // surfaceTintColor: Colors.white,
-      //             color:  Theme.of(context).colorScheme.tertiaryContainer,
-      //             margin: const EdgeInsets.all(16.0),
-      //             child: InkWell(
-      //               borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-      //               splashColor: const Color.fromARGB(92, 234, 119, 188),
-      //               onTap: () {
-      //                 Navigator.push(
-      //                   context,
-      //                   MaterialPageRoute(
-      //                       builder: (context) =>  const ComplainsPage()),
-      //                 );
-      //               },
-      //               child: SizedBox(
-      //                 height: 120,
-      //                 width: MediaQuery.of(context).size.width / 2 -
-      //                     32, // minus 32 due to the margin
+          //                 child: Column(
+          //                   mainAxisAlignment: MainAxisAlignment.center,
+          //                   crossAxisAlignment: CrossAxisAlignment.center,
+          //                   children: [
 
-      //                 child: Column(
-      //                   mainAxisAlignment: MainAxisAlignment.center,
-      //                   crossAxisAlignment: CrossAxisAlignment.center,
-      //                   children: [
-                       
-      //                     Text(
-      //                       "Complaints",
-      //                       style: TextStyle(
-      //                         fontSize: 15,
-      //                         color:  Theme.of(context)
-      //                             .colorScheme
-      //                             .onTertiaryContainer,
-      //                       ),
-      //                     )
-      //                   ],
-      //                 ),
-      //               ),
-      //             )),
-      //  ],
-      //     ),
-      //     const SizedBox(
-      //       height: 50,
-      //     ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 50,
-              width:  MediaQuery.of(context).size.width - 50,
-              child:  OutlinedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const MedicalFacilityPage()),
-                    );
-                  },
-                 child: const Text("Medical Facility"),
-                ),
-            ),
-             
-          ],
-        ),
-         const SizedBox(
-            height: 20,
-          ),
-         Row(
+          //                     Text(
+          //                             "Tinkerers' Lab",
+          //                       style: TextStyle(
+          //                         fontSize: 15,
+          //                         color:  Theme.of(context)
+          //                             .colorScheme
+          //                             .onSecondaryContainer,
+          //                       ),
+          //                     )
+          //                   ],
+          //                 ),
+          //               ),
+          //             )),
+
+          //             Card(
+          //             // surfaceTintColor: Colors.white,
+          //             color:  Theme.of(context).colorScheme.tertiaryContainer,
+          //             margin: const EdgeInsets.all(16.0),
+          //             child: InkWell(
+          //               borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+          //               splashColor: const Color.fromARGB(92, 234, 119, 188),
+          //               onTap: () {
+          //                 Navigator.push(
+          //                   context,
+          //                   MaterialPageRoute(
+          //                       builder: (context) =>  const ComplainsPage()),
+          //                 );
+          //               },
+          //               child: SizedBox(
+          //                 height: 120,
+          //                 width: MediaQuery.of(context).size.width / 2 -
+          //                     32, // minus 32 due to the margin
+
+          //                 child: Column(
+          //                   mainAxisAlignment: MainAxisAlignment.center,
+          //                   crossAxisAlignment: CrossAxisAlignment.center,
+          //                   children: [
+
+          //                     Text(
+          //                       "Complaints",
+          //                       style: TextStyle(
+          //                         fontSize: 15,
+          //                         color:  Theme.of(context)
+          //                             .colorScheme
+          //                             .onTertiaryContainer,
+          //                       ),
+          //                     )
+          //                   ],
+          //                 ),
+          //               ),
+          //             )),
+          //  ],
+          //     ),
+          //     const SizedBox(
+          //       height: 50,
+          //     ),
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-               SizedBox(
+              SizedBox(
                 height: 50,
                 width: MediaQuery.of(context).size.width - 50,
                 child: OutlinedButton(
@@ -157,7 +133,28 @@ class _MorePageState extends State<MorePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const DevelopersPage()),
+                          builder: (context) => const MedicalFacilityPage()),
+                    );
+                  },
+                  child: const Text("Medical Facility"),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 50,
+                width: MediaQuery.of(context).size.width - 50,
+                child: OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DevelopersPage()),
                     );
                   },
                   child: const Text("Team InsIIT"),
@@ -168,7 +165,7 @@ class _MorePageState extends State<MorePage> {
           const SizedBox(
             height: 20,
           ),
-           Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
@@ -190,7 +187,7 @@ class _MorePageState extends State<MorePage> {
           const SizedBox(
             height: 20,
           ),
-           Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
@@ -208,14 +205,14 @@ class _MorePageState extends State<MorePage> {
                 ),
               ),
             ],
-          ), 
+          ),
           const SizedBox(
             height: 20,
           ),
-           Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-             SizedBox(
+              SizedBox(
                 height: 50,
                 width: MediaQuery.of(context).size.width - 50,
                 child: OutlinedButton(
@@ -231,25 +228,22 @@ class _MorePageState extends State<MorePage> {
               ),
             ],
           ),
-            const SizedBox(
-              height: 18,
-            ),
-          
+          const SizedBox(
+            height: 18,
+          ),
+
           const Row(
-            
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [SizedBox(
-              height: 50,
-              child: Text(
-                
-                "Made with ♥️ by Metis, IITGN"
-              ),
-            )],
+            children: [
+              SizedBox(
+                height: 50,
+                child: Text("Made with ♥️ by Metis, IITGN"),
+              )
+            ],
           )
         ],
       ),
-
     );
   }
 }
