@@ -1,134 +1,3 @@
-// import 'dart:convert';
-// import 'package:flutter/material.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:rotating_icon_button/rotating_icon_button.dart';
-// import 'package:intl/intl.dart';
-
-// class Menu extends StatefulWidget {
-//   const Menu({Key? key}) : super(key: key);
-
-//   @override
-//   State<Menu> createState() => _MenuState();
-// }
-
-// class _MenuState extends State<Menu> {
-//   late Map<String, dynamic> weeklyMenu;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     weeklyMenu = {};
-//     loadMenuFromPrefs().then((data) {
-//       if (data.isEmpty) {
-//         fetchMenu();
-//       } else {
-//         setState(() {
-//           weeklyMenu = data;
-//         });
-//       }
-//     });
-//   }
-
-//   Future<void> fetchMenu() async {
-//     final response =
-//         await http.get(Uri.parse('https://insiit-backend-node.vercel.app/api/mess-menu'));
-//     final extractedData = json.decode(response.body);
-//     setState(() {
-//       weeklyMenu = extractedData.mess;
-//     });
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     prefs.setString('weeklyMenu', json.encode(extractedData));
-//   }
-
-//   Future<Map<String, dynamic>> loadMenuFromPrefs() async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     if (prefs.containsKey('weeklyMenu')) {
-//       return json.decode(prefs.getString('weeklyMenu')!);
-//     } else {
-//       return {};
-//     }
-//   }
-
-//   Widget buildDailyMenu(String day, String mealType) {
-//     if (weeklyMenu['mess'] != null) {
-//       for (var menu in weeklyMenu['mess']) {
-//         if (menu['day'] == day) {
-//           return ExpansionTile(
-//             title: Text('$mealType'.toUpperCase()),
-//             children: <Widget>[
-//               ListTile(
-//                 title: Text(menu[mealType]),
-//               ),
-//             ],
-//           );
-//         }
-//       }
-//     }
-//     return Container(); // Return an empty container if menu data is not available
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final weekdays = [
-//       'monday',
-//       'tuesday',
-//       'wednesday',
-//       'thursday',
-//       'friday',
-//       'saturday',
-//       'sunday'
-//     ];
-
-//     final String today = DateFormat('EEEE').format(DateTime.now()).toLowerCase();
-
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Mess Menu'),
-//         actions: [
-//           RotatingIconButton(
-//             background: Theme.of(context).colorScheme.secondary,
-//             onTap: () async {
-//               await fetchMenu();
-//             },
-//             child: const Icon(Icons.refresh),
-//           ),
-//         ],
-//       ),
-//       body: DefaultTabController(
-//         length: 7,
-//         initialIndex: weekdays.indexOf(today),
-//         child: Column(
-//           children: [
-//             TabBar(
-//               isScrollable: true,
-//               tabs: weekdays
-//                   .map((day) => Tab(
-//                         child: Text(
-//                           day.toUpperCase(),
-//                         ),
-//                       ))
-//                   .toList(),
-//             ),
-//             Expanded(
-//               child: TabBarView(
-//                 children: weekdays
-//                     .map((day) => ListView.builder(
-//                           itemCount: 4,
-//                           itemBuilder: (context, index) {
-//                             final mealType = ['breakfast', 'lunch', 'snacks', 'dinner'][index];
-//                             return buildDailyMenu(day, mealType);
-//                           },
-//                         ))
-//                     .toList(),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 import 'package:flutter/material.dart';
 import '../model/mess_menu.dart';
 
@@ -153,6 +22,7 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return FutureBuilder<MessMenu?>(
       future: _menuFuture,
+      
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
@@ -188,6 +58,15 @@ class _MenuPageState extends State<MenuPage> {
                     );
                   }).toList(),
                 ),
+                actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () => {}
+          ),
+          const SizedBox(
+            width: 15,
+          ),
+        ],
               ),
               body: TabBarView(
                 children: menu.mess.map((dayMenu) {

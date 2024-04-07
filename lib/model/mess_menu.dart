@@ -64,13 +64,12 @@ class MenuService {
     if (cachedData != null && cacheTimestamp != null) {
       final currentTime = DateTime.now().millisecondsSinceEpoch;
       final difference = currentTime - cacheTimestamp;
-      if (difference < (24 * 60 * 60 * 1000)) { // Check if cache is within 24 hours
-        // Cached data is still valid, return it
+      if (difference < (24 * 60 * 60 * 1000)) { //24hr
+
         return MessMenu.fromJson(json.decode(cachedData));
       }
     }
 
-    // Fetch data from API if cache is expired or not available
     final response = await http.get(Uri.parse('https://insiit-backend-node.vercel.app/api/mess-menu'));
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);

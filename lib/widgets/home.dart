@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-var name = FirebaseAuth.instance.currentUser!.displayName;
+var name = FirebaseAuth.instance.currentUser!.displayName ?? "Guest";
 
 var nameArray = name?.split(" ");
 

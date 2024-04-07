@@ -14,7 +14,7 @@ class QRDisplay extends StatefulWidget {
   _QRDisplayState createState() => _QRDisplayState();
 }
 
-var email = FirebaseAuth.instance.currentUser!.email;
+var email = FirebaseAuth.instance.currentUser!.email ?? "Enter your email";
 
 class _QRDisplayState extends State<QRDisplay> {
   Future<String> qrDataMethod() async {
@@ -170,7 +170,7 @@ class _QRDisplayState extends State<QRDisplay> {
       // Get the index.php page with the cookies
       var indexPageResponse = await dio.get('http://mess.iitgn.ac.in/');
 
-      // Extract and display the relevant information
+      // display the QR information
       setState(() {
         dom.Document doc = parse(indexPageResponse.data);
         var ord = doc.querySelectorAll('span.text-purple');
