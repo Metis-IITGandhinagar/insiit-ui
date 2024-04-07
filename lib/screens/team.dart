@@ -48,7 +48,7 @@ class DevelopersPageState extends State<DevelopersPage> {
                       role: "",
                       email: "kumaranmol@iitgn.ac.in",
                       imageUrl:
-                          "https://raw.githubusercontent.com/anmolkumr/insiit-ui/master/assets/anmol-insiit.jpeg",
+                          "https://raw.githubusercontent.com/anmolkumr/insiit-ui/master/assets/anmol-insiit.jpg",
                     ),
                   ],
                 ),
