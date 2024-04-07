@@ -175,7 +175,7 @@ class _MenuPageState extends State<MenuPage> {
         } else if (snapshot.hasData) {
           MessMenu? menu = snapshot.data;
           return DefaultTabController(
-               initialIndex: DateTime.now().weekday - 1,
+            initialIndex: DateTime.now().weekday - 1,
             length: menu!.mess.length,
             child: Scaffold(
               appBar: AppBar(
@@ -225,14 +225,18 @@ class _MenuPageState extends State<MenuPage> {
           fontWeight: FontWeight.bold,
         ),
       ),
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            meal ?? 'Not available',
-            style: TextStyle(
-              
-              fontStyle: meal == null ? FontStyle.italic : FontStyle.normal,
+          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+          child: Align(
+            alignment: Alignment.centerLeft, // Align text to the left
+            child: Text(
+              meal ?? 'Not available',
+              style: TextStyle(
+                fontStyle: meal == null ? FontStyle.italic : FontStyle.normal,
+                height: 2.5,
+              ),
             ),
           ),
         ),

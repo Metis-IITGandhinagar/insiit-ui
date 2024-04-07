@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:url_launcher/url_launcher.dart';
 
 class RepresentativesPage extends StatefulWidget {
   const RepresentativesPage({Key? key}) : super(key: key);
@@ -117,23 +118,23 @@ class _RepresentativesPageState extends State<RepresentativesPage> {
                   Text("$email"),
                 ],
               ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.phone),
-                    onPressed: () {
-                      // Implement call functionality
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.email),
-                    onPressed: () {
-                      // Implement email functionality
-                    },
-                  ),
-                ],
-              ),
+              // trailing: Row(
+              //   mainAxisSize: MainAxisSize.min,
+              //   children: [
+              //     IconButton(
+              //       icon: Icon(Icons.phone),
+              //       onPressed: () {
+              //         // Implement call functionality
+              //       },
+              //     ),
+              //     IconButton(
+              //       icon: Icon(Icons.email),
+              //       onPressed: () {
+              //         // Implement email functionality
+              //       },
+              //     ),
+              //   ],
+              // ),
             ),
           );
         },

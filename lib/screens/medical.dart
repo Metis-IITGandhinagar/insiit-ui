@@ -78,7 +78,7 @@ class MedicalFacilityPage extends StatelessWidget {
                           ),
                           SizedBox(width: 10),
                           IconButton(
-                            icon: Icon(Icons.call),
+                            icon: Icon(Icons.call), 
                             onPressed: () {
                               launch('tel://7069795000');
                             },

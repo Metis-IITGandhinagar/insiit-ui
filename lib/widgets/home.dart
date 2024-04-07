@@ -508,6 +508,7 @@ class _HomePageState extends State<HomePage> {
             Text(
               meal ?? 'Not available',
               style: TextStyle(
+                height: 1.5,
                 fontSize: 14,
                 fontStyle: meal == null ? FontStyle.italic : FontStyle.normal,
                 color: meal == null

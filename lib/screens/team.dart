@@ -38,7 +38,8 @@ class DevelopersPageState extends State<DevelopersPage> {
                       name: "Mayank Gulati",
                       role: "",
                       email: "mayank.gulati@iitgn.ac.in",
-                      imageUrl: "https://media.licdn.com/dms/image/D5603AQGMxYt2jU_lhA/profile-displayphoto-shrink_800_800/0/1680005993701?e=1703721600&v=beta&t=WIBvRUPfb6JKhXtt_LxEPhpaXq79UPwAlIVRXO011s8",
+                      imageUrl:
+                          "https://raw.githubusercontent.com/anmolkumr/insiit-ui/master/assets/mayank-insiit.jpeg",
                     ),
                     DeveloperCard(
                       phoneNumber: "",
@@ -46,13 +47,14 @@ class DevelopersPageState extends State<DevelopersPage> {
                       name: "Anmol Kumar",
                       role: "",
                       email: "kumaranmol@iitgn.ac.in",
-                      imageUrl: "https://media.licdn.com/dms/image/D5603AQGH7Y4vaPzLNA/profile-displayphoto-shrink_800_800/0/1677745140471?e=1703721600&v=beta&t=ZfU3lJjCZgGny5BOixhqPMBoyUopDTBYJ38eGRHLCf4",
+                      imageUrl:
+                          "https://raw.githubusercontent.com/anmolkumr/insiit-ui/master/assets/anmol-insiit.jpeg",
                     ),
-                    
                   ],
                 ),
               ],
             ),
+            SizedBox(height: 20),
             ExpansionTile(
               title: const Text('Contributors'),
               initiallyExpanded: true, // Initially expanded
@@ -65,14 +67,23 @@ class DevelopersPageState extends State<DevelopersPage> {
                     mainAxisSpacing: 5,
                   ),
                   children: const [
-                    
                     DeveloperCard(
                       phoneNumber: "",
                       GithubURL: "https://github.com/AshStorm17",
                       name: "Aashmun Gupta",
                       role: "",
                       email: "aashmun.gupta@iitgn.ac.in",
-                      imageUrl: "https://media.licdn.com/dms/image/C5603AQFzPumH4AcueA/profile-displayphoto-shrink_800_800/0/1602848541859?e=1697673600&v=beta&t=zdk-JHO3svMVgo7dQyfAr5iE3lgEt9-a-Rd52x1-at0",
+                      imageUrl:
+                          "https://raw.githubusercontent.com/anmolkumr/insiit-ui/master/assets/aashmun-insiit.jpeg",
+                    ),
+                    DeveloperCard(
+                      phoneNumber: "",
+                      GithubURL: "https://github.com",
+                      name: "Karan Gandhi",
+                      role: "",
+                      email: "@iitgn.ac.in",
+                      imageUrl:
+                          "https://raw.githubusercontent.com/anmolkumr/insiit-ui/master/assets/karan-insiit.jpeg",
                     ),
                   ],
                 ),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 import '../model/outlet.dart';
+
 class OutletPage extends StatelessWidget {
   final Outlet outlet;
 
@@ -11,16 +9,44 @@ class OutletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(outlet.name),
-      ),
-      body: Column(
-        children: outlet.menu.map((item) {
-          return ListTile(
-            title: Text(item.name),
-            subtitle: Text('₹' +'${item.price.toStringAsFixed(2)}'),
-          );
-        }).toList(),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            floating: false,
+            backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+            pinned: true,
+            expandedHeight: 200,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(outlet.name ?? 'Name Not Available',
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(
+                      fontSize: 20,
+                      color:
+                          Theme.of(context).colorScheme.onSecondaryContainer)),
+              background: Container(
+                color: Theme.of(context)
+                    .colorScheme
+                    .secondaryContainer, // Plain dark background color
+              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final item = outlet.menu[index];
+                return ListTile(
+                  title: Text(item.name),
+                  trailing: Text('₹' + '${item.price.toStringAsFixed(2)}'),
+                  onTap: () {
+                    // Handle item selection
+                  },
+                  visualDensity: VisualDensity.standard,
+                );
+              },
+              childCount: outlet.menu.length,
+            ),
+          ),
+        ],
       ),
     );
   }

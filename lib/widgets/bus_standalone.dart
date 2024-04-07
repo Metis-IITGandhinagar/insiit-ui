@@ -27,7 +27,8 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
   }
 
   void fetchTowns() async {
-    Response response = await get(Uri.parse('https://insiit-backend-node.vercel.app/api/towns'));
+    Response response = await get(
+        Uri.parse('https://insiit-backend-node.vercel.app/api/towns'));
     List result = jsonDecode(response.body) as List;
     setState(() {
       towns.clear();
@@ -40,7 +41,8 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
   }
 
   void search() async {
-    String url = 'https://insiit-backend-node.vercel.app/api/search?source=$src&destination=$des';
+    String url =
+        'https://insiit-backend-node.vercel.app/api/search?source=$src&destination=$des';
     Response response = await get(Uri.parse(url));
     print(response.body);
     setState(() {
@@ -50,6 +52,24 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
         data.add(item);
       }
     });
+
+    // Check if data is empty after search
+    // if (data.isEmpty) {
+    //   showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return AlertDialog(
+    //         title: Text('No buses Available'),
+    //         actions: [
+    //           TextButton(
+    //             onPressed: () => Navigator.of(context).pop(),
+    //             child: Text('OK'),
+    //           ),
+    //         ],
+    //       );
+    //     },
+    //   );
+    // }
   }
 
   @override
