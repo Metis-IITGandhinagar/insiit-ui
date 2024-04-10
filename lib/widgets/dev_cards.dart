@@ -40,6 +40,7 @@ class DeveloperCard extends StatelessWidget {
     );
     launchUrl(emailLaunchUri);
   }
+
   @override
   Widget build(BuildContext context) {
     return Card(

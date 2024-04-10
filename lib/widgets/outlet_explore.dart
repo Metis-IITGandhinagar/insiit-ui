@@ -2,173 +2,113 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import '../models/meal.dart';
-import '../widgets/meal.dart';
+import '../model/outlet.dart';
+import 'meal.dart';
+import 'outlet_page.dart';
 
 class OutletExplore extends StatefulWidget {
-  const OutletExplore({super.key});
-
   @override
-  State<OutletExplore> createState() => _OutletExploreState();
+  _OutletExploreState createState() => _OutletExploreState();
 }
 
 class _OutletExploreState extends State<OutletExplore> {
-  List<Meal> meals = [];
+  late Future<List<Outlet>> futureOutlets;
 
-// Get the iems on screen load
   @override
   void initState() {
     super.initState();
-    fetchMeal();
+    futureOutlets = fetchOutlets();
   }
 
-// The item list is updated in meals list
-  Future<void> fetchMeal() async {
-    final response = await http.get(
-        Uri.parse('https://insiit-api.onrender.com/food-outlet_menu_food-item'),
-        headers: {'x-api-key': 'D4tuaQYa1m2pqpILHOND4KSauRFMvbaU'});
-        final outletFoods = json.decode(response.body);
-    print(outletFoods['food_items']);
-
+  Future<List<Outlet>> fetchOutlets() async {
+    final response =
+        await http.get(Uri.parse('https://insiit-backend-node.vercel.app/api/outlets'));
     if (response.statusCode == 200) {
-      final List<dynamic> data = outletFoods['food_items'];
-      final items = data
-          .map((item) => Meal(
-                id: item['id'],
-                name: item['name'],
-                price: item['price'],
-                outletid: item['outlet_id'],
-                // description: item['description'],
-                // rating: item['rating'],
-                // size: item['size'],
-                // cal: item['cal'],
-                // image: item['image'],
-              ))
-          .toList();
-
-      setState(() {
-        meals = items;
-      });
+      List<dynamic> responseData = json.decode(response.body);
+      return responseData.map((data) => Outlet.fromJson(data)).toList();
+    } else {
+      throw Exception('Failed to fetch outlets');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget content = const Column(
-    
-      children: [
-
-        SizedBox(height: 30,),
-        LinearProgressIndicator(),
-         SizedBox(
-        height: 30,
-      ),
-        Text("Getting Munchies for you..."),]
-    );
-
-    if (meals.isNotEmpty) {
-      content = SizedBox(
-        
-        height: 350,
-        child: ListView.builder(
-          itemCount: meals.length,
-          itemBuilder: (ctx, index) => MealCard(
-            meal: meals[index],
-          ),
-        ),
-      );
-    }
-    return 
-    Column(children: [
-      Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-            padding: EdgeInsets.all(20),
-            height: 200,
-            width: double.infinity,
-            // color: const Color(0xFFF6FFD3),
-            color: Theme.of(context).colorScheme.secondaryContainer,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  // "Order Food Online",
-                  "Explore Outlets",
-                  style: TextStyle(
-                    // color: Color(0xFF000000),
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
-                    fontSize: 28,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.5,
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(10),
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              child: const Column(
+                children: [
+                  SizedBox(height: 50),
+                  Text(
+                    'Explore Outlets',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.start,
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Feeling Hungry? You have come to the right place. Explore and enjoy delicious foods here",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
+                  SizedBox(height: 30),
+                  Text(
+                    'Feeling Hungry? You have come to the right place. Explore and enjoy delicious foods here',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            left: 50,
-            bottom: -20,
-            child: Container(
-              color: Color(0xFF),
-              width: 300,
-              child: FloatingActionButton(
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        width: 0.6,
-                        color: Theme.of(context).colorScheme.outline),
-                    borderRadius: BorderRadius.circular(100)),
-                splashColor: Colors.transparent,
-                hoverElevation: 0,
-                focusColor: Colors.transparent,
-                elevation: 0,
-                backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
-                onPressed: () => {},
-                child: Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        "Search Dishes",
-                        style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w300),
-                      ),
-                      Icon(Icons.search),
-                    ],
-                  ),
-                ),
+                  SizedBox(height: 30),
+                ],
               ),
             ),
-          ),
-        ],
+            FutureBuilder<List<Outlet>>(
+              future: futureOutlets,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Outlet>? outlets = snapshot.data;
+                  return ListView.builder(
+                    itemCount: outlets!.length,
+                    itemBuilder: (context, index) {
+                      return OutletWidget(outlet: outlets[index]);
+                    },
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                }
+                // By default, show a loading spinner
+                return Center(child: CircularProgressIndicator());
+              },
+            ),
+          ],
+        ),
       ),
-      const SizedBox(
-        height: 20,
-      ),
-      content,
-      
-    ]);
+    );
   }
 }
+class OutletWidget extends StatelessWidget {
+  final Outlet outlet;
+
+  OutletWidget({required this.outlet});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(outlet.name),
+      subtitle:
+          Text(outlet.openTime + ' - ' + outlet.closeTime),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OutletPage(outlet: outlet)),
+        );
+      },
+    );
+  }
+}
+

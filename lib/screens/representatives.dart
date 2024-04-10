@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:url_launcher/url_launcher.dart';
 
 class RepresentativesPage extends StatefulWidget {
-  const RepresentativesPage({super.key});
+  const RepresentativesPage({Key? key}) : super(key: key);
 
   @override
   _RepresentativesPageState createState() => _RepresentativesPageState();
@@ -12,84 +13,77 @@ class _RepresentativesPageState extends State<RepresentativesPage> {
   final String jsonPORData = '''
   {
     "StudentCouncilBody": [
-       {
-        "Position": "Convener Student Senate",
-        "Name": "Amaan Ansari",
-        "Contacts": {
-          "Mobile": "987-654-3210",
-          "Email": "jane.smith@example.com"
+        
+        {
+            "Position": "General Secretary",
+            "Name": "Yash Dilip Ahire",
+            "Contacts": {
+                "Mobile": "7219193716",
+                "Email": "yashahire@iitgn.ac.in"
+            }
+        },
+        {
+            "Position": "Academic Secretary",
+            "Name": "Aditya Gupte",
+            "Contacts": {
+                "Mobile": "9664488377",
+                "Email": "adityaaditya@iitgn.ac.in"
+            }
+        },
+        {
+            "Position": "Cultural Secretary",
+            "Name": "Abhishek Meena",
+            "Contacts": {
+                "Mobile": "7340360895",
+                "Email": "meenaabhishek@iitgn.ac.in"
+            }
+        },
+        {
+            "Position": "IR&P Secretary",
+            "Name": "Parth Deshpande",
+            "Contacts": {
+                "Mobile": "9527662004",
+                "Email": "deshpandeparth@iitgn.ac.in"
+            }
+        },
+        {
+            "Position": "PDC Secretary",
+            "Name": "Aaryan Darad",
+            "Contacts": {
+                "Mobile": "9998583773",
+                "Email": "daradaaryan@iitgn.ac.in"
+            }
+        },
+        {
+            "Position": "Sports Secretary",
+            "Name": "Adit Rambhia",
+            "Contacts": {
+                "Mobile": "8850270294",
+                "Email": "rambhiaadit@iitgn.ac.in"
+            }
+        },
+        {
+            "Position": "Welfare Secretary",
+            "Name": "Gaurav",
+            "Contacts": {
+                "Mobile": "7627068716",
+                "Email": "mahendragaurav@iitgn.ac.in"
+            }
+        },
+        {
+            "Position": "Technical Secretary",
+            "Name": "Naman Dharmani",
+            "Contacts": {
+                "Mobile": "8378009665",
+                "Email": "dharmaninaman@iitgn.ac.in"
+            }
         }
-      },
-      {
-        "Position": "General Secretary",
-        "Name": "Abhishek Mungekar",
-        "Contacts": {
-          "Mobile": "123-456-7890",
-          "Email": "john.doe@example.com"
-        }
-      },
-      {
-        "Position": "Academic Secretary",
-        "Name": "Reuben Shibu Devanesan",
-        "Contacts": {
-          "Mobile": "987-654-3210",
-          "Email": "jane.smith@example.com"
-        }
-      },
-      {
-        "Position": "Cultural Secretary",
-        "Name": "Varad Sardeshpande",
-        "Contacts": {
-          "Mobile": "987-654-3210",
-          "Email": "jane.smith@example.com"
-        }
-      },
-      {
-        "Position": "IR&P Secretary",
-        "Name": "Bhavesh Jain",
-        "Contacts": {
-          "Mobile": "987-654-3210",
-          "Email": "jane.smith@example.com"
-        }
-      },
-      {
-        "Position": "PDC Secretary",
-        "Name": "Dhairya Shah",
-        "Contacts": {
-          "Mobile": "987-654-3210",
-          "Email": "jane.smith@example.com"
-        }
-      },
-      {
-        "Position": "Sports Secretary",
-        "Name": "Aman Samria",
-        "Contacts": {
-          "Mobile": "987-654-3210",
-          "Email": "jane.smith@example.com"
-        }
-      },
-      {
-        "Position": "Welfare Secretary",
-        "Name": "Harshvardhan Vala",
-        "Contacts": {
-          "Mobile": "987-654-3210",
-          "Email": "jane.smith@example.com"
-        }
-      },
-      {
-        "Position": "Technical Secretary",
-        "Name": "Progyan Das",
-        "Contacts": {
-          "Mobile": "987-654-3210",
-          "Email": "jane.smith@example.com"
-        }
-      }
     ]
-  }
+}
+
   ''';
 
-List<dynamic> studentCouncilData = [];
-
+  List<dynamic> studentCouncilData = [];
 
   @override
   void initState() {
@@ -114,13 +108,27 @@ List<dynamic> studentCouncilData = [];
           return Card(
             margin: const EdgeInsets.all(10),
             child: ListTile(
+              leading: Icon(Icons.person),
               title: Text(position),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Name: $name"),
-                  Text("Mobile: $mobile"),
-                  Text("Email: $email"),
+                  Text("$name"),
+                  Text("$mobile"),
+                  Text("$email"),
+                ],
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.phone),
+                    onPressed: () => _launchPhoneCall(mobile),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.email),
+                    onPressed: () => _launchEmail(email),
+                  ),
                 ],
               ),
             ),
@@ -128,5 +136,34 @@ List<dynamic> studentCouncilData = [];
         },
       ),
     );
+  }
+
+// Function to launch phone call
+  Future<void> _launchPhoneCall(String phoneNumber) async {
+    final url = Uri.parse('tel:$phoneNumber'); // Convert phone number to Uri
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not launch phone call'),
+        ),
+      );
+    }
+  }
+
+// Function to launch email composer
+  Future<void> _launchEmail(String emailAddress) async {
+    final url =
+        Uri.parse('mailto:$emailAddress'); // Convert email address to Uri
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not launch email app'),
+        ),
+      );
+    }
   }
 }

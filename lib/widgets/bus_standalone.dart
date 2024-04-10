@@ -10,9 +10,10 @@ class BusPageStandalone extends StatefulWidget {
 }
 
 class _BusPageStandaloneState extends State<BusPageStandalone> {
-  List<String> towns = ['ANY','Palaj','Choose'];
+  List<String> towns = ['ANY', 'IIT Gandhinagar', 'Choose'];
   List<Map<String, dynamic>> data = [];
-  String src = 'Palaj', des = 'ANY';
+  String src = 'IIT Gandhinagar', des = 'ANY';
+  bool searching = false;
 
   void setSrc(String? t) {
     setState(() {
@@ -27,25 +28,34 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
   }
 
   void fetchTowns() async {
-    Response response = await get(Uri.parse(
-        'https://6baa0265-07c2-4b1c-b8bc-8fb7920eb5ee-00-kiqlob58lav7.pike.repl.co/towns'));
+    Response response = await get(
+        Uri.parse('https://insiit-backend-node.vercel.app/api/towns'));
     List result = jsonDecode(response.body) as List;
     setState(() {
       towns.clear();
       towns.add('ANY');
+      Set<String> townNames = Set(); // Use a set to ensure uniqueness
       for (Map<String, dynamic> item in result) {
         String? townName = item['name'];
-        if (townName != null) towns.add(townName);
+        if (townName != null && !townNames.contains(townName)) {
+          towns.add(townName);
+          townNames.add(townName); // Add the town name to the set
+        }
       }
     });
   }
 
   void search() async {
+    setState(() {
+      searching = true;
+    });
+
     String url =
-        'https://6baa0265-07c2-4b1c-b8bc-8fb7920eb5ee-00-kiqlob58lav7.pike.repl.co/buses?from=$src&to=$des';
+        'https://insiit-backend-node.vercel.app/api/search?source=$src&destination=$des';
     Response response = await get(Uri.parse(url));
     print(response.body);
     setState(() {
+      searching = false;
       data.clear();
       List items = jsonDecode(response.body) as List;
       for (Map<String, dynamic> item in items) {
@@ -62,9 +72,7 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
         centerTitle: true,
         title: const Text("Bus Schedule"),
       ),
-      body:
-      
-       Column(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           const SizedBox(
@@ -107,12 +115,15 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
               ),
             ],
           ),
-         const SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextButton.icon(
-            icon: const Icon(Icons.search, color: Color.fromRGBO(94, 53, 177, 1)),
-            onPressed: search,
+            icon:
+                const Icon(Icons.search, color: Color.fromRGBO(94, 53, 177, 1)),
+            onPressed: () {
+              search();
+            },
             label: const Text(
               'Search     ',
               style: TextStyle(color: Color.fromRGBO(94, 53, 177, 1)),
@@ -124,11 +135,13 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
           const SizedBox(
             height: 12,
           ),
-          Expanded(
-            child: ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, i) => BusCard(data: data[i])),
-          ),
+          searching
+              ? CircularProgressIndicator()
+              : Expanded(
+                  child: ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, i) => BusCard(data: data[i])),
+                ),
         ],
       ),
     );
@@ -147,7 +160,8 @@ class BusCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 239, 233, 255), borderRadius: BorderRadius.circular(12)),
+            color: const Color.fromARGB(255, 239, 233, 255),
+            borderRadius: BorderRadius.circular(12)),
         width: double.infinity,
         child: Column(
           children: [

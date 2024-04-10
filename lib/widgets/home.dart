@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'events_details.dart';
@@ -13,6 +12,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../model/events.dart';
 import 'dart:async';
+import 'package:insiit/model/mess_menu.dart';
+import 'dart:math';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,129 +22,18 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-
-var name = FirebaseAuth.instance.currentUser!.displayName;
+var name = FirebaseAuth.instance.currentUser!.displayName ?? "User";
 
 var nameArray = name?.split(" ");
 
 class _HomePageState extends State<HomePage> {
-  Map<String, dynamic> weeklyMenu = {};
-  Widget buildMenu(String day, String mealType) {
-    if (weeklyMenu['menu'] != null &&
-        weeklyMenu['menu'][day] != null &&
-        weeklyMenu['menu'][day][mealType] != null) {
-      List<dynamic> meals = weeklyMenu['menu'][day][mealType];
-
-      if (meals != null && meals.isNotEmpty) {
-        return Row(children: [
-          Card(
-              elevation: 0,
-              surfaceTintColor: Color.fromARGB(255, 228, 230, 255),
-              color: Theme.of(context).colorScheme.secondaryContainer,
-              margin: const EdgeInsets.all(16.0),
-              child: InkWell(
-                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                splashColor: const Color.fromARGB(103, 159, 111, 255),
-                child: SizedBox(
-                  height: 220,
-                  width: MediaQuery.of(context).size.width -
-                      32, // minus 32 due to the margin
-
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        '$mealType'.toUpperCase(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                        ),
-                      ),
-                      for (var meal in meals)
-                        Text(
-                          meal['name'],
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                          ),
-                        )
-                    ],
-                  ),
-                ),
-              )),
-
-          // return Row(
-
-          //   crossAxisAlignment: CrossAxisAlignment.center,
-          //   children: [
-
-          //     Text(
-          //       '$mealType:'.toUpperCase(),
-          //       style: TextStyle(fontWeight: FontWeight.bold),
-          //     ),
-          //     for (var meal in meals)
-          //     Container(
-          //       margin: EdgeInsets.all(40),
-          //       child: Center(child: Text(meal['name']),),
-          //     ),
-
-          //     // ListTile(
-          //     //   title: Text(meal['name']),
-          //     //   subtitle: Text(meal['description']),
-          //     //   leading: CircleAvatar(
-          //     //     backgroundImage: NetworkImage(meal['image']),
-          //     //   ),
-          //     // ),
-
-          //   ],
-          // );
-        ]);
-      }
-    }
-
-    return Container(); // Return an empty container if there are no meals for the specified day and meal type
-  }
-
-  Future<void> fetchMenu() async {
-    final response = await http
-        .get(Uri.parse('https://insiit-api.onrender.com/mess/2/menu'));
-    final extractedData = json.decode(response.body);
-    print(extractedData);
-    setState(() {
-      weeklyMenu = extractedData;
-      print(weeklyMenu);
-    });
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('weeklyMenu', json.encode(extractedData));
-  }
-
-  Future<Map<String, dynamic>> loadMenuFromPrefs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('weeklyMenu')) {
-      return json.decode(prefs.getString('weeklyMenu')!);
-    } else {
-      return {};
-    }
-  }
+  late Future<MessMenu?> _menuFuture;
+  MenuService _menuService = MenuService();
 
   @override
   void initState() {
     super.initState();
-    loadMenuFromPrefs().then((data) {
-      if (data.isEmpty) {
-        fetchMenu();
-      } else {
-        setState(() {
-          weeklyMenu = data;
-        });
-      }
-    });
+    _menuFuture = _menuService.fetchMenu();
   }
 
   final controller = PageController(viewportFraction: 0.8, keepPage: true);
@@ -151,8 +41,7 @@ class _HomePageState extends State<HomePage> {
   Future<List<Events>> postsFuture = getPosts();
 
   static Future<List<Events>> getPosts() async {
-    var url = Uri.parse(
-        "https://6baa0265-07c2-4b1c-b8bc-8fb7920eb5ee-00-kiqlob58lav7.pike.repl.co/events");
+    var url = Uri.parse("https://insiit-backend-node.vercel.app/api/events");
     final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(response.body);
@@ -161,20 +50,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    const days = [
-      'monday',
-      'tuesday',
-      'wednesday',
-      'thursday',
-      'friday',
-      'saturday',
-      'sunday'
-    ];
-    String today() {
-      return DateFormat('EEEE').format(DateTime.now()).toLowerCase();
-    }
-
-    var todayname = today();
     final TimeOfDay now = TimeOfDay.now();
     print(now);
     final pages = List.generate(
@@ -199,9 +74,8 @@ class _HomePageState extends State<HomePage> {
     );
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: ListView(
-        children: [
+        resizeToAvoidBottomInset: false,
+        body: ListView(children: [
           Padding(
             padding: const EdgeInsets.all(20),
             child: Row(
@@ -370,80 +244,117 @@ class _HomePageState extends State<HomePage> {
                   );
                 } else {
                   final events = snapshot.data;
+                  final currentDate = DateTime.now();
+                  final previousDate = currentDate.subtract(Duration(days: 1));
+
+                  final futureEvents = events?.where((event) {
+                    if (event?.date == null) return false;
+                    final eventDate = DateTime.parse(event!.date!);
+                    return eventDate.isAfter(previousDate);
+                  }).toList();
+
+                  final sortedEvents = futureEvents?.where((event) {
+                    if (event?.date == null) return false;
+                    final eventDate = DateTime.parse(event!.date!);
+                    return eventDate.isAfter(previousDate);
+                  }).toList();
+
+                  sortedEvents?.sort((a, b) {
+                    final aDate = DateTime.parse(a.date!);
+                    final bDate = DateTime.parse(b.date!);
+                    return aDate.compareTo(bDate);
+                  });
 
                   return SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         const SizedBox(height: 16),
-                        SizedBox(
-                          height: 180,
-                          child: PageView.builder(
-                            controller: controller,
-                            itemCount:
-                                events?.length, // Use the length of events
-                            itemBuilder: (_, index) {
-                              final event = events?[index];
-                              return InkWell(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(16.0)),
-                                  splashColor:
-                                      const Color.fromARGB(103, 159, 111, 255),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              EventDetailsPage(
-                                                  event: events?[index])),
-                                    );
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      // color: Colors.grey.shade300,
-                                      image: DecorationImage(
-                                          image:
-                                              NetworkImage("${event?.image}"),
-                                          fit: BoxFit.cover),
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 4),
-                                    child: Container(
-                                      decoration: BoxDecoration(
+                        sortedEvents?.isEmpty ?? true
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'No Events Added!',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              )
+                            : SizedBox(
+                                height: 180,
+                                child: PageView.builder(
+                                  controller: controller,
+                                  itemCount: min(sortedEvents?.length ?? 0, 6),
+                                  itemBuilder: (_, index) {
+                                    final event = sortedEvents?[index];
+                                    return InkWell(
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(16.0),
+                                      ),
+                                      splashColor: const Color.fromARGB(
+                                          103, 159, 111, 255),
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                EventDetailsPage(
+                                              event: sortedEvents?[index],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image:
+                                                NetworkImage("${event?.image}"),
+                                            fit: BoxFit.cover,
+                                          ),
                                           borderRadius:
                                               BorderRadius.circular(16),
-                                          gradient: LinearGradient(
-                                              begin: Alignment.center,
+                                        ),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 4),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            gradient: LinearGradient(
+                                              begin: Alignment.topCenter,
                                               end: Alignment.bottomCenter,
                                               colors: [
                                                 Colors.black.withOpacity(0),
-                                                Colors.black.withOpacity(.5),
-                                              ])),
-                                      height: 280,
-                                      child: Center(
-                                        child: Text(
-                                          event?.name ??
-                                              'Events Not Available', // Display event name
-                                          style: const TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
+                                                Colors.black.withOpacity(.6),
+                                              ],
+                                            ),
+                                          ),
+                                          height: 280,
+                                          child: Center(
+                                            child: Text(
+                                              event?.name ??
+                                                  'Events Not Available',
+                                              style: const TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ));
-                            },
-                          ),
-                        ),
+                                    );
+                                  },
+                                ),
+                              ),
                         const Padding(
                           padding: EdgeInsets.only(top: 4, bottom: 12),
                         ),
                         SmoothPageIndicator(
                           controller: controller,
-                          count:
-                              events?.length ?? 0, // Using the length of events
+                          count: min(sortedEvents?.length ?? 0, 6),
                           effect: const WormEffect(
                             dotHeight: 6,
                             dotWidth: 6,
@@ -463,7 +374,7 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Menu()),
+                MaterialPageRoute(builder: (context) => MenuPage()),
               );
             },
             child: Container(
@@ -484,8 +395,8 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           IconButton(
                               onPressed: () {
-                                Navigator.of(context).push(
-                                    MaterialPageRoute(builder: (_) => Menu()));
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => MenuPage()));
                               },
                               icon: const Icon(Icons.arrow_forward_ios))
                         ],
@@ -499,48 +410,179 @@ class _HomePageState extends State<HomePage> {
                 // ),
                 ),
           ),
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            if (now.hour < 11)
-              Row(
-                children: [
-                  // SizedBox(height: 50),
-                  buildMenu(todayname, 'breakfast'),
-                ],
-              )
-            else if (now.hour < 15)
-              Row(
-                children: [
-                  // SizedBox(height: 50),
-                  buildMenu(todayname, 'lunch'),
-                ],
-              )
-            else if (now.hour < 18)
-              Row(
-                children: [
-                  // SizedBox(height: 50),
-                  buildMenu(todayname, 'snacks'),
-                ],
-              )
-            else if (now.hour < 23)
-              Row(
-                children: [
-                  // SizedBox(height: 50),
-                  buildMenu(todayname, 'dinner'),
-                ],
-              )
-            else
-              Row(
-                children: [
-                  // SizedBox(height: 50),
-                  buildMenu(todayname, 'breakfast'),
-                ],
-              )
-          ]),
-          const SizedBox(
-            height: 90,
-          ),
-        ],
+
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FutureBuilder<MessMenu?>(
+                future: _menuFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error: ${snapshot.error}'),
+                    );
+                  } else if (snapshot.hasData) {
+                    MessMenu? menu = snapshot.data;
+                    MenuDay? todayMenu = _getTodayMenu(menu);
+                    DateTime now = DateTime.now();
+                    if (todayMenu != null) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 10),
+                            if (now.hour < 11)
+                              Row(
+                                children: [
+                                  // SizedBox(height: 50),
+                                  _buildMealTile(
+                                      'Breakfast', todayMenu.breakfast),
+                                ],
+                              )
+                            else if (now.hour < 15)
+                              Row(
+                                children: [
+                                  // SizedBox(height: 50),
+                                  _buildMealTile('Lunch', todayMenu.lunch),
+                                ],
+                              )
+                            else if (now.hour < 18)
+                              Row(
+                                children: [
+                                  // SizedBox(height: 50),
+                                  _buildMealTile('Snacks', todayMenu.snacks),
+                                ],
+                              )
+                            else if (now.hour < 23)
+                              Row(
+                                children: [
+                                  // SizedBox(height: 50),
+                                  _buildMealTile('Dinner', todayMenu.dinner),
+                                ],
+                              )
+                            else
+                              Row(
+                                children: [
+                                  // SizedBox(height: 50),
+                                  _buildMealTile(
+                                      'Breakfast', todayMenu.breakfast),
+                                ],
+                              )
+                          ],
+                        ),
+                      );
+                    } else {
+                      return Center(
+                        child: Text('Menu data not available for today.'),
+                      );
+                    }
+                  } else {
+                    return Center(
+                      child: Text('No menu data available'),
+                    );
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 90,
+              ),
+            ],
+          )
+        ]));
+  }
+
+  Widget _buildMealTile(String mealType, String? meal) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 16,
+      height: 330,
+      margin: EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Theme.of(context)
+            .colorScheme
+            .secondaryContainer, // Light purple color
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              mealType.toUpperCase(),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
+              ),
+            ),
+            SizedBox(height: 12),
+            Text(
+              meal ?? 'Not available',
+              style: TextStyle(
+                height: 1.5,
+                fontSize: 14,
+                fontStyle: meal == null ? FontStyle.italic : FontStyle.normal,
+                color: meal == null
+                    ? Theme.of(context).colorScheme.onSecondaryContainer
+                    : Theme.of(context).colorScheme.onSecondaryContainer,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  MenuDay? _getTodayMenu(MessMenu? menu) {
+    DateTime now = DateTime.now();
+    int currentWeekday =
+        now.weekday; // 1 for Monday, 2 for Tuesday, ..., 7 for Sunday
+    MenuDay? todayMenu;
+
+    if (menu != null) {
+      todayMenu = menu.mess.firstWhere((day) => day.day == currentWeekday);
+      if (todayMenu != null) {
+        if (now.hour < 11) {
+          // Show breakfast
+          return MenuDay(
+            day: todayMenu.day,
+            breakfast: todayMenu.breakfast,
+          );
+        } else if (now.hour < 15) {
+          // Show lunch
+          return MenuDay(
+            day: todayMenu.day,
+            lunch: todayMenu.lunch,
+          );
+        } else if (now.hour < 18) {
+          // Show snacks
+          return MenuDay(
+            day: todayMenu.day,
+            snacks: todayMenu.snacks,
+          );
+        } else if (now.hour < 23) {
+          // Show dinner
+          return MenuDay(
+            day: todayMenu.day,
+            dinner: todayMenu.dinner,
+          );
+        } else {
+          // Show breakfast for late night hours
+          return MenuDay(
+            day: todayMenu.day,
+            breakfast: todayMenu.breakfast,
+          );
+        }
+      }
+    }
+
+    return todayMenu; // Return null if no menu is found or menu is null
   }
 }

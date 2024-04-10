@@ -65,19 +65,18 @@ class _LoginScreenState extends State<LoginScreen> {
             height: 15,
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                backgroundColor:
-                    Theme.of(context).colorScheme.secondaryContainer),
-            onPressed: () => signInAnonymously(),
-            child: Text(
-              'Guest Mode',
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondaryContainer),
-            )
-          ),
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  backgroundColor:
+                      Theme.of(context).colorScheme.secondaryContainer),
+              onPressed: () => signInAnonymously(),
+              child: Text(
+                'Guest Mode',
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSecondaryContainer),
+              )),
           SizedBox(height: 150),
           Text(
             "Made with ♥️ by Metis, IITGN",
@@ -102,18 +101,17 @@ googleSignIn() async {
   print(userCredential.user);
 }
 
-signInAnonymously() async{
+signInAnonymously() async {
   try {
-  final userCredential =
-      await FirebaseAuth.instance.signInAnonymously();
-  print("Signed in with temporary account.");
-} on FirebaseAuthException catch (e) {
-  switch (e.code) {
-    case "operation-not-allowed":
-      print("Anonymous auth hasn't been enabled for this project.");
-      break;
-    default:
-      print("Unknown error.");
+    final userCredential = await FirebaseAuth.instance.signInAnonymously();
+    print("Signed in with temporary account.");
+  } on FirebaseAuthException catch (e) {
+    switch (e.code) {
+      case "operation-not-allowed":
+        print("Anonymous auth hasn't been enabled for this project.");
+        break;
+      default:
+        print("Unknown error.");
+    }
   }
-}
 }

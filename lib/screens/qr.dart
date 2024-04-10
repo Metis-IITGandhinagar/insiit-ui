@@ -14,7 +14,7 @@ class QRDisplay extends StatefulWidget {
   _QRDisplayState createState() => _QRDisplayState();
 }
 
-var email = FirebaseAuth.instance.currentUser!.email;
+var email = FirebaseAuth.instance.currentUser!.email ?? "Enter your email";
 
 class _QRDisplayState extends State<QRDisplay> {
   Future<String> qrDataMethod() async {
@@ -52,7 +52,7 @@ class _QRDisplayState extends State<QRDisplay> {
                   backgroundColor: Colors.white,
                   data: qrData,
                   version: QrVersions.auto,
-                  size: 200.0,
+                  size: 280.0,
                 ),
               ],
             );
@@ -128,7 +128,7 @@ class _QRDisplayState extends State<QRDisplay> {
                   leading: const Icon(Icons.info_outline_rounded),
                   iconColor: Colors.amber[900],
                   title: const Text(
-                      "This feature is in Beta Mode and heavily depends on mess servers, It may generate invalid QRs",
+                      "This feature is in Beta Mode and depends on Mess IITGN Servers. \nWe DO NOT store your credentials.",
                       textAlign: TextAlign.left),
                 ),
               )
@@ -170,7 +170,7 @@ class _QRDisplayState extends State<QRDisplay> {
       // Get the index.php page with the cookies
       var indexPageResponse = await dio.get('http://mess.iitgn.ac.in/');
 
-      // Extract and display the relevant information
+      // display the QR information
       setState(() {
         dom.Document doc = parse(indexPageResponse.data);
         var ord = doc.querySelectorAll('span.text-purple');
