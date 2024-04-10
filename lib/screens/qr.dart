@@ -52,7 +52,7 @@ class _QRDisplayState extends State<QRDisplay> {
                   backgroundColor: Colors.white,
                   data: qrData,
                   version: QrVersions.auto,
-                  size: 200.0,
+                  size: 280.0,
                 ),
               ],
             );
@@ -128,7 +128,7 @@ class _QRDisplayState extends State<QRDisplay> {
                   leading: const Icon(Icons.info_outline_rounded),
                   iconColor: Colors.amber[900],
                   title: const Text(
-                      "This feature is in Beta Mode and heavily depends on mess servers, It may generate invalid QRs",
+                      "This feature is in Beta Mode and depends on Mess IITGN Servers. \nWe DO NOT store your credentials.",
                       textAlign: TextAlign.left),
                 ),
               )

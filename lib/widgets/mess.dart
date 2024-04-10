@@ -22,7 +22,6 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return FutureBuilder<MessMenu?>(
       future: _menuFuture,
-      
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
@@ -50,6 +49,7 @@ class _MenuPageState extends State<MenuPage> {
             child: Scaffold(
               appBar: AppBar(
                 title: Text(menu.messName),
+                backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
                 bottom: TabBar(
                   isScrollable: true,
                   tabs: menu.mess.map((dayMenu) {
@@ -59,14 +59,12 @@ class _MenuPageState extends State<MenuPage> {
                   }).toList(),
                 ),
                 actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () => {}
-          ),
-          const SizedBox(
-            width: 15,
-          ),
-        ],
+                  IconButton(
+                      icon: const Icon(Icons.refresh), onPressed: () => {}),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                ],
               ),
               body: TabBarView(
                 children: menu.mess.map((dayMenu) {

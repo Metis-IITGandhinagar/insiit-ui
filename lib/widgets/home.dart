@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-var name = FirebaseAuth.instance.currentUser!.displayName ?? "Guest";
+var name = FirebaseAuth.instance.currentUser!.displayName ?? "User";
 
 var nameArray = name?.split(" ");
 
@@ -270,74 +270,91 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         const SizedBox(height: 16),
-                        SizedBox(
-                          height: 180,
-                          child: PageView.builder(
-                            controller: controller,
-                            itemCount: min(sortedEvents?.length ?? 0,
-                                6), // Use the length of events
-                            itemBuilder: (_, index) {
-                              final event = sortedEvents?[index];
-                              return InkWell(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(16.0)),
-                                  splashColor:
-                                      const Color.fromARGB(103, 159, 111, 255),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              EventDetailsPage(
-                                                  event: sortedEvents?[index])),
-                                    );
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      // color: Colors.grey.shade300,
-                                      image: DecorationImage(
-                                          image:
-                                              NetworkImage("${event?.image}"),
-                                          fit: BoxFit.cover),
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 4),
-                                    child: Container(
-                                      decoration: BoxDecoration(
+                        sortedEvents?.isEmpty ?? true
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'No Events Added!',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              )
+                            : SizedBox(
+                                height: 180,
+                                child: PageView.builder(
+                                  controller: controller,
+                                  itemCount: min(sortedEvents?.length ?? 0, 6),
+                                  itemBuilder: (_, index) {
+                                    final event = sortedEvents?[index];
+                                    return InkWell(
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(16.0),
+                                      ),
+                                      splashColor: const Color.fromARGB(
+                                          103, 159, 111, 255),
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                EventDetailsPage(
+                                              event: sortedEvents?[index],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image:
+                                                NetworkImage("${event?.image}"),
+                                            fit: BoxFit.cover,
+                                          ),
                                           borderRadius:
                                               BorderRadius.circular(16),
-                                          gradient: LinearGradient(
+                                        ),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 4),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            gradient: LinearGradient(
                                               begin: Alignment.topCenter,
                                               end: Alignment.bottomCenter,
                                               colors: [
                                                 Colors.black.withOpacity(0),
                                                 Colors.black.withOpacity(.6),
-                                              ])),
-                                      height: 280,
-                                      child: Center(
-                                        child: Text(
-                                          event?.name ??
-                                              'Events Not Available', // Display event name
-                                          style: const TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
+                                              ],
+                                            ),
+                                          ),
+                                          height: 280,
+                                          child: Center(
+                                            child: Text(
+                                              event?.name ??
+                                                  'Events Not Available',
+                                              style: const TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ));
-                            },
-                          ),
-                        ),
+                                    );
+                                  },
+                                ),
+                              ),
                         const Padding(
                           padding: EdgeInsets.only(top: 4, bottom: 12),
                         ),
                         SmoothPageIndicator(
                           controller: controller,
-                          count: min(sortedEvents?.length ?? 0,
-                              6), // Using the length of events
+                          count: min(sortedEvents?.length ?? 0, 6),
                           effect: const WormEffect(
                             dotHeight: 6,
                             dotWidth: 6,

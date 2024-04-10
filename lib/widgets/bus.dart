@@ -10,9 +10,9 @@ class BusPage extends StatefulWidget {
 }
 
 class _BusPageState extends State<BusPage> {
-  List<String> towns = ['ANY', 'Palaj', 'Choose'];
+  List<String> towns = ['ANY', 'IIT Gandhinagar', 'Choose'];
   List<Map<String, dynamic>> data = [];
-  String src = 'Palaj', des = 'ANY';
+  String src = 'IIT Gandhinagar', des = 'ANY';
 
   void setSrc(String? t) {
     setState(() {

@@ -118,27 +118,52 @@ class _RepresentativesPageState extends State<RepresentativesPage> {
                   Text("$email"),
                 ],
               ),
-              // trailing: Row(
-              //   mainAxisSize: MainAxisSize.min,
-              //   children: [
-              //     IconButton(
-              //       icon: Icon(Icons.phone),
-              //       onPressed: () {
-              //         // Implement call functionality
-              //       },
-              //     ),
-              //     IconButton(
-              //       icon: Icon(Icons.email),
-              //       onPressed: () {
-              //         // Implement email functionality
-              //       },
-              //     ),
-              //   ],
-              // ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.phone),
+                    onPressed: () => _launchPhoneCall(mobile),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.email),
+                    onPressed: () => _launchEmail(email),
+                  ),
+                ],
+              ),
             ),
           );
         },
       ),
     );
+  }
+
+// Function to launch phone call
+  Future<void> _launchPhoneCall(String phoneNumber) async {
+    final url = Uri.parse('tel:$phoneNumber'); // Convert phone number to Uri
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not launch phone call'),
+        ),
+      );
+    }
+  }
+
+// Function to launch email composer
+  Future<void> _launchEmail(String emailAddress) async {
+    final url =
+        Uri.parse('mailto:$emailAddress'); // Convert email address to Uri
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not launch email app'),
+        ),
+      );
+    }
   }
 }
