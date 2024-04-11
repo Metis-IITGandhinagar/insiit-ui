@@ -22,7 +22,7 @@ class _QRDisplayState extends State<QRDisplay> {
     //Return String
     // String scrapedData = '';
     var scrapedData = prefs.getString('qr_data')!;
-    print(scrapedData);
+    // print(scrapedData);
     return scrapedData;
   }
 

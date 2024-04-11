@@ -21,8 +21,8 @@ class _OutletExploreState extends State<OutletExplore> {
   }
 
   Future<List<Outlet>> fetchOutlets() async {
-    final response =
-        await http.get(Uri.parse('https://insiit-backend-node.vercel.app/api/outlets'));
+    final response = await http
+        .get(Uri.parse('https://insiit-backend-node.vercel.app/api/outlets'));
     if (response.statusCode == 200) {
       List<dynamic> responseData = json.decode(response.body);
       return responseData.map((data) => Outlet.fromJson(data)).toList();
@@ -63,6 +63,7 @@ class _OutletExploreState extends State<OutletExplore> {
                 ],
               ),
             ),
+            SizedBox(height: 20),
             FutureBuilder<List<Outlet>>(
               future: futureOutlets,
               builder: (context, snapshot) {
@@ -82,7 +83,10 @@ class _OutletExploreState extends State<OutletExplore> {
                   );
                 }
                 // By default, show a loading spinner
-                return Center(child: CircularProgressIndicator());
+                return const Center(
+                    child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                ));
               },
             ),
           ],
@@ -91,6 +95,7 @@ class _OutletExploreState extends State<OutletExplore> {
     );
   }
 }
+
 class OutletWidget extends StatelessWidget {
   final Outlet outlet;
 
@@ -100,8 +105,7 @@ class OutletWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(outlet.name),
-      subtitle:
-          Text(outlet.openTime + ' - ' + outlet.closeTime),
+      subtitle: Text(outlet.openTime + ' - ' + outlet.closeTime),
       onTap: () {
         Navigator.push(
           context,
@@ -111,4 +115,3 @@ class OutletWidget extends StatelessWidget {
     );
   }
 }
-

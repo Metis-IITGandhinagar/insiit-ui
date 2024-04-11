@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
               if (snapshot.data == null) {
                 return const LoginScreen();
               } else {
-                return HomeScreen();
+                return const HomeScreen();
               }
             }
             return const Center(child: CircularProgressIndicator());
