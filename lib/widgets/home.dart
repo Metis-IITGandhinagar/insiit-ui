@@ -245,7 +245,8 @@ class _HomePageState extends State<HomePage> {
                 } else {
                   final events = snapshot.data;
                   final currentDate = DateTime.now();
-                  final previousDate = currentDate.subtract(Duration(days: 1));
+                  final previousDate =
+                      currentDate.subtract(const Duration(days: 1));
 
                   final futureEvents = events?.where((event) {
                     if (event?.date == null) return false;
@@ -271,8 +272,8 @@ class _HomePageState extends State<HomePage> {
                       children: <Widget>[
                         const SizedBox(height: 16),
                         sortedEvents?.isEmpty ?? true
-                            ? Padding(
-                                padding: const EdgeInsets.all(8.0),
+                            ? const Padding(
+                                padding: EdgeInsets.all(8.0),
                                 child: Text(
                                   'No Events Added!',
                                   style: TextStyle(

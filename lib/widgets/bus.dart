@@ -13,6 +13,7 @@ class _BusPageState extends State<BusPage> {
   List<String> towns = ['ANY', 'IIT Gandhinagar', 'Choose'];
   List<Map<String, dynamic>> data = [];
   String src = 'IIT Gandhinagar', des = 'ANY';
+  bool searching = false;
 
   void setSrc(String? t) {
     setState(() {
@@ -27,25 +28,34 @@ class _BusPageState extends State<BusPage> {
   }
 
   void fetchTowns() async {
-    Response response = await get(Uri.parse(
-        'https://insiit-backend-node.vercel.app/api/towns'));
+    Response response = await get(
+        Uri.parse('https://insiit-backend-node.vercel.app/api/towns'));
     List result = jsonDecode(response.body) as List;
     setState(() {
       towns.clear();
       towns.add('ANY');
+      Set<String> townNames = Set(); // Use a set to ensure uniqueness
       for (Map<String, dynamic> item in result) {
         String? townName = item['name'];
-        if (townName != null) towns.add(townName);
+        if (townName != null && !townNames.contains(townName)) {
+          towns.add(townName);
+          townNames.add(townName); // Add the town name to the set
+        }
       }
     });
   }
 
   void search() async {
+    setState(() {
+      searching = true;
+    });
+
     String url =
         'https://insiit-backend-node.vercel.app/api/search?source=$src&destination=$des';
     Response response = await get(Uri.parse(url));
     print(response.body);
     setState(() {
+      searching = false;
       data.clear();
       List items = jsonDecode(response.body) as List;
       for (Map<String, dynamic> item in items) {
@@ -107,7 +117,9 @@ class _BusPageState extends State<BusPage> {
           TextButton.icon(
             icon:
                 const Icon(Icons.search, color: Color.fromRGBO(94, 53, 177, 1)),
-            onPressed: search,
+            onPressed: () {
+              search();
+            },
             label: const Text(
               'Search     ',
               style: TextStyle(color: Color.fromRGBO(94, 53, 177, 1)),
@@ -119,11 +131,13 @@ class _BusPageState extends State<BusPage> {
           const SizedBox(
             height: 12,
           ),
-          Expanded(
-            child: ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, i) => BusCard(data: data[i])),
-          ),
+          searching
+              ? CircularProgressIndicator()
+              : Expanded(
+                  child: ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, i) => BusCard(data: data[i])),
+                ),
         ],
       ),
     );

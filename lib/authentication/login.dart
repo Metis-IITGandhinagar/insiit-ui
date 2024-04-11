@@ -77,8 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.onSecondaryContainer),
               )),
-          SizedBox(height: 150),
-          Text(
+          const SizedBox(height: 150),
+          const Text(
             "Made with ♥️ by Metis, IITGN",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
@@ -98,20 +98,20 @@ googleSignIn() async {
       accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
   UserCredential userCredential =
       await FirebaseAuth.instance.signInWithCredential(credential);
-  print(userCredential.user);
+  // print(userCredential.user);
 }
 
 signInAnonymously() async {
   try {
     final userCredential = await FirebaseAuth.instance.signInAnonymously();
-    print("Signed in with temporary account.");
+    // print("Signed in with temporary account.");
   } on FirebaseAuthException catch (e) {
     switch (e.code) {
       case "operation-not-allowed":
-        print("Anonymous auth hasn't been enabled for this project.");
+        // print("Anonymous auth hasn't been enabled for this project.");
         break;
       default:
-        print("Unknown error.");
+        // print("Unknown error.");
     }
   }
 }
