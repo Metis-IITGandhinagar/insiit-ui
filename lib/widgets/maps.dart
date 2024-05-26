@@ -1,72 +1,140 @@
+//Secret Token = sk.eyJ1IjoibWV0aXMtbWFwYm94IiwiYSI6ImNsdzIwaG1zeTBpNXIyaW11cHp2MThncHMifQ.xgNyF2twUoOad7uocTpUbg
+
 import 'package:flutter/material.dart';
-import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key});
-
   @override
-  State<MapPage> createState() => _MapPageState();
+  _MapPageState createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
-   MapController mapController = MapController(
-    initPosition: GeoPoint(latitude: 23.21049 , longitude: 72.68475),
-    
-    areaLimit: BoundingBox(
-          north: 23.22817602890616,
-          east: 72.70700454711915,
-          south: 23.18810234082923,
-          west: 72.66408920288087)
-  );
+  MapController _mapController = MapController();
+  double _currentZoom = 18;
+
+  // Future<Position>_getCurrentlocation() async {
+  //   bool service = await Geolocator.isLocationServiceEnabled();
+  //   if (!service) {
+  //     return Future.error('Location services are disabled.');
+  //   }
+  //   LocationPermission permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       return Future.error('Location permissions are denied');
+  //     }
+
+  //   }
+  //   if (permission == LocationPermission.deniedForever) {
+  //     return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+  //   }
+
+  //   return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  Stack(
-        children: <Widget>[
-          OSMFlutter( 
-        mapIsLoading: const Center(child: SizedBox(height: 30,width: 30,child: CircularProgressIndicator(semanticsLabel:"Loading",),)),
-        controller:mapController,
-        osmOption: OSMOption(
-              showZoomController: true,
-            zoomOption: const ZoomOption(
-                  initZoom: 17,
-                  minZoomLevel: 10,
-                  maxZoomLevel: 19,
-                  stepZoom: 1.0,
-            ),
-            userLocationMarker: UserLocationMaker(
-                personMarker: const MarkerIcon(
-                    icon: Icon(
-                        Icons.location_on_outlined,
-                        color: Color.fromARGB(255, 255, 105, 94),
-                        size: 48,
-                    ),
-                ),
-                directionArrowMarker: const MarkerIcon(
-                    icon: Icon(
-                        Icons.double_arrow,
-                        size: 48,
-                    ),
-                ),
-            ),
-            roadConfiguration: const RoadOption(
-                    roadColor: Colors.yellowAccent,
-            ),
-            markerOption: MarkerOption(
-                defaultMarker: const MarkerIcon(
-                    icon: Icon(
-                      Icons.person_pin_circle,
-                      color: Colors.blue,
-                      size: 56,
-                    ),
-                )
-            ),
-        )
-    )
-
+      body: FlutterMap(
+        mapController: _mapController,
+        options: MapOptions(
+          center: LatLng(23.21049, 72.68475),
+          zoom: _currentZoom,
+          minZoom: 1,
+          maxZoom: 24,
+          interactiveFlags: InteractiveFlag.all,
+          onPositionChanged: (MapPosition position, bool hasGesture) {
+            if (hasGesture) {
+              setState(() {
+                _currentZoom = position.zoom ?? _currentZoom;
+              });
+            }
+          },
+        ),
+        children: [
+          TileLayer(
+            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            subdomains: ['a', 'b', 'c'],
+            maxZoom: 24,
+            userAgentPackageName: 'com.metis.insiit',
+          )
         ],
       ),
-    ) ;
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'zoom_in',
+            onPressed: () {
+              setState(() {
+                _currentZoom++;
+                _mapController.move(_mapController.center, _currentZoom);
+              });
+            },
+            child: Icon(Icons.zoom_in),
+          ),
+          SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'zoom_out',
+            onPressed: () {
+              setState(() {
+                _currentZoom--;
+                _mapController.move(_mapController.center, _currentZoom);
+              });
+            },
+            child: Icon(Icons.zoom_out),
+          ),
+        ],
+      ),
+    );
   }
 }
+
+
+// class MapPage extends StatefulWidget {
+//   const MapPage({super.key});
+
+//   @override
+//   State<MapPage> createState() => _MapPageState();
+// }
+
+// class _MapPageState extends State<MapPage> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: FlutterMap(
+//         options: MapOptions(
+//           center: LatLng(23.21049, 72.68475),
+//           zoom: 18.2,
+//           maxZoom: 22,
+//         ),
+//         children: [
+//           TileLayer(
+//             urlTemplate:
+//                 'https://{s}.tile.thunderforest.com/{style}/{z}/{x}/{y}{r}.png?apikey={apiKey}',
+//             subdomains: ['a', 'b', 'c'],
+//             additionalOptions: {
+//               'style': 'outdoors',
+//               'apiKey': 'e7e012186aa94cca825fbe505dae61a0',
+//             },
+//             maxZoom: 22,
+//             userAgentPackageName: 'com.metis.insiit',
+//           ),
+//           RichAttributionWidget(
+//             attributions: [
+//               TextSourceAttribution(
+//                 'OpenStreetMap contributors',
+//                 onTap: () =>
+//                     launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+//               ),
+//             ],
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

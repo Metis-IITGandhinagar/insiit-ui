@@ -8,12 +8,18 @@ import './authentication/login.dart';
 import './screens/home.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  } catch (e) {
+    print("Failed to initialize Firebase: $e");
+  }
 
   // SharedPreferences prefs = await SharedPreferences.getInstance();
   runApp(const MyApp());

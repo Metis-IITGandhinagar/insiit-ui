@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 class BusPage extends StatefulWidget {
-  const BusPage({super.key});
+  const BusPage({Key? key});
 
   @override
   State<BusPage> createState() => _BusPageState();
@@ -14,6 +14,13 @@ class _BusPageState extends State<BusPage> {
   List<Map<String, dynamic>> data = [];
   String src = 'IIT Gandhinagar', des = 'ANY';
   bool searching = false;
+  bool townsFetched = false; // Flag to track whether towns are fetched
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTowns();
+  }
 
   void setSrc(String? t) {
     setState(() {
@@ -42,6 +49,7 @@ class _BusPageState extends State<BusPage> {
           townNames.add(townName); // Add the town name to the set
         }
       }
+      townsFetched = true; // Set the flag to true after fetching towns
     });
   }
 
@@ -66,7 +74,6 @@ class _BusPageState extends State<BusPage> {
 
   @override
   Widget build(BuildContext context) {
-    fetchTowns();
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -74,58 +81,62 @@ class _BusPageState extends State<BusPage> {
           const SizedBox(
             height: 18,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('SOURCE'),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: DropdownButton(
-                        value: src,
-                        items: towns.map((element) {
-                          return DropdownMenuItem(
-                              value: element, child: Text(element));
-                        }).toList(),
-                        onChanged: setSrc),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('DESTINATION'),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: DropdownButton(
-                        value: des,
-                        items: towns.map((element) {
-                          return DropdownMenuItem(
-                              value: element, child: Text(element));
-                        }).toList(),
-                        onChanged: setDes),
-                  ),
-                ],
-              ),
-            ],
-          ),
+          townsFetched // Only show dropdowns if towns are fetched
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('SOURCE'),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: DropdownButton(
+                              value: src,
+                              items: towns.map((element) {
+                                return DropdownMenuItem(
+                                    value: element, child: Text(element));
+                              }).toList(),
+                              onChanged: setSrc),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('DESTINATION'),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: DropdownButton(
+                              value: des,
+                              items: towns.map((element) {
+                                return DropdownMenuItem(
+                                    value: element, child: Text(element));
+                              }).toList(),
+                              onChanged: setDes),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              : CircularProgressIndicator(), // Show loading indicator if towns are not fetched
           const SizedBox(
             height: 10,
           ),
           TextButton.icon(
-            icon:
-                const Icon(Icons.search, color: Color.fromRGBO(94, 53, 177, 1)),
+            icon: Icon(Icons.search,
+                color: Theme.of(context).colorScheme.secondaryContainer),
             onPressed: () {
               search();
             },
-            label: const Text(
+            label: Text(
               'Search     ',
-              style: TextStyle(color: Color.fromRGBO(94, 53, 177, 1)),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondaryContainer),
             ),
             style: TextButton.styleFrom(
-              backgroundColor: const Color.fromRGBO(212, 212, 255, 1),
+              backgroundColor:
+                  Theme.of(context).colorScheme.onSecondaryContainer,
             ),
           ),
           const SizedBox(
@@ -156,7 +167,7 @@ class BusCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 239, 233, 255),
+            color: Theme.of(context).colorScheme.secondaryContainer,
             borderRadius: BorderRadius.circular(12)),
         width: double.infinity,
         child: Column(
@@ -169,17 +180,19 @@ class BusCard extends StatelessWidget {
                   children: [
                     Text(
                       data['Source']!,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 14,
-                          color: Color.fromRGBO(94, 53, 177, 1),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
                           fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
-                const Text(
+                Text(
                   '→',
                   style: TextStyle(
-                      color: Color.fromRGBO(94, 53, 177, 1),
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
                       fontWeight: FontWeight.bold,
                       fontSize: 24),
                 ),
@@ -188,9 +201,11 @@ class BusCard extends StatelessWidget {
                   children: [
                     Text(
                       data['Destination']!,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 14,
-                          color: Color.fromRGBO(94, 53, 177, 1),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
                           fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -202,9 +217,9 @@ class BusCard extends StatelessWidget {
             ),
             Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.access_time,
-                  color: Color.fromRGBO(94, 53, 177, 1),
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
                 ),
                 const SizedBox(
                   width: 5,
@@ -213,8 +228,8 @@ class BusCard extends StatelessWidget {
                   child: Text(
                     'Departure Time ' + data['DepartureTime'],
                     maxLines: 2,
-                    style: const TextStyle(
-                      color: Color.fromRGBO(94, 53, 177, 1),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
                     ),
                   ),
                 ),
@@ -225,9 +240,9 @@ class BusCard extends StatelessWidget {
             ),
             Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.directions,
-                  color: Color.fromRGBO(94, 53, 177, 1),
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
                 ),
                 const SizedBox(
                   width: 5,
@@ -236,8 +251,8 @@ class BusCard extends StatelessWidget {
                   child: Text(
                     'Via ' + data['Stops'].join(', '),
                     maxLines: 2,
-                    style: const TextStyle(
-                      color: Color.fromRGBO(94, 53, 177, 1),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
                     ),
                   ),
                 ),
@@ -248,16 +263,18 @@ class BusCard extends StatelessWidget {
             ),
             Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.directions_bus,
-                  color: Color.fromRGBO(94, 53, 177, 1),
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
                 ),
                 const SizedBox(
                   width: 5,
                 ),
                 Text(
                   data['BusName']!,
-                  style: const TextStyle(color: Color.fromRGBO(94, 53, 177, 1)),
+                  style: TextStyle(
+                      color:
+                          Theme.of(context).colorScheme.onSecondaryContainer),
                 ),
               ],
             ),

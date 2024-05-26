@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           color: Colors.white,
           alignment: Alignment.center,
-          child: const MapPage(),
+          child:  MapPage(),
         ),
         Container(
           color: Colors.white,
