@@ -1,10 +1,15 @@
+// This file contains the OutletExplore widget which is used to display the list of outlets available in the app.
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:provider/provider.dart';
 
 import '../model/outlet.dart';
 import 'meal.dart';
 import 'outlet_page.dart';
+import '../provider/cart_provider.dart';
+
 
 class OutletExplore extends StatefulWidget {
   @override
@@ -22,7 +27,7 @@ class _OutletExploreState extends State<OutletExplore> {
 
   Future<List<Outlet>> fetchOutlets() async {
     final response = await http
-        .get(Uri.parse('https://insiit-backend-node.vercel.app/api/outlets'));
+        .get(Uri.parse('http://10.7.17.57:3000/api/outlets'));
     if (response.statusCode == 200) {
       List<dynamic> responseData = json.decode(response.body);
       return responseData.map((data) => Outlet.fromJson(data)).toList();
@@ -107,9 +112,14 @@ class OutletWidget extends StatelessWidget {
       title: Text(outlet.name),
       subtitle: Text(outlet.openTime + ' - ' + outlet.closeTime),
       onTap: () {
-        Navigator.push(
+         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => OutletPage(outlet: outlet)),
+          MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+              create: (context) => CartProvider(),
+              child: OutletPage(outlet: outlet),
+            ),
+          ),
         );
       },
     );

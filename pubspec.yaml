@@ -38,7 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   auth: ^8.2.0+02
   gsheets: ^0.4.2
-  sqflite: ^2.3.0
+  sqflite: ^2.3.3+1
   google_fonts: ^4.0.4
   rotating_icon_button: ^1.0.0
   intl: ^0.18.1
@@ -50,7 +50,7 @@ dependencies:
   font_awesome_flutter: ^10.6.0
   shared_preferences: ^2.2.2
   icons_launcher: ^2.1.7
-  provider: ^6.0.5
+  provider: ^6.1.2
   qr_flutter: ^4.1.0
   animations: ^2.0.8
   flutter_form_builder: ^9.1.1
@@ -71,6 +71,9 @@ dependencies:
   firebase_analytics: ^10.10.5
   geolocator: ^12.0.0
   dio_cache_interceptor: ^3.5.0
+  flutter_cart: ^0.0.9
+  path_provider: ^2.1.3
+  badges: ^3.1.2
   
 
 dev_dependencies:

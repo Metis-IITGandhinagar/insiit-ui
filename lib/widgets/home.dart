@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:insiit/provider/cart_provider.dart';
+import 'package:provider/provider.dart';
 import 'events_details.dart';
 import 'mess.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +28,8 @@ var name = FirebaseAuth.instance.currentUser!.displayName ?? "User";
 
 var nameArray = name?.split(" ");
 
+var userdata = FirebaseAuth.instance.currentUser!;
+
 class _HomePageState extends State<HomePage> {
   late Future<MessMenu?> _menuFuture;
   MenuService _menuService = MenuService();
@@ -41,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   Future<List<Events>> postsFuture = getPosts();
 
   static Future<List<Events>> getPosts() async {
-    var url = Uri.parse("https://insiit-backend-node.vercel.app/api/events");
+    var url = Uri.parse("http://10.7.17.57:3000/api/events");
     final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(response.body);
@@ -52,6 +56,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final TimeOfDay now = TimeOfDay.now();
     print(now);
+    print(userdata);
     final pages = List.generate(
       6,
       (index) => Container(
@@ -154,10 +159,19 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                   splashColor: const Color.fromARGB(123, 255, 166, 121),
                   onTap: () {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => const OutletScreen()),
+                    // );
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const OutletScreen()),
+                        builder: (context) => ChangeNotifierProvider(
+                          create: (context) => CartProvider(),
+                          child: OutletScreen(),
+                        ),
+                      ),
                     );
                   },
                   child: SizedBox(
@@ -255,8 +269,8 @@ class _HomePageState extends State<HomePage> {
                   }).toList();
 
                   final sortedEvents = futureEvents?.where((event) {
-                    if (event?.date == null) return false;
-                    final eventDate = DateTime.parse(event!.date!);
+                    if (event.date == null) return false;
+                    final eventDate = DateTime.parse(event.date!);
                     return eventDate.isAfter(previousDate);
                   }).toList();
 

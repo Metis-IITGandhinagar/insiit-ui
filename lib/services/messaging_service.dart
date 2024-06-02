@@ -1,5 +1,13 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+const String apiUrl =
+    'http://10.7.17.57:3000/api/fcmverify'; // API endpoint to send FCM token
+const String fcmVerifyKey = 'fcmverify';
 
 class MessagingService {
   static String? fcmToken; // Variable to store the FCM token
@@ -30,6 +38,15 @@ class MessagingService {
     // Retrieving the FCM token
     fcmToken = await _fcm.getToken();
     print('fcmToken: $fcmToken');
+
+    Future<void> _checkFcmVerify(BuildContext context) async {
+      final prefs = await SharedPreferences.getInstance();
+
+      if (!prefs.containsKey(fcmVerifyKey)) {
+        debugPrint('FCM token not verified yet.');
+        await _sendDataToApi(context);
+      }
+    }
 
     // Handling background messages using the specified handler
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -101,6 +118,45 @@ class MessagingService {
     if (notificationData.containsKey('screen')) {
       final screen = notificationData['screen'];
       Navigator.of(context).pushNamed(screen);
+    }
+  }
+
+  // Check if FCM token is already verified
+
+  // Send data to API and store in shared preferences if successful
+  Future<void> _sendDataToApi(BuildContext context) async {
+    final firebaseUser = FirebaseAuth.instance.currentUser;
+    if (firebaseUser == null) {
+      debugPrint('No user is currently signed in.');
+      return;
+    }
+
+    final name = firebaseUser.displayName;
+    final email = firebaseUser.email;
+
+    final Map<String, String> data = {
+      'name': name ?? '',
+      'email': email ?? '',
+      'fcmToken': fcmToken ?? '',
+    };
+    final String jsonData = jsonEncode(data);
+
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonData,
+      );
+
+      if (response.statusCode == 200) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString(fcmVerifyKey, jsonData);
+        print('Data sent to API and stored in shared preferences.');
+      } else {
+        print('Failed to send data to API.');
+      }
+    } catch (e) {
+      print('Error sending data to API: $e');
     }
   }
 }

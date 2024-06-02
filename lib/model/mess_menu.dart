@@ -70,7 +70,7 @@ class MenuService {
       }
     }
 
-    final response = await http.get(Uri.parse('https://insiit-backend-node.vercel.app/api/mess-menu'));
+    final response = await http.get(Uri.parse('http://10.7.17.57:3000/api/mess-menu'));
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       final messMenu = MessMenu.fromJson(responseData);

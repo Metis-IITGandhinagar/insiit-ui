@@ -16,25 +16,6 @@ class _MapPageState extends State<MapPage> {
   MapController _mapController = MapController();
   double _currentZoom = 18;
 
-  // Future<Position>_getCurrentlocation() async {
-  //   bool service = await Geolocator.isLocationServiceEnabled();
-  //   if (!service) {
-  //     return Future.error('Location services are disabled.');
-  //   }
-  //   LocationPermission permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       return Future.error('Location permissions are denied');
-  //     }
-
-  //   }
-  //   if (permission == LocationPermission.deniedForever) {
-  //     return Future.error('Location permissions are permanently denied, we cannot request permissions.');
-  //   }
-
-  //   return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -93,48 +74,3 @@ class _MapPageState extends State<MapPage> {
     );
   }
 }
-
-
-// class MapPage extends StatefulWidget {
-//   const MapPage({super.key});
-
-//   @override
-//   State<MapPage> createState() => _MapPageState();
-// }
-
-// class _MapPageState extends State<MapPage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: FlutterMap(
-//         options: MapOptions(
-//           center: LatLng(23.21049, 72.68475),
-//           zoom: 18.2,
-//           maxZoom: 22,
-//         ),
-//         children: [
-//           TileLayer(
-//             urlTemplate:
-//                 'https://{s}.tile.thunderforest.com/{style}/{z}/{x}/{y}{r}.png?apikey={apiKey}',
-//             subdomains: ['a', 'b', 'c'],
-//             additionalOptions: {
-//               'style': 'outdoors',
-//               'apiKey': 'e7e012186aa94cca825fbe505dae61a0',
-//             },
-//             maxZoom: 22,
-//             userAgentPackageName: 'com.metis.insiit',
-//           ),
-//           RichAttributionWidget(
-//             attributions: [
-//               TextSourceAttribution(
-//                 'OpenStreetMap contributors',
-//                 onTap: () =>
-//                     launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
-//               ),
-//             ],
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

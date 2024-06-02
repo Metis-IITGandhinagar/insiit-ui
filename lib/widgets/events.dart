@@ -25,7 +25,7 @@ class _EventWidgetState extends State<EventWidget> {
   }
 
   Future<List<Events>> getPosts() async {
-    var url = Uri.parse("https://insiit-backend-node.vercel.app/api/events");
+    var url = Uri.parse("http://10.7.17.57:3000/api/events");
     final response = await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(response.body);
     return body.map((e) => Events.fromJson(e)).toList();

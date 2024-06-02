@@ -29,7 +29,7 @@ class Outlet {
   final List<MenuItem> menuItems = menuData.map((item) => MenuItem.fromJson(item)).toList();
 
   return Outlet(
-    id: json['id'] ?? '', // Provide a default value for id if it's null
+    id: json['_id'] ?? '', // Provide a default value for id if it's null
     name: json['name'] ?? '',
     location: Location.fromJson(json['location'] ?? {}),
     landmark: json['landmark'] ?? '',
@@ -83,7 +83,7 @@ class MenuItem {
 
   factory MenuItem.fromJson(Map<String, dynamic> json) {
   return MenuItem(
-    id: json['id'] ?? '', // Provide a default value for id if it's null
+    id: json['_id'] ?? '', // Provide a default value for id if it's null
     name: json['name'] ?? '',
     price: json['price']?.toDouble() ?? 0.0,
     description: json['description'] ?? '',
@@ -97,7 +97,7 @@ class MenuItem {
 
 Future<Outlet?> fetchOutlet() async {
   final response =
-      await http.get(Uri.parse('https://insiit-backend-node.vercel.app/api/outlets'));
+      await http.get(Uri.parse('http://10.7.17.57:3000/api/outlets'));
   if (response.statusCode == 200) {
     Map<String, dynamic> responseData = json.decode(response.body);
     return Outlet.fromJson(responseData);
