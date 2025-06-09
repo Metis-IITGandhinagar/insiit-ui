@@ -52,14 +52,14 @@ class MyApp extends StatelessWidget {
           dividerColor: Colors.transparent,
           fontFamily: GoogleFonts.dmSans().fontFamily,
           useMaterial3: true,
-          colorSchemeSeed: Colors.deepPurple[600]),
+          colorSchemeSeed: Colors.deepPurple),
       // theme: lightTheme,
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         dividerColor: Colors.transparent,
         fontFamily: GoogleFonts.dmSans().fontFamily,
         useMaterial3: true,
-        colorSchemeSeed: Colors.deepPurple[600]!,
+        colorSchemeSeed: Colors.deepPurple!,
       ),
     );
   }

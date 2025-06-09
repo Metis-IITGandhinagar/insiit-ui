@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:insiit/widgets/maps.dart';
 import 'package:insiit/widgets/more.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/messaging_service.dart';
 import '../widgets/home.dart';
 import '../widgets/mess.dart';
@@ -13,6 +14,8 @@ import '../widgets/bus.dart';
 import './qr.dart';
 import './notification.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,19 +26,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _messagingService = MessagingService();
-
-  // void initState() {
-  //   AwesomeNotifications().isNotificationAllowed().then((isAllowed){
-  //     if(!isAllowed){
-  //       AwesomeNotifications().requestPermissionToSendNotifications();
-  //     }
-
-  //   });
-  //   super.initState();
-  // }
-  // triggerNotification(){
-  //   AwesomeNotifications().createNotification(content: NotificationContent(id: 1, channelKey: 'basic_channel', title: "InsIIT Notification Test", body: "This is a test notification"));
-  // }
   int currentPageIndex = 0;
 
   @override
@@ -58,6 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () async {
                 await GoogleSignIn().signOut();
                 FirebaseAuth.instance.signOut();
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
               }),
           const SizedBox(
             width: 15,

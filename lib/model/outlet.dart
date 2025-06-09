@@ -29,7 +29,7 @@ class Outlet {
   final List<MenuItem> menuItems = menuData.map((item) => MenuItem.fromJson(item)).toList();
 
   return Outlet(
-    id: json['id'] ?? '', // Provide a default value for id if it's null
+    id: json['_id'] ?? '', // Provide a default value for id if it's null
     name: json['name'] ?? '',
     location: Location.fromJson(json['location'] ?? {}),
     landmark: json['landmark'] ?? '',
@@ -83,7 +83,7 @@ class MenuItem {
 
   factory MenuItem.fromJson(Map<String, dynamic> json) {
   return MenuItem(
-    id: json['id'] ?? '', // Provide a default value for id if it's null
+    id: json['_id'] ?? '', // Provide a default value for id if it's null
     name: json['name'] ?? '',
     price: json['price']?.toDouble() ?? 0.0,
     description: json['description'] ?? '',

@@ -1,10 +1,15 @@
+// This file contains the OutletExplore widget which is used to display the list of outlets available in the app.
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:provider/provider.dart';
 
 import '../model/outlet.dart';
 import 'meal.dart';
 import 'outlet_page.dart';
+import '../provider/cart_provider.dart';
+
 
 class OutletExplore extends StatefulWidget {
   @override
@@ -107,9 +112,14 @@ class OutletWidget extends StatelessWidget {
       title: Text(outlet.name),
       subtitle: Text(outlet.openTime + ' - ' + outlet.closeTime),
       onTap: () {
-        Navigator.push(
+         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => OutletPage(outlet: outlet)),
+          MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+              create: (context) => CartProvider(),
+              child: OutletPage(outlet: outlet),
+            ),
+          ),
         );
       },
     );

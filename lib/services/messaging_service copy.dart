@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 const String apiUrl =
-    'http://10.0.2.2:3000/api/fcmverify'; // API endpoint to send FCM token
+    'https://insiit-backend-node.vercel.app/api/fcmverify'; // API endpoint to send FCM token
 const String fcmVerifyKey = 'fcmverify';
 
 class MessagingService {
@@ -19,18 +19,6 @@ class MessagingService {
   MessagingService._internal();
 
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
-
-  // Moved _checkFcmVerify outside init to be a class method
-  Future<void> _checkFcmVerify(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    if (!prefs.containsKey(fcmVerifyKey)) {
-      debugPrint('FCM token not verified yet. Sending to API.');
-      await _sendDataToApi(context);
-    } else {
-      debugPrint('FCM token already marked as verified in SharedPreferences.');
-    }
-  }
 
   Future<void> init(BuildContext context) async {
     // Requesting permission for notifications
@@ -48,18 +36,16 @@ class MessagingService {
         'User granted notifications permission: ${settings.authorizationStatus}');
 
     // Retrieving the FCM token
-    try {
-      fcmToken = await _fcm.getToken();
-      print('fcmToken: $fcmToken');
+    fcmToken = await _fcm.getToken();
+    print('fcmToken: $fcmToken');
 
-      // Call _checkFcmVerify after retrieving the token
-      if (fcmToken != null) {
-        await _checkFcmVerify(context);
-      } else {
-        debugPrint('FCM token is null. Cannot send to API.');
+    Future<void> _checkFcmVerify(BuildContext context) async {
+      final prefs = await SharedPreferences.getInstance();
+
+      if (!prefs.containsKey(fcmVerifyKey)) {
+        debugPrint('FCM token not verified yet.');
+        await _sendDataToApi(context);
       }
-    } catch (e) {
-      debugPrint('Error getting FCM token: $e');
     }
 
     // Handling background messages using the specified handler
@@ -80,8 +66,7 @@ class MessagingService {
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (BuildContext dialogContext) {
-            
+            builder: (BuildContext context) {
               return WillPopScope(
                 onWillPop: () async => false,
                 child: AlertDialog(
@@ -91,15 +76,13 @@ class MessagingService {
                     if (notificationData.containsKey('screen'))
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(dialogContext); 
-                          Navigator.of(context).pushNamed(
-                              screen); 
+                          Navigator.pop(context);
+                          Navigator.of(context).pushNamed(screen);
                         },
                         child: const Text('Open Screen'),
                       ),
                     TextButton(
-                      onPressed: () => Navigator.of(dialogContext)
-                          .pop(), 
+                      onPressed: () => Navigator.of(context).pop(),
                       child: const Text('Dismiss'),
                     ),
                   ],
@@ -112,6 +95,8 @@ class MessagingService {
     });
 
     // Handling the initial message received when the app is launched from dead (killed state)
+    // When the app is killed and a new notification arrives when user clicks on it
+    // It gets the data to which screen to open
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       if (message != null) {
         _handleNotificationClick(context, message);
@@ -123,14 +108,6 @@ class MessagingService {
       debugPrint(
           'onMessageOpenedApp: ${message.notification!.title.toString()}');
       _handleNotificationClick(context, message);
-    });
-
-    // Add handling for FCM token refresh
-    _fcm.onTokenRefresh.listen((newToken) async {
-      fcmToken = newToken;
-      debugPrint('FCM token refreshed: $newToken');
-      // When token refreshes, send it to your API
-      await _sendDataToApi(context);
     });
   }
 
@@ -144,15 +121,13 @@ class MessagingService {
     }
   }
 
+  // Check if FCM token is already verified
+
   // Send data to API and store in shared preferences if successful
   Future<void> _sendDataToApi(BuildContext context) async {
     final firebaseUser = FirebaseAuth.instance.currentUser;
     if (firebaseUser == null) {
-      debugPrint('No user is currently signed in. Cannot send FCM data.');
-      return;
-    }
-    if (fcmToken == null) {
-      debugPrint('FCM token is null. Cannot send FCM data.');
+      debugPrint('No user is currently signed in.');
       return;
     }
 
@@ -162,7 +137,7 @@ class MessagingService {
     final Map<String, String> data = {
       'name': name ?? '',
       'email': email ?? '',
-      'fcmToken': fcmToken!, // fcmToken is checked for null above
+      'fcmToken': fcmToken ?? '',
     };
     final String jsonData = jsonEncode(data);
 
@@ -173,17 +148,12 @@ class MessagingService {
         body: jsonData,
       );
 
-      if (response.statusCode == 201 || response.statusCode == 200) {
+      if (response.statusCode == 200) {
         final prefs = await SharedPreferences.getInstance();
-        // Store a representation of the sent data or a simple flag
-        // Storing jsonData might be large; consider storing a hash or timestamp if space is a concern
-        await prefs.setString(fcmVerifyKey,
-            jsonData); // Or simply prefs.setBool(fcmVerifyKey, true);
-        print(
-            'Data sent to API and verification status stored in shared preferences.');
+        await prefs.setString(fcmVerifyKey, jsonData);
+        print('Data sent to API and stored in shared preferences.');
       } else {
-        print(
-            'Failed to send data to API. Status code: ${response.statusCode}, Body: ${response.body}');
+        print('Failed to send data to API.');
       }
     } catch (e) {
       print('Error sending data to API: $e');
@@ -194,12 +164,7 @@ class MessagingService {
 // Handler for background messages
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
- 
-  debugPrint('Handling a background message: ${message.messageId}');
-  if (message.notification != null) {
-    debugPrint(
-        'Background Message Notification Title: ${message.notification!.title}');
-    debugPrint(
-        'Background Message Notification Body: ${message.notification!.body}');
-  }
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  debugPrint('Handling a background message: ${message.notification!.title}');
 }
