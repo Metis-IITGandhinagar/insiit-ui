@@ -13,69 +13,77 @@ class _RepresentativesPageState extends State<RepresentativesPage> {
   final String jsonPORData = '''
   {
     "StudentCouncilBody": [
-        
-        {
+     {
             "Position": "General Secretary",
-            "Name": "Yash Dilip Ahire",
+            "Name": "Siddharth Sachin Doshi",
             "Contacts": {
-                "Mobile": "7219193716",
-                "Email": "yashahire@iitgn.ac.in"
+                "Mobile": "8208710144",
+                "Email": "siddharth.doshi@iitgn.ac.in"
             }
         },
         {
-            "Position": "Academic Secretary",
-            "Name": "Aditya Gupte",
+            "Position": "Convener, SS",
+            "Name": "Shambhavi Agarwal",
             "Contacts": {
-                "Mobile": "9664488377",
-                "Email": "adityaaditya@iitgn.ac.in"
+                "Mobile": "9827948651",
+                "Email": "shambhavi.agrawal@iitgn.ac.in"
+            }
+        },
+       
+        {
+            "Position": "Academic Secretary",
+            "Name": "Shrishti Mishra",
+            "Contacts": {
+                "Mobile": "9263870017",
+                "Email": "shrishti.mishra@iitgn.ac.in"
             }
         },
         {
             "Position": "Cultural Secretary",
-            "Name": "Abhishek Meena",
+            "Name": "Jovit Jayan",
             "Contacts": {
-                "Mobile": "7340360895",
-                "Email": "meenaabhishek@iitgn.ac.in"
-            }
-        },
-        {
-            "Position": "IR&P Secretary",
-            "Name": "Parth Deshpande",
-            "Contacts": {
-                "Mobile": "9527662004",
-                "Email": "deshpandeparth@iitgn.ac.in"
-            }
-        },
-        {
-            "Position": "PDC Secretary",
-            "Name": "Aaryan Darad",
-            "Contacts": {
-                "Mobile": "9998583773",
-                "Email": "daradaaryan@iitgn.ac.in"
-            }
-        },
-        {
-            "Position": "Sports Secretary",
-            "Name": "Adit Rambhia",
-            "Contacts": {
-                "Mobile": "8850270294",
-                "Email": "rambhiaadit@iitgn.ac.in"
-            }
-        },
-        {
-            "Position": "Welfare Secretary",
-            "Name": "Gaurav",
-            "Contacts": {
-                "Mobile": "7627068716",
-                "Email": "mahendragaurav@iitgn.ac.in"
+                "Mobile": "9400907585",
+                "Email": "jovit.jayan@iitgn.ac.in"
             }
         },
         {
             "Position": "Technical Secretary",
-            "Name": "Naman Dharmani",
+            "Name": "Chandrabhan Patel",
             "Contacts": {
-                "Mobile": "8378009665",
-                "Email": "dharmaninaman@iitgn.ac.in"
+                "Mobile": "6376471802",
+                "Email": "chandrabhan.patel@iitgn.ac.in"
+            }
+        },
+        {
+            "Position": "IR&P Secretary",
+            "Name": "Rupak Banerjee",
+            "Contacts": {
+                "Mobile": "9007669974",
+                "Email": "rupak.banerjee@iitgn.ac.in"
+            }
+        },
+        {
+            "Position": "PDC Secretary",
+            "Name": "Mumuksh Anilkumar Jain",
+            "Contacts": {
+                "Mobile": "8459610057",
+                "Email": "mumuksh.jain@iitgn.ac.in"
+            }
+        },
+        {
+            "Position": "Sports Secretary",
+            "Name": "Keshav Sobania",
+            "Contacts": {
+                "Mobile": "7240638176",
+                "Email": "keshav.sobania@iitgn.ac.in"
+            }
+        },
+        {
+            "Position": "Welfare Secretary",
+            "Name": "Sridhar Singh Thakur",
+            "Contacts": {
+                "Mobile": "6362578897",
+                "Email": "sridharsingh.thakur@iitgn.ac.in"
             }
         }
     ]
@@ -113,7 +121,8 @@ class _RepresentativesPageState extends State<RepresentativesPage> {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("$name"),
+                  Text("$name", style: TextStyle(fontWeight: FontWeight.bold)),
+                  SizedBox(height: 10),
                   Text("$mobile"),
                   Text("$email"),
                 ],

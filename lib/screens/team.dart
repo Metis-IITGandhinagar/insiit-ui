@@ -34,15 +34,6 @@ class DevelopersPageState extends State<DevelopersPage> {
                   children: const [
                     DeveloperCard(
                       phoneNumber: "",
-                      GithubURL: "https://github.com/mayankgul",
-                      name: "Mayank Gulati",
-                      role: "",
-                      email: "mayank.gulati@iitgn.ac.in",
-                      imageUrl:
-                          "https://raw.githubusercontent.com/anmolkumr/insiit-ui/master/assets/mayank-insiit.jpeg",
-                    ),
-                    DeveloperCard(
-                      phoneNumber: "",
                       GithubURL: "https://github.com/anmolkumr",
                       name: "Anmol Kumar",
                       role: "",
@@ -50,6 +41,16 @@ class DevelopersPageState extends State<DevelopersPage> {
                       imageUrl:
                           "https://raw.githubusercontent.com/anmolkumr/insiit-ui/master/assets/anmol-insiit.jpg",
                     ),
+                    DeveloperCard(
+                      phoneNumber: "",
+                      GithubURL: "https://github.com/mayankgul",
+                      name: "Mayank Gulati",
+                      role: "",
+                      email: "mayank.gulati@iitgn.ac.in",
+                      imageUrl:
+                          "https://raw.githubusercontent.com/anmolkumr/insiit-ui/master/assets/mayank-insiit.jpeg",
+                    ),
+                    
                   ],
                 ),
               ],
@@ -57,7 +58,7 @@ class DevelopersPageState extends State<DevelopersPage> {
             SizedBox(height: 20),
             ExpansionTile(
               title: const Text('Contributors'),
-              initiallyExpanded: true, // Initially expanded
+              initiallyExpanded: false, // Initially expanded
               children: [
                 GridView(
                   shrinkWrap: true,

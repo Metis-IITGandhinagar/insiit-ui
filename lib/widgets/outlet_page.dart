@@ -27,31 +27,31 @@ class OutletPage extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
             pinned: true,
             expandedHeight: 200,
-            actions: [
-              Center(
-                child: Consumer<CartProvider>(
-                  builder: (context, value, child) {
-                    return badges.Badge(
-                      badgeContent: Text(
-                        '${value.getCounter()}',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      child: Icon(Icons.shopping_cart_outlined),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              IconButton(
-                  icon: const Icon(Icons.logout_sharp), onPressed: () async {}),
-              const SizedBox(
-                width: 15,
-              ),
-            ],
+            // actions: [
+            //   Center(
+            //     child: Consumer<CartProvider>(
+            //       builder: (context, value, child) {
+            //         return badges.Badge(
+            //           badgeContent: Text(
+            //             '${value.getCounter()}',
+            //             style: TextStyle(
+            //               color: Colors.white,
+            //             ),
+            //           ),
+            //           child: Icon(Icons.shopping_cart_outlined),
+            //         );
+            //       },
+            //     ),
+            //   ),
+            //   const SizedBox(
+            //     width: 10,
+            //   ),
+            //   IconButton(
+            //       icon: const Icon(Icons.logout_sharp), onPressed: () async {}),
+            //   const SizedBox(
+            //     width: 15,
+            //   ),
+            // ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(outlet.name ?? 'Name Not Available',
                   textAlign: TextAlign.justify,
@@ -73,39 +73,39 @@ class OutletPage extends StatelessWidget {
                 return ListTile(
                   title: Text(item.name),
                   subtitle: Text('₹' + '${item.price.toStringAsFixed(2)}'),
-                  trailing: OutlinedButton(
-                    onPressed: () {
-                      dbHelper
-                          .insert(Cart(
-                        productId: item.id,
-                        productName: item.name,
-                        unitPrice: item.price,
-                        productPrice: item.price,
-                        quantity: 1,
-                        outletID: outlet.id,
-                        outletName: outlet.name,
-                      ))
-                          .then((value) {
-                        print('Item added to cart');
-                        Provider.of<CartProvider>(context, listen: false)
-                            .addCounter();
-                        Provider.of<CartProvider>(context, listen: false)
-                            .addTotalPrice(item.price);
-                      }).catchError((error) {
-                        print('Error adding item to cart: $error');
-                      });
+                  // trailing: OutlinedButton(
+                  //   onPressed: () {
+                  //     dbHelper
+                  //         .insert(Cart(
+                  //       productId: item.id,
+                  //       productName: item.name,
+                  //       unitPrice: item.price,
+                  //       productPrice: item.price,
+                  //       quantity: 1,
+                  //       outletID: outlet.id,
+                  //       outletName: outlet.name,
+                  //     ))
+                  //         .then((value) {
+                  //       print('Item added to cart');
+                  //       Provider.of<CartProvider>(context, listen: false)
+                  //           .addCounter();
+                  //       Provider.of<CartProvider>(context, listen: false)
+                  //           .addTotalPrice(item.price);
+                  //     }).catchError((error) {
+                  //       print('Error adding item to cart: $error');
+                  //     });
 
-                      // Provider.of<CartProvider>(context, listen: false)
-                      //     .addCounter();
-                      // Provider.of<CartProvider>(context, listen: false)
-                      //     .addTotalPrice(item.price);
-                      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      //   backgroundColor: Colors.green[900],
-                      //   content: Text(item.name + " " + 'added to cart'),
-                      // ));
-                    },
-                    child: Text('Add'),
-                  ),
+                  //     // Provider.of<CartProvider>(context, listen: false)
+                  //     //     .addCounter();
+                  //     // Provider.of<CartProvider>(context, listen: false)
+                  //     //     .addTotalPrice(item.price);
+                  //     // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  //     //   backgroundColor: Colors.green[900],
+                  //     //   content: Text(item.name + " " + 'added to cart'),
+                  //     // ));
+                  //   },
+                  //   child: Text('Add'),
+                  // ),
                   onTap: () {},
                   visualDensity: VisualDensity.standard,
                 );

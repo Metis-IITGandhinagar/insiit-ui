@@ -32,6 +32,11 @@ class InsIITAbout extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 24),
+            Text(
+              'The app is maintained by Metis Club and App data is managed by the Respective Council Secretaries.',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -53,7 +58,7 @@ class InsIITAbout extends StatelessWidget {
                       _launchURL('https://github.com/Metis-IITGandhinagar/'),
                   child: Text('Visit Metis IITGN'),
                   style: ElevatedButton.styleFrom(
-                     backgroundColor:
+                    backgroundColor:
                         Theme.of(context).colorScheme.secondaryContainer,
                   ),
                 ),
@@ -62,11 +67,11 @@ class InsIITAbout extends StatelessWidget {
             SizedBox(height: 24),
             Text(
               'Version: 1.0.0',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: TextStyle(fontSize: 14, color: const Color(0xFF1142AD)),
             ),
             Text(
-              '© 2024 Metis, IITGN',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              '© 2025 Metis, IITGN',
+              style: TextStyle(fontSize: 14, color: const Color(0xFF1142AD)),
             ),
           ],
         ),

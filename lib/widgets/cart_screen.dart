@@ -41,11 +41,16 @@ class _CartScreenState extends State<CartScreen> {
                           icon: const Icon(Icons.delete),
                           onPressed: () {
                             //TODO: Delete item from cart
-                            dbHelper.delete(snapshot.data![index].id!);
-                            cart.removeCounter();
-                            Provider.of<CartProvider>(context, listen: false)
-                            .removeCounter();
-                            setState(() {});
+                            dbHelper
+                                .delete(snapshot.data![index].id!)
+                                .then((value) {
+                              Provider.of<CartProvider>(context, listen: false)
+                                  .removeCounter();
+                                  
+                              setState(() {});
+                            }).catchError((error) {
+                              print("Error: $error");
+                            });
                           },
                         ),
                       );

@@ -16,6 +16,8 @@ import '../model/events.dart';
 import 'dart:async';
 import 'package:insiit/model/mess_menu.dart';
 import 'dart:math';
+import '../model/timetable_entry_model.dart';
+import '../screens/course_selection.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,28 +26,191 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-var name = FirebaseAuth.instance.currentUser!.displayName ?? "User";
+// var name = FirebaseAuth.instance.currentUser!.displayName ?? "User";
 
-var nameArray = name?.split(" ");
+// var nameArray = name?.split(" ");
 
-var userdata = FirebaseAuth.instance.currentUser!;
+// var userdata = FirebaseAuth.instance.currentUser!;
 
 class _HomePageState extends State<HomePage> {
   late Future<MessMenu?> _menuFuture;
   MenuService _menuService = MenuService();
+  final controller = PageController(viewportFraction: 0.8, keepPage: true);
+  Future<List<Events>> postsFuture = getPosts();
+
+  // Timetable state variables
+  Map<String, List<TimetableEntry>> _timetableData = {};
+  List<TimetableEntry> _todayClasses = [];
+  String _currentDayKey = '';
+  String _displayCurrentDay = '';
+  bool _isTimetableLoading = true;
+  String? _timetableMessage;
+  String _greetingName = "User"; // For greeting
 
   @override
   void initState() {
     super.initState();
     _menuFuture = _menuService.fetchMenu();
+    _loadTimetableAndSetup(); // Load timetable data
+    _updateGreetingName(); // Fetch Firebase user name
   }
 
-  final controller = PageController(viewportFraction: 0.8, keepPage: true);
+  void _updateGreetingName() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null &&
+        user.displayName != null &&
+        user.displayName!.isNotEmpty) {
+      final nameParts = user.displayName!.split(" ");
+      if (mounted) {
+        setState(() {
+          _greetingName = nameParts[0]; // Use the first name
+        });
+      }
+    } else if (mounted) {
+      setState(() {
+        _greetingName = "User"; // Default if no name
+      });
+    }
+  }
 
-  Future<List<Events>> postsFuture = getPosts();
+  // Timetable methods
+  Future<void> _loadTimetableAndSetup() async {
+    if (!mounted) return;
+    _getCurrentDayInfo();
+    await _loadTimetable();
+  }
+
+  void _getCurrentDayInfo() {
+    final now = DateTime.now();
+    _currentDayKey = DateFormat('EEEE').format(now).toLowerCase();
+    _displayCurrentDay = DateFormat('EEEE').format(now);
+  }
+
+  Future<void> _loadTimetable() async {
+    if (!mounted) return;
+    setState(() {
+      _isTimetableLoading = true;
+      _timetableMessage = null;
+      _todayClasses = [];
+    });
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? timetableJsonString = prefs.getString('timetable');
+
+    if (timetableJsonString != null && timetableJsonString.isNotEmpty) {
+      try {
+        final Map<String, dynamic> decodedData =
+            jsonDecode(timetableJsonString);
+        _timetableData = decodedData.map((key, value) {
+          final List<dynamic> entriesJson = value as List<dynamic>;
+          return MapEntry(
+              key.toLowerCase(),
+              entriesJson
+                  .map(
+                      (e) => TimetableEntry.fromJson(e as Map<String, dynamic>))
+                  .toList());
+        });
+
+        if (_timetableData.containsKey(_currentDayKey)) {
+          _todayClasses = _timetableData[_currentDayKey]!;
+          if (_todayClasses.isEmpty) {
+            _timetableMessage =
+                'No classes scheduled for $_displayCurrentDay! 🎉';
+          }
+        } else {
+          _timetableMessage =
+              'No classes scheduled for $_displayCurrentDay! 🎉';
+        }
+      } catch (e) {
+        print("Error parsing timetable data: $e");
+        _timetableMessage =
+            'Error loading timetable. Please select courses again or refresh.';
+      }
+    } else {
+      _timetableMessage =
+          'No timetable available. Please select your courses first.';
+    }
+    if (!mounted) return;
+    setState(() {
+      _isTimetableLoading = false;
+    });
+  }
+
+  Widget _buildTimetableDisplay() {
+    if (_isTimetableLoading) {
+      return const Center(
+          child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: CircularProgressIndicator(),
+      ));
+    }
+    if (_timetableMessage != null) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30.0),
+          child: Text(
+            _timetableMessage!,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
+      );
+    }
+    if (_todayClasses.isEmpty) {
+      // Fallback, should be covered by _timetableMessage
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30.0),
+          child: Text(
+            'No classes scheduled for $_displayCurrentDay! 🎉',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+          ),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: _todayClasses.length,
+      itemBuilder: (context, index) {
+        final entry = _todayClasses[index];
+        return Card(
+          elevation: 2,
+          margin: const EdgeInsets.symmetric(
+              vertical: 6, horizontal: 0), // Adjust horizontal margin if needed
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: ListTile(
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+            leading: CircleAvatar(
+              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+              child: Text(
+                entry.startTime.split(':')[0],
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+              ),
+            ),
+            title: Text(
+              entry.fullClassDetails,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
+            subtitle: Text(
+              'Time: ${entry.startTime} - ${entry.endTime}',
+              style: TextStyle(fontSize: 13),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   static Future<List<Events>> getPosts() async {
-    var url = Uri.parse("http://10.7.17.57:3000/api/events");
+    var url = Uri.parse("https://insiit-backend-node.vercel.app/api/events");
     final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(response.body);
@@ -56,7 +221,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final TimeOfDay now = TimeOfDay.now();
     print(now);
-    print(userdata);
+    // print(userdata);
+
     final pages = List.generate(
       6,
       (index) => Container(
@@ -80,16 +246,18 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: ListView(children: [
+        body: ListView(padding: const EdgeInsets.all(0), children: [
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, top: 25, bottom: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Hi, ${nameArray?[0]}',
+                    Text(
+                        'Hi, $_greetingName', // Using state variable _greetingName
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 25)),
                     const SizedBox(
@@ -99,109 +267,151 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(fontSize: 15)),
                   ],
                 ),
+                // Potentially add a profile icon or settings button here on the right
+                // Spacer(),
+                // CircleAvatar(child: Icon(Icons.person))
               ],
             ),
           ),
 
-          // const SizedBox(
-          //   height: 10,
-          // ),
-
-          Row(children: [
-            Card(
-                surfaceTintColor:
-                    Theme.of(context).colorScheme.secondaryContainer,
-                color: Theme.of(context).colorScheme.secondaryContainer,
-                margin: const EdgeInsets.all(16.0),
-                child: InkWell(
-                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                  splashColor: const Color.fromARGB(103, 159, 111, 255),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const BusPageStandalone()),
-                    );
+          // Timetable Section (NEWLY INSERTED)
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                    _isTimetableLoading
+                        ? 'Loading your schedule...'
+                        : 'Your Today\'s Schedule ($_displayCurrentDay)',
+                    style: TextStyle(fontSize: 18)),
+                const SizedBox(height: 10),
+                _buildTimetableDisplay(),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.calendar_today_outlined, size: 20),
+                  label: const Text('Select / Update Courses'),
+                  onPressed: () async {
+                    final result = await Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (_) => CourseSelectionPage()));
+                    if (result == true && mounted) {
+                      _loadTimetableAndSetup();
+                    }
                   },
-                  child: SizedBox(
-                    height: 120,
-                    width: MediaQuery.of(context).size.width / 2 -
-                        32, // minus 32 due to the margin
+                  style: ElevatedButton.styleFrom(
+                      foregroundColor:
+                          Theme.of(context).colorScheme.onSecondaryContainer,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
+                      textStyle: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                      minimumSize: const Size(
+                          double.infinity, 48), // Make button full width
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8))),
+                ), // Displays loading, message, or list
+              ],
+            ),
+          ),
 
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.directions_bus_filled_outlined,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                        ),
-                        Text(
-                          "Bus Schedule",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                )),
-            Card(
-                surfaceTintColor: Colors.white,
-                color: Theme.of(context).colorScheme.tertiaryContainer,
-                margin: const EdgeInsets.all(16.0),
-                child: InkWell(
-                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                  splashColor: const Color.fromARGB(123, 255, 166, 121),
-                  onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => const OutletScreen()),
-                    // );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChangeNotifierProvider(
-                          create: (context) => CartProvider(),
-                          child: OutletScreen(),
-                        ),
-                      ),
-                    );
-                  },
-                  child: SizedBox(
-                    height: 120,
-                    width: MediaQuery.of(context).size.width / 2 -
-                        32, // minus 32 due to the margin
+          // Row(children: [
+          //   Card(
+          //       surfaceTintColor:
+          //           Theme.of(context).colorScheme.secondaryContainer,
+          //       color: Theme.of(context).colorScheme.secondaryContainer,
+          //       margin: const EdgeInsets.all(16.0),
+          //       child: InkWell(
+          //         borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+          //         splashColor: const Color.fromARGB(103, 159, 111, 255),
+          //         onTap: () {
+          //           Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //                 builder: (context) => const BusPageStandalone()),
+          //           );
+          //         },
+          //         child: SizedBox(
+          //           height: 120,
+          //           width: MediaQuery.of(context).size.width / 2 -
+          //               32, // minus 32 due to the margin
 
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.restaurant_menu_outlined,
-                          color:
-                              Theme.of(context).colorScheme.onTertiaryContainer,
-                        ),
-                        Text(
-                          "Outlets",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onTertiaryContainer,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                )),
-          ]),
+          //           child: Column(
+          //             mainAxisAlignment: MainAxisAlignment.center,
+          //             crossAxisAlignment: CrossAxisAlignment.center,
+          //             children: [
+          //               Icon(
+          //                 Icons.directions_bus_filled_outlined,
+          //                 color: Theme.of(context)
+          //                     .colorScheme
+          //                     .onSecondaryContainer,
+          //               ),
+          //               Text(
+          //                 "Bus Schedule",
+          //                 style: TextStyle(
+          //                   fontSize: 15,
+          //                   color: Theme.of(context)
+          //                       .colorScheme
+          //                       .onSecondaryContainer,
+          //                 ),
+          //               )
+          //             ],
+          //           ),
+          //         ),
+          //       )),
+          //   Card(
+          //       surfaceTintColor: Colors.white,
+          //       color: Theme.of(context).colorScheme.tertiaryContainer,
+          //       margin: const EdgeInsets.all(16.0),
+          //       child: InkWell(
+          //         borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+          //         splashColor: const Color.fromARGB(123, 255, 166, 121),
+          //         onTap: () {
+          //           // Navigator.push(
+          //           //   context,
+          //           //   MaterialPageRoute(
+          //           //       builder: (context) => const OutletScreen()),
+          //           // );
+          //           Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //               builder: (context) => ChangeNotifierProvider(
+          //                 create: (context) => CartProvider(),
+          //                 child: OutletScreen(),
+          //               ),
+          //             ),
+          //           );
+          //         },
+          //         child: SizedBox(
+          //           height: 120,
+          //           width: MediaQuery.of(context).size.width / 2 -
+          //               32, // minus 32 due to the margin
+
+          //           child: Column(
+          //             mainAxisAlignment: MainAxisAlignment.center,
+          //             crossAxisAlignment: CrossAxisAlignment.center,
+          //             children: [
+          //               Icon(
+          //                 Icons.restaurant_menu_outlined,
+          //                 color:
+          //                     Theme.of(context).colorScheme.onTertiaryContainer,
+          //               ),
+          //               Text(
+          //                 "Outlets",
+          //                 style: TextStyle(
+          //                   fontSize: 15,
+          //                   color: Theme.of(context)
+          //                       .colorScheme
+          //                       .onTertiaryContainer,
+          //                 ),
+          //               )
+          //             ],
+          //           ),
+          //         ),
+          //       )),
+          // ]),
+
           InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(20.0)),
             onTap: () {
@@ -456,7 +666,8 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   // SizedBox(height: 50),
                                   _buildMealTile(
-                                      'Breakfast', todayMenu.breakfast),
+                                      'Breakfast \n (7:30 AM - 9:30 AM)',
+                                      todayMenu.breakfast),
                                 ],
                               )
                             else if (now.hour < 15)
@@ -530,6 +741,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Text(
               mealType.toUpperCase(),
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

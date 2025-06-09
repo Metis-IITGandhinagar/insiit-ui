@@ -40,9 +40,11 @@ class CartProvider with ChangeNotifier {
   }
 
   void removeCounter() {
+    debugPrint("Counter in removeCounter: $_counter");
     if (_counter > 0) {
       _counter--;
       _setPrefItems();
+      debugPrint("Counter in setpref: $_counter");
     }
     notifyListeners();
   }
@@ -51,8 +53,6 @@ class CartProvider with ChangeNotifier {
     _getPrefItems();
     return _counter;
   }
-
-  
 
   void addTotalPrice(double price) {
     _totalPrice += price;
@@ -67,7 +67,6 @@ class CartProvider with ChangeNotifier {
     }
     notifyListeners();
   }
-
 
   double getTotalPrice() {
     _getPrefItems();
