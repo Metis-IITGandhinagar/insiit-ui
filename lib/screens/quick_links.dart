@@ -25,10 +25,16 @@ class QuickLinksState extends State<QuickLinks> {
             url: "http://maintenance.iitgn.ac.in",
           ),
           _buildLinkTile(
+            icon: Icons.local_hospital_outlined,
+            title: "Hospital Center Reservation System",
+            subtitle: "For booking appointments with doctors",
+            url: "https://hcrs.iitgn.ac.in/slotbooking/",
+          ),
+          _buildLinkTile(
             icon: Icons.security_outlined,
             title: "Campus Security (24x7)",
-            subtitle: "Security supervisor hotline: 7567935473 (available 24x7)",
-          
+            subtitle:
+                "Security supervisor hotline: 7567935473 (available 24x7)",
           ),
           _buildLinkTile(
             icon: Icons.hotel_outlined,

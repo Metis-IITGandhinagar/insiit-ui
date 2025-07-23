@@ -19,19 +19,25 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Container(
             padding: const EdgeInsets.all(20),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("InsIIT",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 40)),
+                    Text(
+                      "InsIIT",
+                      style: Theme.of(context).textTheme.displayMedium,
+                      // style: TextStyle(
+                      //     fontWeight: FontWeight.bold,
+                      //     fontSize: 40,
+                      //    ),
+                    ),
                     SizedBox(
                       height: 5,
                     ),
-                    Text("All things IITGN", style: TextStyle(fontSize: 20)),
+                    Text("All things IITGN",
+                        style: Theme.of(context).textTheme.titleLarge),
                   ],
                 ),
               ],
@@ -111,7 +117,7 @@ signInAnonymously() async {
         // print("Anonymous auth hasn't been enabled for this project.");
         break;
       default:
-        // print("Unknown error.");
+      // print("Unknown error.");
     }
   }
 }

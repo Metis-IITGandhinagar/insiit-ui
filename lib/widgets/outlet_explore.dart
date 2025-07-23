@@ -9,7 +9,7 @@ import '../model/outlet.dart';
 import 'meal.dart';
 import 'outlet_page.dart';
 import '../provider/cart_provider.dart';
-
+import 'outlet_card.dart';
 
 class OutletExplore extends StatefulWidget {
   @override
@@ -39,89 +39,58 @@ class _OutletExploreState extends State<OutletExplore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(10),
-              color: Theme.of(context).colorScheme.secondaryContainer,
-              child: const Column(
-                children: [
-                  SizedBox(height: 50),
-                  Text(
-                    'Explore Outlets',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                  SizedBox(height: 30),
-                  Text(
-                    'Feeling Hungry? You have come to the right place. Explore and enjoy delicious foods here',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            FutureBuilder<List<Outlet>>(
-              future: futureOutlets,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<Outlet>? outlets = snapshot.data;
-                  return ListView.builder(
-                    itemCount: outlets!.length,
-                    itemBuilder: (context, index) {
-                      return OutletWidget(outlet: outlets[index]);
-                    },
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${snapshot.error}'),
-                  );
+      body: FutureBuilder<List<Outlet>>(
+        future: futureOutlets,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+                child: CircularProgressIndicator(strokeWidth: 2));
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          if (snapshot.hasData) {
+            List<Outlet>? outlets = snapshot.data;
+            return ListView.builder(
+              itemCount: outlets!.length + 1,
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return _buildHeader(context);
                 }
-                // By default, show a loading spinner
-                return const Center(
-                    child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                ));
+
+                return OutletCard(outlet: outlets[index - 1]);
               },
-            ),
-          ],
-        ),
+            );
+          }
+          return const Center(child: Text('No outlets found.'));
+        },
       ),
     );
   }
 }
 
-class OutletWidget extends StatelessWidget {
-  final Outlet outlet;
-
-  OutletWidget({required this.outlet});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(outlet.name),
-      subtitle: Text(outlet.openTime + ' - ' + outlet.closeTime),
-      onTap: () {
-         Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChangeNotifierProvider(
-              create: (context) => CartProvider(),
-              child: OutletPage(outlet: outlet),
-            ),
+Widget _buildHeader(BuildContext context) {
+  return Container(
+    padding: const EdgeInsets.fromLTRB(16, 0, 16, 30),
+    child: const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Explore Outlets',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
           ),
-        );
-      },
-    );
-  }
+        ),
+        SizedBox(height: 16),
+        Text(
+          'Feeling Hungry? You have come to the right place. Explore and enjoy delicious foods here.',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    ),
+  );
 }

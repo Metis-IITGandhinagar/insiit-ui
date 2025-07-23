@@ -3,7 +3,7 @@
 class TimetableEntry {
   final String startTime;
   final String endTime;
-  final String fullClassDetails; // e.g., "ES 115, Design, Innovation, and Prototyping, Lab"
+  final String fullClassDetails; 
  
   // final String courseCode;
   // final String courseName;
@@ -30,7 +30,7 @@ class TimetableEntry {
     String endTime = timeParts.length > 1 ? timeParts[1].trim() : '';
     
 
-    // More complex parsing can be added here if needed.
+    // complex parsing can be added if needed later.
 
     // List<String> classComponents = classStr.split(',').map((s) => s.trim()).toList();
     // String extractedCourseCode = classComponents.isNotEmpty ? classComponents[0] : classStr;

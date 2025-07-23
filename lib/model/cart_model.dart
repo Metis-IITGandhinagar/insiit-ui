@@ -1,19 +1,19 @@
 class Cart {
   late final int? id;
-  final String? productId;
-  final String? productName;
+  final String? itemId;
+  final String? itemName;
   final double? unitPrice;
-  final double? productPrice;
-  final int? quantity;
+  double? itemPrice;
+  int? quantity;
   final String? outletID;
   final String? outletName;
 
   Cart({
     this.id,
-    this.productId,
-    this.productName,
+    this.itemId,
+    this.itemName,
     this.unitPrice,
-    this.productPrice,
+    this.itemPrice,
     this.quantity,
     this.outletID,
     this.outletName,
@@ -21,10 +21,10 @@ class Cart {
 
   Cart.fromMap(Map<dynamic, dynamic> data)
       : id = data['id'],
-        productId = data['productId'],
-        productName = data['productName'],
+        itemId = data['itemId'],
+        itemName = data['itemName'],
         unitPrice = data['unitPrice'],
-        productPrice = data['productPrice'],
+        itemPrice = data['itemPrice'],
         quantity = data['quantity'],
         outletID = data['outletID'],
         outletName = data['outletName'];
@@ -32,10 +32,10 @@ class Cart {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'productId': productId,
-      'productName': productName,
+      'itemId': itemId,
+      'itemName': itemName,
       'unitPrice': unitPrice,
-      'productPrice': productPrice,
+      'itemPrice': itemPrice,
       'quantity': quantity,
       'outletID': outletID,
       'outletName': outletName,
