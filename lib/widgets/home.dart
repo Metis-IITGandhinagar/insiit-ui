@@ -26,12 +26,6 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-// var name = FirebaseAuth.instance.currentUser!.displayName ?? "User";
-
-// var nameArray = name?.split(" ");
-
-// var userdata = FirebaseAuth.instance.currentUser!;
-
 class _HomePageState extends State<HomePage> {
   late Future<MessMenu?> _menuFuture;
   MenuService _menuService = MenuService();
@@ -63,12 +57,12 @@ class _HomePageState extends State<HomePage> {
       final nameParts = user.displayName!.split(" ");
       if (mounted) {
         setState(() {
-          _greetingName = nameParts[0]; // Use the first name
+          _greetingName = nameParts[0]; 
         });
       }
     } else if (mounted) {
       setState(() {
-        _greetingName = "User"; // Default if no name
+        _greetingName = "User"; 
       });
     }
   }
@@ -157,7 +151,6 @@ class _HomePageState extends State<HomePage> {
       );
     }
     if (_todayClasses.isEmpty) {
-      // Fallback, should be covered by _timetableMessage
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30.0),
@@ -179,7 +172,7 @@ class _HomePageState extends State<HomePage> {
         return Card(
           elevation: 2,
           margin: const EdgeInsets.symmetric(
-              vertical: 6, horizontal: 0), // Adjust horizontal margin if needed
+              vertical: 6, horizontal: 0), 
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: ListTile(
@@ -211,6 +204,7 @@ class _HomePageState extends State<HomePage> {
 
   static Future<List<Events>> getPosts() async {
     var url = Uri.parse("https://insiit-backend-node.vercel.app/api/events");
+    // var url = Uri.parse("http://10.0.2.2:3000/api/events"); 
     final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(response.body);
@@ -257,9 +251,13 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                        'Hi, $_greetingName', // Using state variable _greetingName
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 25)),
+                        'Hi, $_greetingName', 
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                                fontSize: 25, fontWeight: FontWeight.bold)),
+                   
                     const SizedBox(
                       height: 5,
                     ),
@@ -267,15 +265,15 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(fontSize: 15)),
                   ],
                 ),
-                // Potentially add a profile icon or settings button here on the right
+                // We can add a profile picture here later
                 // Spacer(),
                 // CircleAvatar(child: Icon(Icons.person))
               ],
             ),
           ),
 
-          // Timetable Section (NEWLY INSERTED)
-          Padding(
+          // Timetable section
+            Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             child: Column(
@@ -284,7 +282,7 @@ class _HomePageState extends State<HomePage> {
                 Text(
                     _isTimetableLoading
                         ? 'Loading your schedule...'
-                        : 'Your Today\'s Schedule ($_displayCurrentDay)',
+                        : 'Your Schedule for $_displayCurrentDay',
                     style: TextStyle(fontSize: 18)),
                 const SizedBox(height: 10),
                 _buildTimetableDisplay(),
@@ -308,14 +306,14 @@ class _HomePageState extends State<HomePage> {
                       textStyle: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w500),
                       minimumSize: const Size(
-                          double.infinity, 48), // Make button full width
+                          double.infinity, 48), 
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8))),
-                ), // Displays loading, message, or list
+                ), 
               ],
             ),
           ),
-
+          // This section is currently commented out
           // Row(children: [
           //   Card(
           //       surfaceTintColor:
@@ -426,12 +424,15 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(width: 10),
                         Text("What's on the Campus?",
-                            style: TextStyle(fontSize: 18)),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(fontSize: 16)),
                       ],
                     ),
                     Column(
@@ -496,15 +497,15 @@ class _HomePageState extends State<HomePage> {
                       children: <Widget>[
                         const SizedBox(height: 16),
                         sortedEvents?.isEmpty ?? true
-                            ? const Padding(
+                            ? Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'No Events Added!',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                child: Text('No Events Added!',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold)),
                               )
                             : SizedBox(
                                 height: 180,
@@ -608,12 +609,15 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(width: 10),
                           Text("What's in the Mess?",
-                              style: TextStyle(fontSize: 18)),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(fontSize: 16)),
                         ],
                       ),
                       Column(
@@ -627,12 +631,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ])
-                // const ListTile(
-
-                //   leading: Icon(Icons.food_bank_outlined),
-                //   title: Text("What is in the Mess?"),
-                //   trailing: IconButton(onPressed: (), icon: icon)
-                // ),
+             
                 ),
           ),
 
@@ -731,8 +730,8 @@ class _HomePageState extends State<HomePage> {
       decoration: BoxDecoration(
         color: Theme.of(context)
             .colorScheme
-            .secondaryContainer, // Light purple color
-        borderRadius: BorderRadius.circular(8),
+            .primaryContainer, 
+        borderRadius: BorderRadius.circular(22),
       ),
       child: Center(
         child: Column(
@@ -745,7 +744,7 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
             ),
             SizedBox(height: 12),
@@ -810,6 +809,6 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
-    return todayMenu; // Return null if no menu is found or menu is null
+    return todayMenu; 
   }
 }

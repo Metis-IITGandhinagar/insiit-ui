@@ -14,8 +14,7 @@ import '../widgets/bus.dart';
 import './qr.dart';
 import './notification.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-
-
+import '../widgets/outlet_explore.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -55,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 15,
           ),
         ],
-    
       ),
       body: <Widget>[
         Container(
@@ -66,12 +64,12 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           color: Colors.white,
           alignment: Alignment.center,
-          child: const BusPage(),
+          child: OutletExplore(),
         ),
         Container(
           color: Colors.white,
           alignment: Alignment.center,
-          child:  MapPage(),
+          child: BusPage(),
         ),
         Container(
           color: Colors.white,
@@ -93,14 +91,14 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.directions_bus_filled_outlined),
-            selectedIcon: Icon(Icons.directions_bus_filled),
-            label: 'Bus',
+            icon: Icon(Icons.fastfood_outlined),
+            selectedIcon: Icon(Icons.fastfood),
+            label: 'Outlets',
           ),
           NavigationDestination(
-            icon: Icon(Icons.map_outlined),
-            selectedIcon: Icon(Icons.map_sharp),
-            label: 'Campus Map',
+            icon: Icon(Icons.directions_bus_filled_outlined),
+            selectedIcon: Icon(Icons.directions_bus_filled),
+            label: 'Buses',
           ),
           NavigationDestination(
             icon: Icon(Icons.more_horiz_outlined),

@@ -113,7 +113,7 @@ class _QRDisplayState extends State<QRDisplay> {
                 label: const Text("Refresh your QR"),
               ),
               const SizedBox(
-                height: 30,
+                height: 50,
               ),
               Container(
                 padding: const EdgeInsets.all(5),
@@ -122,13 +122,16 @@ class _QRDisplayState extends State<QRDisplay> {
                 decoration: BoxDecoration(
 
                     // color: Colors.amber[50],
-                    border: Border.all(width: 1, color: Colors.amber[900]!),
+                    border: Border.all(width: 1, color: Colors.green.shade700),
                     borderRadius: BorderRadius.circular(20)),
                 child: ListTile(
-                  leading: const Icon(Icons.info_outline_rounded),
-                  iconColor: Colors.amber[900],
-                  title: const Text(
-                      "This feature is in Beta Mode and depends on Mess IITGN Servers. \nWe DO NOT store your credentials.",
+                  leading: const Icon(Icons.security_outlined),
+                  iconColor: Colors.green.shade700,
+                  title: Text("We do not store your credentials.",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.green.shade700),
                       textAlign: TextAlign.left),
                 ),
               )

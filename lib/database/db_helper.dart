@@ -26,10 +26,10 @@ class DBHelper {
     await db.execute('''
       CREATE TABLE Cart (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        productId TEXT,
-        productName TEXT,
+        itemId TEXT UNIQUE, 
+        itemName TEXT,
         unitPrice REAL,
-        productPrice REAL,
+        itemPrice REAL,
         quantity INTEGER,
         outletID TEXT,
         outletName TEXT
@@ -37,33 +37,15 @@ class DBHelper {
     ''');
   }
 
+
+  // insert method
   Future<Cart> insert(Cart cart) async {
-    print(cart.toMap());
     var dbClient = await db;
-    await dbClient!.insert('Cart', cart.toMap());
+    await dbClient!.insert('Cart', cart.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
     return cart;
   }
 
-  // Future<List<Cart>> getCart() async {
-  //   var dbClient = await db;
-  //   List<Map> maps = await dbClient!.query('Cart', columns: [
-  //     'id',
-  //     'productId',
-  //     'productName',
-  //     'unitPrice',
-  //     'productPrice',
-  //     'quantity',
-  //     'outletID',
-  //     'outletName'
-  //   ]);
-  //   List<Cart> cart = [];
-  //   if (maps.length > 0) {
-  //     for (int i = 0; i < maps.length; i++) {
-  //       cart.add(Cart.fromMap(maps[i]));
-  //     }
-  //   }
-  //   return cart;
-  // }
+  // getCartList method
   Future<List<Cart>> getCartList() async {
     var dbClient = await db;
     final List<Map<String, Object?>> queryResult =
@@ -71,8 +53,27 @@ class DBHelper {
     return queryResult.map((e) => Cart.fromMap(e)).toList();
   }
 
-  Future<int> delete(int id) async {
+  // delete method for removing a specific item by its database row id.
+  Future<int> deleteItem(int id) async {
     var dbClient = await db;
     return await dbClient!.delete('Cart', where: 'id = ?', whereArgs: [id]);
+  }
+
+
+  /// for the '+' and '-' buttons in the cart.
+  Future<int> updateQuantity(Cart cart) async {
+    var dbClient = await db;
+    return await dbClient!.update(
+      'Cart',
+      cart.toMap(),
+      where: 'itemId = ?', 
+      whereArgs: [cart.itemId],
+    );
+  }
+
+  /// delete all items from the cart.
+  Future<int> clearCart() async {
+    var dbClient = await db;
+    return await dbClient!.delete('Cart'); 
   }
 }

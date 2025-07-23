@@ -1,3 +1,4 @@
+// This is events calendar widget that displays events in a calendar format.
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -26,6 +27,7 @@ class _EventWidgetState extends State<EventWidget> {
 
   Future<List<Events>> getPosts() async {
     var url = Uri.parse("https://insiit-backend-node.vercel.app/api/events");
+    // var url = Uri.parse("http://10.0.2.2:3000/api/events");
     final response = await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(response.body);
     return body.map((e) => Events.fromJson(e)).toList();

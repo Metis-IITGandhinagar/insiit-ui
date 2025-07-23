@@ -8,7 +8,7 @@ class MedicalFacilityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Medical Facilities Info'),
+        title: const Text('Medical Facilities Info'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -25,7 +25,7 @@ class MedicalFacilityPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Location:',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -36,7 +36,7 @@ class MedicalFacilityPage extends StatelessWidget {
                         onTap: () {
                           // Handle location navigation
                         },
-                        child: Text(
+                        child: const Text(
                           'First floor of the Central Arcade, IITGN Campus',
                           style: TextStyle(
                             fontSize: 16,
@@ -44,8 +44,8 @@ class MedicalFacilityPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Row(
+                      const SizedBox(height: 10),
+                      const Row(
                         children: [
                           Text(
                             'Contact:',
@@ -64,15 +64,15 @@ class MedicalFacilityPage extends StatelessWidget {
                       SizedBox(height: 10),
                       Row(
                         children: [
-                          Text(
+                          const Text(
                             'Emergency:',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
                           ),
-                          SizedBox(width: 10),
-                          Text(
+                          const SizedBox(width: 10),
+                          const Text(
                             '7069795000',
                             style: TextStyle(fontSize: 16),
                           ),
@@ -97,7 +97,7 @@ class MedicalFacilityPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Monday To Friday',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -110,7 +110,7 @@ class MedicalFacilityPage extends StatelessWidget {
                         child: DataTable(
                           columns: [
                             DataColumn(label: Text('Doctor')),
-                            DataColumn(label: Text('Timings')),
+                            const DataColumn(label: Text('Timings')),
                           ],
                           rows: [
                             DataRow(cells: [
