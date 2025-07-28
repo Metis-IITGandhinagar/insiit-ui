@@ -73,6 +73,9 @@ dependencies:
   url_launcher: ^6.3.1
   markdown_widget: ^2.3.2+8
   mapbox_maps_flutter: ^2.0.0
+  timezone: ^0.9.4
+  flutter_local_notifications: ^18.0.1
+  fluttertoast: ^8.2.12
   
 
 dev_dependencies:

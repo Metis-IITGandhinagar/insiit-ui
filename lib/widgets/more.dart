@@ -7,6 +7,8 @@ import 'package:insiit/screens/post.dart';
 import 'package:insiit/screens/quick_links.dart';
 import 'package:insiit/screens/representatives.dart';
 import 'package:insiit/screens/team.dart';
+import './haircut.dart';
+import './maps.dart';
 
 class MorePage extends StatefulWidget {
   const MorePage({super.key});
@@ -144,6 +146,49 @@ class _MorePageState extends State<MorePage> {
           const SizedBox(
             height: 20,
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 50,
+                width: MediaQuery.of(context).size.width - 50,
+                child: OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HaircutBookingPage()),
+                    );
+                  },
+                  child: const Text("Haircut Booking"),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 50,
+                width: MediaQuery.of(context).size.width - 50,
+                child: OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MapPage()),
+                    );
+                  },
+                  child: const Text("Campus Map"),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
