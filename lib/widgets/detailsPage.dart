@@ -8,7 +8,6 @@ import 'dart:convert';
 import '../notification_helper.dart';
 import '../authentication/login.dart';
 
-// I am not asking for name, since I plan to get it using the email of the user
 class DetailsPage extends StatefulWidget {
   const DetailsPage({super.key, required this.date, required this.time});
   final String date;
@@ -18,12 +17,15 @@ class DetailsPage extends StatefulWidget {
   State<DetailsPage> createState() => _DetailsPageState();
 }
 
+enum DataState { loading, loaded, failed }
+
 class _DetailsPageState extends State<DetailsPage> {
   //bool isInfoLoaded = false;
   //String userName = "";
   //String userEmail = "";
   String userPhoneNumber = "";
   late Future<Map<String, dynamic>?> userFuture;
+  DataState dataState = DataState.loading;
 
 
   @override
@@ -111,6 +113,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               onPressed: () async {
                                 // Add this function
                                 // submitDetails();
+				try {
                                 final firebaseAuthInstance =
                                     FirebaseAuth.instance;
                                 final currentUser =
@@ -124,7 +127,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                       headers: <String, String>{
                                         'Content-Type':
                                             'application/json; charset=UTF-8',
-                                        'Auth': 'Bearer ${uid}'
+                                            'Auth': 'Bearer ${uid}'
                                       },
                                       body: jsonEncode(<String, dynamic>{
                                         'userdisplayname': userName,
@@ -164,6 +167,13 @@ class _DetailsPageState extends State<DetailsPage> {
 						)));
                                   }
                                 }
+			      } catch(e) {
+
+				Fluttertoast.showToast(
+					msg: "Failed to make the appointment"
+				);
+			      	
+			        }
                               }),
                         ])));
           }
@@ -213,9 +223,9 @@ class DonePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text("Booking failed")),
       body: Center(
-        child: Text(
+        child: Padding(padding: EdgeInsets.all(8.0), child: Text(
           "Booking failed for some reason. Please contact the Metis team",
-        ),
+        )),
       ),
     );
   }

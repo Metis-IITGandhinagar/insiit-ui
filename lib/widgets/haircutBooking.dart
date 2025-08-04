@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import './detailsPage.dart';
 
+
+enum DataState { loading, loaded, failed }
+
 class TimeSlotPage extends StatefulWidget {
   TimeSlotPage({super.key, required this.initialDateIndex});
   final int initialDateIndex;
@@ -12,8 +15,8 @@ class TimeSlotPage extends StatefulWidget {
 }
 
 class _TimeSlotPageState extends State<TimeSlotPage> {
-  bool isDataFetched = false;
   List<dynamic> data = [];
+  DataState dataState = DataState.loading;
 
   @override
   void initState() {
@@ -27,7 +30,7 @@ class _TimeSlotPageState extends State<TimeSlotPage> {
     if (response.body != null) {
       var fetchedData = jsonDecode(response.body);
       setState(() {
-        isDataFetched = true;
+        dataState = DataState.loaded;
         data = fetchedData["data"]; // Now it's a list
       });
     } else {
@@ -37,8 +40,10 @@ class _TimeSlotPageState extends State<TimeSlotPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isDataFetched) {
+    if (dataState == DataState.loading) {
       return Scaffold(body: Center(child: CircularProgressIndicator()));
+    } else if (dataState == DataState.failed) {
+      return Scaffold(body: Center(child: Text('Failed to fetch data')));
     }
 
     return DefaultTabController(

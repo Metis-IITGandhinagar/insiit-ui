@@ -29,7 +29,6 @@ class _HaircutBookingPageState extends State<HaircutBookingPage> {
 			});
 		} else {
 			await shared_preferences_storage.setString('haircut-data', jsonEncode([]));
-			print("Empty data is added to shared preferences");
 			setState(() {
 				is_data_fetched = true;
 			});
@@ -62,6 +61,7 @@ class _HaircutBookingPageState extends State<HaircutBookingPage> {
 								ElevatedButton(
 									child: Text("Make a new appointment"),
 									onPressed: () async{
+									try {
 										
 										http.Response response = await http.get(Uri.parse("http://10.0.2.2:3000/api/haircut-dates"));
 										if (response.body != null) {
@@ -90,13 +90,17 @@ class _HaircutBookingPageState extends State<HaircutBookingPage> {
 												
 											} else {
 												final pickedDateIndex = haircutDates.indexOf(pickedDate);
-												print(pickedDateIndex);
 												Navigator.push(
 													context,
 													MaterialPageRoute(
 														builder: (context) => TimeSlotPage(initialDateIndex: pickedDateIndex)),
 												);
 											}
+										}
+										} catch(e) {
+											Fluttertoast.showToast(
+												msg: "Failed to connect to the server",
+											);
 										}
 
 
