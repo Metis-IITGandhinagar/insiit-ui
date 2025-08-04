@@ -136,7 +136,8 @@ class OutletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Consumer<CartProvider>(
+    // The following widget/floating action button is turned off till ordering from outlets is completely implemented.
+      floatingActionButton: true ? Container() : Consumer<CartProvider>(
         builder: (context, cart, child) {
           return cart.counter == 0
               ? const SizedBox.shrink() 
@@ -302,7 +303,8 @@ class MenuItemWidget extends StatelessWidget {
               ],
             ),
           ),
-          TextButton(
+	  // The following widget is turned off till ordering from outlets is implemented completely.
+          true ? Container() : TextButton(
             onPressed: () async {
               List<Cart> currentCart = await cartProvider.db.getCartList();
               if (currentCart.isNotEmpty &&

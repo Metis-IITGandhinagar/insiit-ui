@@ -54,19 +54,21 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCI7fZEKHJ3sqxYTIRyCrpX9cpV6f8OXkg',
-    appId: '1:1083943258514:android:1256252a7357527347194b',
-    messagingSenderId: '1083943258514',
-    projectId: 'insiit-production',
-    storageBucket: 'insiit-production.appspot.com',
+    apiKey: 'AIzaSyC6ucsCFdwaFyaKOZJ8EEUtzJ2cgZ7PCR4',
+    appId: '1:799004821779:android:b580c77fe0a10da225b2e6',
+    messagingSenderId: '799004821779',
+    projectId: 'metis-preprod',
+    storageBucket: 'metis-preprod.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBCotc330vJ2noxKRSMp5vsLi7vn3INx5I',
-    appId: '1:1083943258514:ios:99b2469c9b14d1f447194b',
-    messagingSenderId: '1083943258514',
-    projectId: 'insiit-production',
-    storageBucket: 'insiit-production.appspot.com',
+    apiKey: 'AIzaSyCfr11GDFsEUvrUzMyxGXNe7e5s0j3TWIs',
+    appId: '1:799004821779:ios:2798d2ff4d3dda4e25b2e6',
+    messagingSenderId: '799004821779',
+    projectId: 'metis-preprod',
+    storageBucket: 'metis-preprod.firebasestorage.app',
+    androidClientId: '799004821779-2rk7mcl19itr8htqtlab00447qqa9sm8.apps.googleusercontent.com',
+    iosClientId: '799004821779-v8al0kuamat8l2pf3vkicr0v58allrd5.apps.googleusercontent.com',
     iosBundleId: 'com.example.insiit',
   );
 
