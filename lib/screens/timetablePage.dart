@@ -20,7 +20,6 @@ class _TimetablePageState extends State<TimetablePage> {
 
 	@override
 	Widget build(BuildContext context) {
-		print(widget.timetableData);
 			try {
 				final todayDayIndex = DateTime.now().weekday - 1;
 				return DefaultTabController(

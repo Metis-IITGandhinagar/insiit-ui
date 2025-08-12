@@ -125,7 +125,6 @@ class _HomePageState extends State<HomePage> {
       _timetableMessage =
           'No timetable available. Please select your courses first.';
     }
-    print(_timetableData);
     if (!mounted) return;
     setState(() {
       _isTimetableLoading = false;
@@ -216,7 +215,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final TimeOfDay now = TimeOfDay.now();
-    print(now);
     // print(userdata);
 
     final pages = List.generate(
