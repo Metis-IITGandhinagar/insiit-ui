@@ -61,6 +61,18 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
         final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
         final List<dynamic> coursesData =
             decodedResponse['courses'] as List<dynamic>;
+	
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+	List<String>? storedCourses = prefs.getStringList('courses');
+	if (storedCourses != null) {
+		for (int i = 0; i < storedCourses!.length; i++) {
+			_selectedCourseCodes.add(storedCourses![i]);
+		}
+	}
+	print(storedCourses);
+	print(_selectedCourseCodes);
+
+
         setState(() {
           _allCourses =
               coursesData.map((json) => Course.fromJson(json)).toList();
@@ -111,6 +123,7 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
         final String responseBody = response.body;
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('timetable', responseBody);
+	await prefs.setStringList('courses', _selectedCourseCodes.toList());
 
         if (!mounted) return;
         showDialog(
