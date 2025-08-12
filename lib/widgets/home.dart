@@ -18,6 +18,7 @@ import 'package:insiit/model/mess_menu.dart';
 import 'dart:math';
 import '../model/timetable_entry_model.dart';
 import '../screens/course_selection.dart';
+import '../screens/timetablePage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -124,6 +125,7 @@ class _HomePageState extends State<HomePage> {
       _timetableMessage =
           'No timetable available. Please select your courses first.';
     }
+    print(_timetableData);
     if (!mounted) return;
     setState(() {
       _isTimetableLoading = false;
@@ -279,11 +281,18 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                    _isTimetableLoading
-                        ? 'Loading your schedule...'
-                        : 'Your Schedule for $_displayCurrentDay',
-                    style: TextStyle(fontSize: 18)),
+	        Row(
+		  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+		  children: _isTimetableLoading ? [Text('Loading your schedule ...', style: TextStyle(fontSize: 18))] : [
+		  	Text('Your Schedule'),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => TimetablePage(timetableData: _timetableData)));
+                            },
+                            icon: const Icon(Icons.arrow_forward_ios))
+		  ]
+		),
                 const SizedBox(height: 10),
                 _buildTimetableDisplay(),
                 const SizedBox(height: 20),
