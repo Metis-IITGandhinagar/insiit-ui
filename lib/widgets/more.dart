@@ -143,27 +143,27 @@ class _MorePageState extends State<MorePage> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 50,
-                width: MediaQuery.of(context).size.width - 50,
-                child: OutlinedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HaircutBookingPage()),
-                    );
-                  },
-                  child: const Text("Haircut Booking"),
-                ),
-              ),
-            ],
-          ),
+//          const SizedBox(
+//            height: 20,
+//          ),
+//          Row(
+//            mainAxisAlignment: MainAxisAlignment.center,
+//            children: [
+//              SizedBox(
+//                height: 50,
+//                width: MediaQuery.of(context).size.width - 50,
+//                child: OutlinedButton(
+//                  onPressed: () {
+//                    Navigator.push(
+//                      context,
+//                      MaterialPageRoute(builder: (context) => HaircutBookingPage()),
+//                    );
+//                  },
+//                  child: const Text("Haircut Booking"),
+//                ),
+//              ),
+//            ],
+//          ),
           const SizedBox(
             height: 20,
           ),
