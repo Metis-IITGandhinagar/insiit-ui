@@ -57,13 +57,17 @@ class _MenuPageState extends State<MenuPage> {
                       text: _getWeekday(dayMenu.day), // Get weekday name
                     );
                   }).toList(),
-                ),
+                ),        
                 actions: [
                   IconButton(
-                      icon: const Icon(Icons.refresh), onPressed: () => {}),
-                  const SizedBox(
-                    width: 15,
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () {
+                      setState(() {
+                        _menuFuture = _menuService.fetchMenu();
+                      });
+                    },
                   ),
+                  const SizedBox(width: 15),
                 ],
               ),
               body: TabBarView(
@@ -72,7 +76,8 @@ class _MenuPageState extends State<MenuPage> {
                     children: [
                       _buildMealTile('Breakfast', dayMenu.breakfast),
                       _buildMealTile('Lunch', dayMenu.lunch),
-                      _buildMealTile('Snacks', dayMenu.snacks),
+                     
+_buildMealTile('Snacks', dayMenu.snacks),
                       _buildMealTile('Dinner', dayMenu.dinner),
                     ],
                   );
