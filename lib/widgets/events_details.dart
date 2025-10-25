@@ -73,7 +73,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   child: Image.network(
                     widget.event?.image ??
                         "https://placehold.co/600x400/black/white?text=No%20Image",
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
                         color: Colors.grey[300],
