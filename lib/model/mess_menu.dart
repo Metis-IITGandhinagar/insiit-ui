@@ -53,32 +53,37 @@ class MenuDay {
   }
 }
 class MenuService {
-  Future<MessMenu?> fetchMenu() async {
+  Future<MessMenu?> fetchMenu({bool forceRefresh = false}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     
-    // fetch cached data
-    final String? cachedData = prefs.getString('cachedMenu');
-    final int? cacheTimestamp = prefs.getInt('cacheTimestamp');
+    if (!forceRefresh) {
+      // fetch cached data
+      final String? cachedData = prefs.getString('cachedMenu');
+      final int? cacheTimestamp = prefs.getInt('cacheTimestamp');
 
-    // Check if cached data exists and if it's not expired
-    if (cachedData != null && cacheTimestamp != null) {
-      final currentTime = DateTime.now().millisecondsSinceEpoch;
-      final difference = currentTime - cacheTimestamp;
-      if (difference < (24 * 60 * 60 * 1000)) { //24hr
-
-        return MessMenu.fromJson(json.decode(cachedData));
+      // Check if cached data exists and if it's not expired
+      if (cachedData != null && cacheTimestamp != null) {
+        final currentTime = DateTime.now().millisecondsSinceEpoch;
+        final difference = currentTime - cacheTimestamp;
+        if (difference < (24 * 60 * 60 * 1000)) { // 24hr
+          return MessMenu.fromJson(json.decode(cachedData));
+        }
       }
     }
 
-    final response = await http.get(Uri.parse('https://insiit-backend-node.vercel.app/api/mess-menu'));
+    // Always fetch fresh data if forceRefresh=true or cache expired
+    final response = await http.get(
+      Uri.parse('https://insiit-backend-node.vercel.app/api/mess-menu'),
+    );
+
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       final messMenu = MessMenu.fromJson(responseData);
-      
+
       // Cache fetched data
       await prefs.setString('cachedMenu', response.body);
       await prefs.setInt('cacheTimestamp', DateTime.now().millisecondsSinceEpoch);
-      
+
       return messMenu;
     } else {
       throw Exception('Failed to load menu');
