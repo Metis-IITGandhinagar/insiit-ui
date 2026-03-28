@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 const String apiUrl =
-    'https://insiit-backend-node.vercel.app/api/fcmverify'; // API endpoint to send FCM token
+    'https://chubby-mirilla-metis-d5811889.koyeb.app/api/fcmverify'; // API endpoint to send FCM token
 const String fcmVerifyKey = 'fcmverify';
 
 class MessagingService {

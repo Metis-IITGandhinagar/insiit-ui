@@ -58,12 +58,12 @@ class _HomePageState extends State<HomePage> {
       final nameParts = user.displayName!.split(" ");
       if (mounted) {
         setState(() {
-          _greetingName = nameParts[0]; 
+          _greetingName = nameParts[0];
         });
       }
     } else if (mounted) {
       setState(() {
-        _greetingName = "User"; 
+        _greetingName = "User";
       });
     }
   }
@@ -94,16 +94,17 @@ class _HomePageState extends State<HomePage> {
 
     if (timetableJsonString != null && timetableJsonString.isNotEmpty) {
       try {
-        final Map<String, dynamic> decodedData =
-            jsonDecode(timetableJsonString);
+        final Map<String, dynamic> decodedData = jsonDecode(
+          timetableJsonString,
+        );
         _timetableData = decodedData.map((key, value) {
           final List<dynamic> entriesJson = value as List<dynamic>;
           return MapEntry(
-              key.toLowerCase(),
-              entriesJson
-                  .map(
-                      (e) => TimetableEntry.fromJson(e as Map<String, dynamic>))
-                  .toList());
+            key.toLowerCase(),
+            entriesJson
+                .map((e) => TimetableEntry.fromJson(e as Map<String, dynamic>))
+                .toList(),
+          );
         });
 
         if (_timetableData.containsKey(_currentDayKey)) {
@@ -134,10 +135,11 @@ class _HomePageState extends State<HomePage> {
   Widget _buildTimetableDisplay() {
     if (_isTimetableLoading) {
       return const Center(
-          child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: CircularProgressIndicator(),
-      ));
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
     if (_timetableMessage != null) {
       return Center(
@@ -172,21 +174,24 @@ class _HomePageState extends State<HomePage> {
         final entry = _todayClasses[index];
         return Card(
           elevation: 2,
-          margin: const EdgeInsets.symmetric(
-              vertical: 6, horizontal: 0), 
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: ListTile(
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 10.0,
+              horizontal: 16.0,
+            ),
             leading: CircleAvatar(
               backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
               child: Text(
                 entry.startTime.split(':')[0],
                 style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
             ),
             title: Text(
@@ -204,10 +209,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   static Future<List<Events>> getPosts() async {
-    var url = Uri.parse("https://insiit-backend-node.vercel.app/api/events");
-    // var url = Uri.parse("http://10.0.2.2:3000/api/events"); 
-    final response =
-        await http.get(url, headers: {"Content-Type": "application/json"});
+    var url =
+        Uri.parse("https://chubby-mirilla-metis-d5811889.koyeb.app/api/events");
+    // var url = Uri.parse("http://10.0.2.2:3000/api/events");
+    final response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
     final List body = json.decode(response.body);
     return body.map((e) => Events.fromJson(e)).toList();
   }
@@ -228,22 +236,29 @@ class _HomePageState extends State<HomePage> {
         child: Container(
           height: 180,
           child: Center(
-              child: Text(
-            "Event $index",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSecondaryContainer,
+            child: Text(
+              "Event $index",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
+              ),
             ),
-          )),
+          ),
         ),
       ),
     );
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: ListView(padding: const EdgeInsets.all(0), children: [
+      resizeToAvoidBottomInset: false,
+      body: ListView(
+        padding: const EdgeInsets.all(0),
+        children: [
           Padding(
-            padding:
-                const EdgeInsets.only(left: 20, right: 20, top: 25, bottom: 15),
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 25,
+              bottom: 15,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -251,18 +266,17 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                        'Hi, $_greetingName', 
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(
-                                fontSize: 25, fontWeight: FontWeight.bold)),
-                   
-                    const SizedBox(
-                      height: 5,
+                      'Hi, $_greetingName',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
-                    const Text("Welcome Back!!",
-                        style: TextStyle(fontSize: 15)),
+                    const SizedBox(height: 5),
+                    const Text(
+                      "Welcome Back!!",
+                      style: TextStyle(fontSize: 15),
+                    ),
                   ],
                 ),
                 // We can add a profile picture here later
@@ -273,24 +287,39 @@ class _HomePageState extends State<HomePage> {
           ),
 
           // Timetable section
-            Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20.0,
+              vertical: 10.0,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-	        Row(
-		  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-		  children: _isTimetableLoading ? [Text('Loading your schedule ...', style: TextStyle(fontSize: 18))] : [
-		  	Text('Your Schedule'),
-                        IconButton(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: _isTimetableLoading
+                      ? [
+                          Text(
+                            'Loading your schedule ...',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ]
+                      : [
+                          Text('Your Schedule'),
+                          IconButton(
                             onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) => TimetablePage(timetableData: _timetableData)));
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => TimetablePage(
+                                    timetableData: _timetableData,
+                                  ),
+                                ),
+                              );
                             },
-                            icon: const Icon(Icons.arrow_forward_ios))
-		  ]
-		),
+                            icon: const Icon(Icons.arrow_forward_ios),
+                          ),
+                        ],
+                ),
                 const SizedBox(height: 10),
                 _buildTimetableDisplay(),
                 const SizedBox(height: 20),
@@ -299,27 +328,34 @@ class _HomePageState extends State<HomePage> {
                   label: const Text('Select / Update Courses'),
                   onPressed: () async {
                     final result = await Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (_) => CourseSelectionPage()));
+                      MaterialPageRoute(builder: (_) => CourseSelectionPage()),
+                    );
                     if (result == true && mounted) {
                       _loadTimetableAndSetup();
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                      foregroundColor:
-                          Theme.of(context).colorScheme.onSecondaryContainer,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
-                      textStyle: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w500),
-                      minimumSize: const Size(
-                          double.infinity, 48), 
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8))),
-                ), 
+                    foregroundColor: Theme.of(
+                      context,
+                    ).colorScheme.onSecondaryContainer,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    minimumSize: const Size(double.infinity, 48),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
+
           // This section is currently commented out
           // Row(children: [
           //   Card(
@@ -416,7 +452,6 @@ class _HomePageState extends State<HomePage> {
           //         ),
           //       )),
           // ]),
-
           InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(20.0)),
             onTap: () {
@@ -426,59 +461,61 @@ class _HomePageState extends State<HomePage> {
               );
             },
             child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(width: 10),
-                        Text("What's on the Campus?",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(fontSize: 16)),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        IconButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) => const EventWidget()));
-                            },
-                            icon: const Icon(Icons.arrow_forward_ios))
-                      ],
-                    ),
-                  ],
-                )
-                // const ListTile(
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 10),
+                      Text(
+                        "What's on the Campus?",
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleMedium?.copyWith(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const EventWidget(),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.arrow_forward_ios),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              // const ListTile(
 
-                //   leading: Icon(Icons.food_bank_outlined),
-                //   title: Text("What is in the Mess?"),
-                //   trailing: IconButton(onPressed: (), icon: icon)
-                // ),
-                ),
+              //   leading: Icon(Icons.food_bank_outlined),
+              //   title: Text("What is in the Mess?"),
+              //   trailing: IconButton(onPressed: (), icon: icon)
+              // ),
+            ),
           ),
           SafeArea(
             child: FutureBuilder<List<Events>>(
               future: postsFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text("Error: ${snapshot.error}"),
-                  );
+                  return Center(child: Text("Error: ${snapshot.error}"));
                 } else {
                   final events = snapshot.data;
                   final currentDate = DateTime.now();
-                  final previousDate =
-                      currentDate.subtract(const Duration(days: 1));
+                  final previousDate = currentDate.subtract(
+                    const Duration(days: 1),
+                  );
 
                   final futureEvents = events?.where((event) {
                     if (event?.date == null) return false;
@@ -506,13 +543,16 @@ class _HomePageState extends State<HomePage> {
                         sortedEvents?.isEmpty ?? true
                             ? Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text('No Events Added!',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold)),
+                                child: Text(
+                                  'No Events Added!',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
                               )
                             : SizedBox(
                                 height: 180,
@@ -526,7 +566,11 @@ class _HomePageState extends State<HomePage> {
                                         Radius.circular(16.0),
                                       ),
                                       splashColor: const Color.fromARGB(
-                                          103, 159, 111, 255),
+                                        103,
+                                        159,
+                                        111,
+                                        255,
+                                      ),
                                       onTap: () {
                                         Navigator.push(
                                           context,
@@ -541,19 +585,24 @@ class _HomePageState extends State<HomePage> {
                                       child: Container(
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
-                                            image:
-                                                NetworkImage("${event?.image}"),
+                                            image: NetworkImage(
+                                              "${event?.image}",
+                                            ),
                                             fit: BoxFit.cover,
                                           ),
-                                          borderRadius:
-                                              BorderRadius.circular(16),
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
                                         ),
                                         margin: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 4),
+                                          horizontal: 10,
+                                          vertical: 4,
+                                        ),
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(16),
+                                            borderRadius: BorderRadius.circular(
+                                              16,
+                                            ),
                                             gradient: LinearGradient(
                                               begin: Alignment.topCenter,
                                               end: Alignment.bottomCenter,
@@ -570,7 +619,11 @@ class _HomePageState extends State<HomePage> {
                                                   'Events Not Available',
                                               style: const TextStyle(
                                                 color: Color.fromARGB(
-                                                    255, 255, 255, 255),
+                                                  255,
+                                                  255,
+                                                  255,
+                                                  255,
+                                                ),
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 18,
                                               ),
@@ -611,35 +664,38 @@ class _HomePageState extends State<HomePage> {
               );
             },
             child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                width: double.infinity,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(width: 10),
-                          Text("What's in the Mess?",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(fontSize: 16)),
-                        ],
+                      SizedBox(width: 10),
+                      Text(
+                        "What's in the Mess?",
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleMedium?.copyWith(fontSize: 16),
                       ),
-                      Column(
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => MenuPage()));
-                              },
-                              icon: const Icon(Icons.arrow_forward_ios))
-                        ],
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(
+                            context,
+                          ).push(MaterialPageRoute(builder: (_) => MenuPage()));
+                        },
+                        icon: const Icon(Icons.arrow_forward_ios),
                       ),
-                    ])
-             
-                ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
 
           Column(
@@ -649,13 +705,9 @@ class _HomePageState extends State<HomePage> {
                 future: _menuFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Error: ${snapshot.error}'),
-                    );
+                    return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (snapshot.hasData) {
                     MessMenu? menu = snapshot.data;
                     MenuDay? todayMenu = _getTodayMenu(menu);
@@ -672,8 +724,9 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   // SizedBox(height: 50),
                                   _buildMealTile(
-                                      'Breakfast \n (7:30 AM - 9:30 AM)',
-                                      todayMenu.breakfast),
+                                    'Breakfast \n (7:30 AM - 9:30 AM)',
+                                    todayMenu.breakfast,
+                                  ),
                                 ],
                               )
                             else if (now.hour < 15)
@@ -702,9 +755,11 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   // SizedBox(height: 50),
                                   _buildMealTile(
-                                      'Breakfast', todayMenu.breakfast),
+                                    'Breakfast',
+                                    todayMenu.breakfast,
+                                  ),
                                 ],
-                              )
+                              ),
                           ],
                         ),
                       );
@@ -714,30 +769,26 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                   } else {
-                    return Center(
-                      child: Text('No menu data available'),
-                    );
+                    return Center(child: Text('No menu data available'));
                   }
                 },
               ),
-              const SizedBox(
-                height: 90,
-              ),
+              const SizedBox(height: 90),
             ],
-          )
-        ]));
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildMealTile(String mealType, String? meal) {
     return Container(
       width: MediaQuery.of(context).size.width - 16,
-      height: 330,
+      // height: 330,
       margin: EdgeInsets.symmetric(vertical: 8),
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context)
-            .colorScheme
-            .primaryContainer, 
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(22),
       ),
       child: Center(
@@ -784,38 +835,23 @@ class _HomePageState extends State<HomePage> {
       if (todayMenu != null) {
         if (now.hour < 11) {
           // Show breakfast
-          return MenuDay(
-            day: todayMenu.day,
-            breakfast: todayMenu.breakfast,
-          );
+          return MenuDay(day: todayMenu.day, breakfast: todayMenu.breakfast);
         } else if (now.hour < 15) {
           // Show lunch
-          return MenuDay(
-            day: todayMenu.day,
-            lunch: todayMenu.lunch,
-          );
+          return MenuDay(day: todayMenu.day, lunch: todayMenu.lunch);
         } else if (now.hour < 18) {
           // Show snacks
-          return MenuDay(
-            day: todayMenu.day,
-            snacks: todayMenu.snacks,
-          );
+          return MenuDay(day: todayMenu.day, snacks: todayMenu.snacks);
         } else if (now.hour < 23) {
           // Show dinner
-          return MenuDay(
-            day: todayMenu.day,
-            dinner: todayMenu.dinner,
-          );
+          return MenuDay(day: todayMenu.day, dinner: todayMenu.dinner);
         } else {
           // Show breakfast for late night hours
-          return MenuDay(
-            day: todayMenu.day,
-            breakfast: todayMenu.breakfast,
-          );
+          return MenuDay(day: todayMenu.day, breakfast: todayMenu.breakfast);
         }
       }
     }
 
-    return todayMenu; 
+    return todayMenu;
   }
 }

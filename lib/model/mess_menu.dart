@@ -2,7 +2,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class MessMenu {
   final String id;
   final String messName;
@@ -52,10 +51,11 @@ class MenuDay {
     );
   }
 }
+
 class MenuService {
   Future<MessMenu?> fetchMenu() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    
+
     // fetch cached data
     final String? cachedData = prefs.getString('cachedMenu');
     final int? cacheTimestamp = prefs.getInt('cacheTimestamp');
@@ -64,24 +64,28 @@ class MenuService {
     if (cachedData != null && cacheTimestamp != null) {
       final currentTime = DateTime.now().millisecondsSinceEpoch;
       final difference = currentTime - cacheTimestamp;
-      if (difference < (24 * 60 * 60 * 1000)) { //24hr
+      if (difference < (24 * 60 * 60 * 1000)) {
+        //24hr
 
         return MessMenu.fromJson(json.decode(cachedData));
       }
     }
 
-    final response = await http.get(Uri.parse('https://insiit-backend-node.vercel.app/api/mess-menu'));
+    final response = await http.get(Uri.parse(
+        'https://chubby-mirilla-metis-d5811889.koyeb.app/api/mess-menu'));
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       final messMenu = MessMenu.fromJson(responseData);
-      
+
       // Cache fetched data
       await prefs.setString('cachedMenu', response.body);
-      await prefs.setInt('cacheTimestamp', DateTime.now().millisecondsSinceEpoch);
-      
+      await prefs.setInt(
+          'cacheTimestamp', DateTime.now().millisecondsSinceEpoch);
+
       return messMenu;
     } else {
       throw Exception('Failed to load menu');
     }
   }
 }
+

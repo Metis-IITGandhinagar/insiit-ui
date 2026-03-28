@@ -42,14 +42,13 @@ class _HomePageState extends State<HomePage> {
     _menuFuture = _menuService.fetchMenu();
   }
 
-  
-
   final controller = PageController(viewportFraction: 0.8, keepPage: true);
 
   Future<List<Events>> postsFuture = getPosts();
 
   static Future<List<Events>> getPosts() async {
-    var url = Uri.parse("https://insiit-backend-node.vercel.app/api/events");
+    var url =
+        Uri.parse("https://chubby-mirilla-metis-d5811889.koyeb.app/api/events");
     final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(response.body);

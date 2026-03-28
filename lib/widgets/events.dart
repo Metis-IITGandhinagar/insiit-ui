@@ -26,9 +26,11 @@ class _EventWidgetState extends State<EventWidget> {
   }
 
   Future<List<Events>> getPosts() async {
-    var url = Uri.parse("https://insiit-backend-node.vercel.app/api/events");
+    var url =
+        Uri.parse("https://chubby-mirilla-metis-d5811889.koyeb.app/api/events");
     // var url = Uri.parse("http://10.0.2.2:3000/api/events");
-    final response = await http.get(url, headers: {"Content-Type": "application/json"});
+    final response =
+        await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(response.body);
     return body.map((e) => Events.fromJson(e)).toList();
   }
@@ -53,27 +55,39 @@ class _EventWidgetState extends State<EventWidget> {
               calendarType: CalendarType.GREGORIAN,
               calendarLanguage: 'en',
               headerOptions: HeaderOptions(
-                calendarIconColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                navigationColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                headerTextColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                resetDateColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                calendarIconColor:
+                    Theme.of(context).colorScheme.onSecondaryContainer,
+                navigationColor:
+                    Theme.of(context).colorScheme.onSecondaryContainer,
+                headerTextColor:
+                    Theme.of(context).colorScheme.onSecondaryContainer,
+                resetDateColor:
+                    Theme.of(context).colorScheme.onSecondaryContainer,
               ),
               dayOptions: DayOptions(
                 showWeekDay: true,
                 disableDaysBeforeNow: true,
                 disableFadeEffect: true,
-                weekDaySelectedColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                unselectedTextColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                weekDayUnselectedColor: Theme.of(context).colorScheme.onTertiaryContainer,
-                selectedBackgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
-                selectedTextColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                weekDaySelectedColor:
+                    Theme.of(context).colorScheme.onSecondaryContainer,
+                unselectedTextColor:
+                    Theme.of(context).colorScheme.onSecondaryContainer,
+                weekDayUnselectedColor:
+                    Theme.of(context).colorScheme.onTertiaryContainer,
+                selectedBackgroundColor:
+                    Theme.of(context).colorScheme.tertiaryContainer,
+                selectedTextColor:
+                    Theme.of(context).colorScheme.onSecondaryContainer,
                 eventCounterColor: Colors.deepPurple,
               ),
               showLoadingForEvent: true,
               calendarOptions: CalendarOptions(
-                headerMonthBackColor: Theme.of(context).colorScheme.secondaryContainer,
-                headerMonthShadowColor: Theme.of(context).colorScheme.secondaryContainer,
-                bottomSheetBackColor: Theme.of(context).colorScheme.secondaryContainer,
+                headerMonthBackColor:
+                    Theme.of(context).colorScheme.secondaryContainer,
+                headerMonthShadowColor:
+                    Theme.of(context).colorScheme.secondaryContainer,
+                bottomSheetBackColor:
+                    Theme.of(context).colorScheme.secondaryContainer,
                 toggleViewType: true,
                 viewType: ViewType.DAILY,
               ),
@@ -87,8 +101,10 @@ class _EventWidgetState extends State<EventWidget> {
                 return Event(
                   child: ListTile(
                     leading: Icon(Icons.event_outlined),
-                    title: Text(event.name ?? "", style: TextStyle(fontWeight: FontWeight.bold)),
-                    trailing: Text(event.time ?? "", style: TextStyle(fontSize: 16)),
+                    title: Text(event.name ?? "",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    trailing:
+                        Text(event.time ?? "", style: TextStyle(fontSize: 16)),
                   ),
                   dateTime: CalendarDateTime(
                     year: int.parse(event.date?.substring(0, 4) ?? "2023"),

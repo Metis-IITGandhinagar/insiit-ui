@@ -36,7 +36,7 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
 
   void fetchTowns() async {
     Response response = await get(
-        Uri.parse('https://insiit-backend-node.vercel.app/api/towns'));
+        Uri.parse('https://chubby-mirilla-metis-d5811889.koyeb.app/api/towns'));
     List result = jsonDecode(response.body) as List;
     setState(() {
       towns.clear();
@@ -59,7 +59,7 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
     });
 
     String url =
-        'https://insiit-backend-node.vercel.app/api/search?source=$src&destination=$des';
+        'https://chubby-mirilla-metis-d5811889.koyeb.app/api/search?source=$src&destination=$des';
     Response response = await get(Uri.parse(url));
     print(response.body);
     setState(() {

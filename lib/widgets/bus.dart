@@ -10,9 +10,9 @@ class BusPage extends StatefulWidget {
 }
 
 class _BusPageState extends State<BusPage> {
-  List<String> towns = ['ANY', 'IIT Gandhinagar', 'Choose'];
+  List<String> towns = [];
   List<Map<String, dynamic>> data = [];
-  String src = 'IIT Gandhinagar', des = 'ANY';
+  String src = 'ANY', des = 'ANY';
   bool searching = false;
   bool townsFetched = false; // Flag to track whether towns are fetched
 
@@ -36,7 +36,7 @@ class _BusPageState extends State<BusPage> {
 
   void fetchTowns() async {
     Response response = await get(
-        Uri.parse('https://insiit-backend-node.vercel.app/api/towns'));
+        Uri.parse('https://chubby-mirilla-metis-d5811889.koyeb.app/api/towns'));
     List result = jsonDecode(response.body) as List;
     setState(() {
       towns.clear();
@@ -59,9 +59,8 @@ class _BusPageState extends State<BusPage> {
     });
 
     String url =
-        'https://insiit-backend-node.vercel.app/api/search?source=$src&destination=$des';
+        'https://chubby-mirilla-metis-d5811889.koyeb.app/api/search?source=$src&destination=$des';
     Response response = await get(Uri.parse(url));
-    print(response.body);
     setState(() {
       searching = false;
       data.clear();
