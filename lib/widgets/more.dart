@@ -7,6 +7,7 @@ import 'package:insiit/screens/post.dart';
 import 'package:insiit/screens/quick_links.dart';
 import 'package:insiit/screens/representatives.dart';
 import 'package:insiit/screens/team.dart';
+import 'package:insiit/screens/hostel_cleaning.dart';
 import './haircut.dart';
 import './maps.dart';
 
@@ -139,6 +140,28 @@ class _MorePageState extends State<MorePage> {
                     );
                   },
                   child: const Text("Medical Facility"),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 50,
+                width: MediaQuery.of(context).size.width - 50,
+                child: OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HostelCleaningScreen()),
+                    );
+                  },
+                  child: const Text("Hostel Cleaning"),
                 ),
               ),
             ],
