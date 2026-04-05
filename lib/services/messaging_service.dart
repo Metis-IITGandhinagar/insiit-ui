@@ -5,8 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+const String localApiUrl =
+    'http://10.0.138.244:3000/api/fcmverify'; // API endpoint to send FCM token
 const String apiUrl =
-    'http://10.0.2.2:3000/api/fcmverify'; // API endpoint to send FCM token
+    'https://insiit-backend-node.vercel.app/api/fcmverify'; // API endpoint to send FCM token
 const String fcmVerifyKey = 'fcmverify';
 
 class MessagingService {
@@ -81,7 +83,6 @@ class MessagingService {
             context: context,
             barrierDismissible: false,
             builder: (BuildContext dialogContext) {
-            
               return WillPopScope(
                 onWillPop: () async => false,
                 child: AlertDialog(
@@ -91,15 +92,13 @@ class MessagingService {
                     if (notificationData.containsKey('screen'))
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(dialogContext); 
-                          Navigator.of(context).pushNamed(
-                              screen); 
+                          Navigator.pop(dialogContext);
+                          Navigator.of(context).pushNamed(screen);
                         },
                         child: const Text('Open Screen'),
                       ),
                     TextButton(
-                      onPressed: () => Navigator.of(dialogContext)
-                          .pop(), 
+                      onPressed: () => Navigator.of(dialogContext).pop(),
                       child: const Text('Dismiss'),
                     ),
                   ],
@@ -167,11 +166,18 @@ class MessagingService {
     final String jsonData = jsonEncode(data);
 
     try {
-      final response = await http.post(
-        Uri.parse(apiUrl),
+      var response = await http.post(
+        Uri.parse(localApiUrl),
         headers: {'Content-Type': 'application/json'},
         body: jsonData,
       );
+      if (!(response.statusCode == 201 || response.statusCode == 200)) {
+        response = await http.post(
+          Uri.parse(apiUrl),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonData,
+        );
+      }
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         final prefs = await SharedPreferences.getInstance();
@@ -194,7 +200,6 @@ class MessagingService {
 // Handler for background messages
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
- 
   debugPrint('Handling a background message: ${message.messageId}');
   if (message.notification != null) {
     debugPrint(

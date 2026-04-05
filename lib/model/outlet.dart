@@ -96,8 +96,12 @@ class MenuItem {
 }
 
 Future<Outlet?> fetchOutlet() async {
-  final response = await http.get(
-      Uri.parse('https://chubby-mirilla-metis-d5811889.koyeb.app/api/outlets'));
+  var response =
+      await http.get(Uri.parse('http://10.0.138.244:3000/api/outlets'));
+  if (response.statusCode != 200) {
+    response = await http.get(Uri.parse(
+        'https://insiit-backend-node.vercel.app/api/outlets'));
+  }
   if (response.statusCode == 200) {
     Map<String, dynamic> responseData = json.decode(response.body);
     return Outlet.fromJson(responseData);

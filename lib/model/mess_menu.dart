@@ -71,8 +71,12 @@ class MenuService {
       }
     }
 
-    final response = await http.get(Uri.parse(
-        'https://chubby-mirilla-metis-d5811889.koyeb.app/api/mess-menu'));
+    var response =
+        await http.get(Uri.parse('http://10.0.138.244:3000/api/mess-menu'));
+    if (response.statusCode != 200) {
+      response = await http.get(
+          Uri.parse('https://insiit-backend-node.vercel.app/api/mess-menu'));
+    }
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       final messMenu = MessMenu.fromJson(responseData);
@@ -88,4 +92,3 @@ class MenuService {
     }
   }
 }
-

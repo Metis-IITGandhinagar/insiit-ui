@@ -35,8 +35,12 @@ class _BusPageState extends State<BusPage> {
   }
 
   void fetchTowns() async {
-    Response response = await get(
-        Uri.parse('https://chubby-mirilla-metis-d5811889.koyeb.app/api/towns'));
+    Response response =
+        await get(Uri.parse('http://10.0.138.244:3000/api/towns'));
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      response = await get(
+          Uri.parse('https://insiit-backend-node.vercel.app/api/towns'));
+    }
     List result = jsonDecode(response.body) as List;
     setState(() {
       towns.clear();
@@ -58,9 +62,12 @@ class _BusPageState extends State<BusPage> {
       searching = true;
     });
 
-    String url =
-        'https://chubby-mirilla-metis-d5811889.koyeb.app/api/search?source=$src&destination=$des';
-    Response response = await get(Uri.parse(url));
+    Response response = await get(Uri.parse(
+        'http://10.0.138.244:3000/api/search?source=$src&destination=$des'));
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      response = await get(Uri.parse(
+          'https://insiit-backend-node.vercel.app/api/search?source=$src&destination=$des'));
+    }
     setState(() {
       searching = false;
       data.clear();

@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _messagingService
-        .init(context); // Initialize MessagingService to handle notifications
+    // _messagingService
+    //     .init(context); // Initialize MessagingService to handle notifications
   }
 }
