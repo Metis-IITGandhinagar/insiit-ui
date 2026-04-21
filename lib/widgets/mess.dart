@@ -60,12 +60,13 @@ class _MenuPageState extends State<MenuPage> {
                 ),
                 actions: [
                   IconButton(
-                      icon: const Icon(Icons.refresh), onPressed: () => {}),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                ],
-              ),
+                     icon: const Icon(Icons.refresh),
+  onPressed: () {
+    setState(() {
+      _menuFuture = _menuService.fetchMenu();
+    });
+  },
+),
               body: TabBarView(
                 children: menu.mess.map((dayMenu) {
                   return ListView(
