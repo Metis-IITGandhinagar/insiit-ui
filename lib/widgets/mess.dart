@@ -59,13 +59,23 @@ class _MenuPageState extends State<MenuPage> {
                   }).toList(),
                 ),
                 actions: [
-                  IconButton(
-                      icon: const Icon(Icons.refresh), onPressed: () => {}),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                ],
-              ),
+                IconButton(
+  icon: const Icon(Icons.refresh),
+  onPressed: () async {
+    try {
+      // Call fetchMenu with forceRefresh=true
+      MessMenu? menu = await MenuService().fetchMenu(forceRefresh: true);
+      
+      // Update the UI with the new menu
+      setState(() {
+        data = menu;  // 'data' should be the variable displaying the menu in your widget
+      });
+    } catch (e) {
+      print("Failed to refresh menu: $e");
+    }
+  },
+),
+
               body: TabBarView(
                 children: menu.mess.map((dayMenu) {
                   return ListView(
