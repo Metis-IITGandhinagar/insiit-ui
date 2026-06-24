@@ -1,35 +1,35 @@
 //Secret Token = sk.eyJ1IjoibWV0aXMtbWFwYm94IiwiYSI6ImNsdzIwaG1zeTBpNXIyaW11cHp2MThncHMifQ.xgNyF2twUoOad7uocTpUbg
 
-import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
-class MapPage extends StatefulWidget {
-  @override
-  _MapPageState createState() => _MapPageState();
-}
-
-class _MapPageState extends State<MapPage> {
-  // MapController _mapController = MapController();
-  // double _currentZoom = 18;
-
-  @override
-  Widget build(BuildContext context) {
-    String ACCESS_TOKEN = const String.fromEnvironment("ACCESS_TOKEN");
-    MapboxOptions.setAccessToken(ACCESS_TOKEN);
-
-    CameraOptions camera = CameraOptions(
-        center: Point(coordinates: Position(72.68475, 23.21049)),
-        zoom: 17,
-        bearing: 0,
-        pitch: 55);
-
-    return Scaffold(
-        body: MapWidget(
-      cameraOptions: camera,
-    )
+// import 'package:flutter/material.dart';
+// import 'package:flutter_map/flutter_map.dart';
+// import 'package:latlong2/latlong.dart';
+// import 'package:url_launcher/url_launcher.dart';
+// import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+//
+// class MapPage extends StatefulWidget {
+//   @override
+//   _MapPageState createState() => _MapPageState();
+// }
+//
+// class _MapPageState extends State<MapPage> {
+//   // MapController _mapController = MapController();
+//   // double _currentZoom = 18;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     String ACCESS_TOKEN = const String.fromEnvironment("ACCESS_TOKEN");
+//     MapboxOptions.setAccessToken(ACCESS_TOKEN);
+//
+//     CameraOptions camera = CameraOptions(
+//         center: Point(coordinates: Position(72.68475, 23.21049)),
+//         zoom: 17,
+//         bearing: 0,
+//         pitch: 55);
+//
+//     return Scaffold(
+//         body: MapWidget(
+//       cameraOptions: camera,
+//     )
 
         // FlutterMap(
         //   mapController: _mapController,

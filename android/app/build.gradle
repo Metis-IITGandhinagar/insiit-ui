@@ -30,10 +30,10 @@ if (flutterVersionName == null) {
        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
    }
 android {
-    
+
     namespace "com.example.insiit"
-    compileSdkVersion 35
-    ndkVersion "25.1.8937393"
+    compileSdkVersion 36
+    ndkVersion "28.2.13676358"
 
     compileOptions {
     	coreLibraryDesugaringEnabled true
@@ -55,8 +55,8 @@ android {
         applicationId "com.metis.insiit"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion    
-        targetSdkVersion 35
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -68,12 +68,12 @@ android {
            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
            storePassword keystoreProperties['storePassword']
        }
-    
+
     }
 
     buildTypes {
         release {
-          
+
            signingConfig signingConfigs.release
         }
         debug {

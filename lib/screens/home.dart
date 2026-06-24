@@ -4,7 +4,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:insiit/widgets/maps.dart';
+// import 'package:insiit/widgets/maps.dart';
 import 'package:insiit/widgets/more.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/messaging_service.dart';
