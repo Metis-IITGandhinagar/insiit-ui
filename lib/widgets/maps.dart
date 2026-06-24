@@ -1,5 +1,46 @@
 //Secret Token = sk.eyJ1IjoibWV0aXMtbWFwYm94IiwiYSI6ImNsdzIwaG1zeTBpNXIyaW11cHp2MThncHMifQ.xgNyF2twUoOad7uocTpUbg
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart'; // Used here
+import 'package:latlong2/latlong.dart'; // Used here
 
+class MapPage extends StatefulWidget {
+  @override
+  _MapPageState createState() => _MapPageState();
+}
+
+class _MapPageState extends State<MapPage> {
+  @override
+  Widget build(BuildContext context) {
+    String accessToken = const String.fromEnvironment("ACCESS_TOKEN");
+
+    // Mapbox Raster Tiles API URL
+    // You can swap 'streets-v11' with 'outdoors-v11', 'satellite-v9', etc.
+    final String mapboxUrl =
+        'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=$accessToken';
+
+    return Scaffold(
+      body: FlutterMap(
+        options: MapOptions(
+          initialCenter:
+              LatLng(23.21049, 72.68475), // Notice: LatLng is (lat, lng)
+          initialZoom: 17,
+          initialRotation: 0, // Equivalent to bearing
+        ),
+        children: [
+          TileLayer(
+            urlTemplate: mapboxUrl,
+            additionalOptions: {
+              'accessToken': accessToken,
+            },
+            // Mapbox tiles require a 512px size for proper scaling on high-res screens
+            tileSize: 512,
+            zoomOffset: -1,
+          ),
+        ],
+      ),
+    );
+
+    // Old file, which used mapbox_maps_flutter library
 // import 'package:flutter/material.dart';
 // import 'package:flutter_map/flutter_map.dart';
 // import 'package:latlong2/latlong.dart';
@@ -31,100 +72,57 @@
 //       cameraOptions: camera,
 //     )
 
-
-import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart'; // Used here
-import 'package:latlong2/latlong.dart';       // Used here
-
-class MapPage extends StatefulWidget {
-  @override
-  _MapPageState createState() => _MapPageState();
-}
-
-class _MapPageState extends State<MapPage> {
-  @override
-  Widget build(BuildContext context) {
-    String accessToken = const String.fromEnvironment("ACCESS_TOKEN");
-
-    // Mapbox Raster Tiles API URL
-    // You can swap 'streets-v11' with 'outdoors-v11', 'satellite-v9', etc.
-    final String mapboxUrl =
-        'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=$accessToken';
-
-    return Scaffold(
-      body: FlutterMap(
-        options: MapOptions(
-          initialCenter: LatLng(23.21049, 72.68475), // Notice: LatLng is (lat, lng)
-          initialZoom: 17,
-          initialRotation: 0, // Equivalent to bearing
-        ),
-        children: [
-          TileLayer(
-            urlTemplate: mapboxUrl,
-            additionalOptions: {
-              'accessToken': accessToken,
-            },
-            // Mapbox tiles require a 512px size for proper scaling on high-res screens
-            tileSize: 512,
-            zoomOffset: -1,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-        // FlutterMap(
-        //   mapController: _mapController,
-        //   options: MapOptions(
-        //     center: LatLng(23.21049, 72.68475),
-        //     zoom: _currentZoom,
-        //     minZoom: 1,
-        //     maxZoom: 24,
-        //     interactiveFlags: InteractiveFlag.all,
-        //     onPositionChanged: (MapPosition position, bool hasGesture) {
-        //       if (hasGesture) {
-        //         setState(() {
-        //           _currentZoom = position.zoom ?? _currentZoom;
-        //         });
-        //       }
-        //     },
-        //   ),
-        //   children: [
-        //     TileLayer(
-        //       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-        //       subdomains: ['a', 'b', 'c'],
-        //       maxZoom: 24,
-        //       userAgentPackageName: 'com.metis.insiit',
-        //     )
-        //   ],
-        // ),
-        // floatingActionButton: Column(
-        //   mainAxisAlignment: MainAxisAlignment.end,
-        //   children: [
-        //     FloatingActionButton(
-        //       heroTag: 'zoom_in',
-        //       onPressed: () {
-        //         setState(() {
-        //           _currentZoom++;
-        //           _mapController.move(_mapController.center, _currentZoom);
-        //         });
-        //       },
-        //       child: Icon(Icons.zoom_in),
-        //     ),
-        //     SizedBox(height: 8),
-        //     FloatingActionButton(
-        //       heroTag: 'zoom_out',
-        //       onPressed: () {
-        //         setState(() {
-        //           _currentZoom--;
-        //           _mapController.move(_mapController.center, _currentZoom);
-        //         });
-        //       },
-        //       child: Icon(Icons.zoom_out),
-        //     ),
-        //   ],
-        // ),
-        );
+    // FlutterMap(
+    //   mapController: _mapController,
+    //   options: MapOptions(
+    //     center: LatLng(23.21049, 72.68475),
+    //     zoom: _currentZoom,
+    //     minZoom: 1,
+    //     maxZoom: 24,
+    //     interactiveFlags: InteractiveFlag.all,
+    //     onPositionChanged: (MapPosition position, bool hasGesture) {
+    //       if (hasGesture) {
+    //         setState(() {
+    //           _currentZoom = position.zoom ?? _currentZoom;
+    //         });
+    //       }
+    //     },
+    //   ),
+    //   children: [
+    //     TileLayer(
+    //       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    //       subdomains: ['a', 'b', 'c'],
+    //       maxZoom: 24,
+    //       userAgentPackageName: 'com.metis.insiit',
+    //     )
+    //   ],
+    // ),
+    // floatingActionButton: Column(
+    //   mainAxisAlignment: MainAxisAlignment.end,
+    //   children: [
+    //     FloatingActionButton(
+    //       heroTag: 'zoom_in',
+    //       onPressed: () {
+    //         setState(() {
+    //           _currentZoom++;
+    //           _mapController.move(_mapController.center, _currentZoom);
+    //         });
+    //       },
+    //       child: Icon(Icons.zoom_in),
+    //     ),
+    //     SizedBox(height: 8),
+    //     FloatingActionButton(
+    //       heroTag: 'zoom_out',
+    //       onPressed: () {
+    //         setState(() {
+    //           _currentZoom--;
+    //           _mapController.move(_mapController.center, _currentZoom);
+    //         });
+    //       },
+    //       child: Icon(Icons.zoom_out),
+    //     ),
+    //   ],
+    // ),
+    // );
   }
 }
