@@ -5,10 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-const String localApiUrl =
-    'http://10.0.138.244:3000/api/fcmverify'; // API endpoint to send FCM token
-const String apiUrl =
-    'https://insiit-backend-node.vercel.app/api/fcmverify'; // API endpoint to send FCM token
+import 'package:insiit/constants.dart';
+
 const String fcmVerifyKey = 'fcmverify';
 
 class MessagingService {
@@ -166,18 +164,11 @@ class MessagingService {
     final String jsonData = jsonEncode(data);
 
     try {
-      var response = await http.post(
-        Uri.parse(localApiUrl),
+      final response = await http.post(
+        Uri.parse("${API_BASE_URL}/fcmverify"),
         headers: {'Content-Type': 'application/json'},
         body: jsonData,
       );
-      if (!(response.statusCode == 201 || response.statusCode == 200)) {
-        response = await http.post(
-          Uri.parse(apiUrl),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonData,
-        );
-      }
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         final prefs = await SharedPreferences.getInstance();

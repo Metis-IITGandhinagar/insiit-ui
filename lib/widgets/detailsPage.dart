@@ -8,6 +8,8 @@ import 'dart:convert';
 import '../notification_helper.dart';
 import '../authentication/login.dart';
 
+import 'package:insiit/constants.dart';
+
 class DetailsPage extends StatefulWidget {
   const DetailsPage({super.key, required this.date, required this.time});
   final String date;
@@ -27,7 +29,6 @@ class _DetailsPageState extends State<DetailsPage> {
   late Future<Map<String, dynamic>?> userFuture;
   DataState dataState = DataState.loading;
 
-
   @override
   void initState() {
     super.initState();
@@ -38,17 +39,16 @@ class _DetailsPageState extends State<DetailsPage> {
     final firebaseAuthInstance = FirebaseAuth.instance;
     final currentUser = await firebaseAuthInstance.currentUser;
     if (currentUser != null && currentUser.isAnonymous == false) {
-    print(currentUser);
+      print(currentUser);
       return <String, dynamic>{
         "userName": currentUser.displayName!,
         "userEmail": currentUser.email!,
       };
     } else {
-    	Fluttertoast.showToast(
-		msg: "You need to log in!"
-	);
-	Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
-	return null;
+      Fluttertoast.showToast(msg: "You need to log in!");
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
+      return null;
     }
   }
 
@@ -76,9 +76,9 @@ class _DetailsPageState extends State<DetailsPage> {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}"));
-          } else if (snapshot.data == null){
-	    return CircularProgressIndicator();
-	  } else {
+          } else if (snapshot.data == null) {
+            return CircularProgressIndicator();
+          } else {
             final userName = snapshot.data!["userName"];
             final userEmail = snapshot.data!["userEmail"];
             return Scaffold(
@@ -113,73 +113,63 @@ class _DetailsPageState extends State<DetailsPage> {
                               onPressed: () async {
                                 // Add this function
                                 // submitDetails();
-				try {
-                                final firebaseAuthInstance =
-                                    FirebaseAuth.instance;
-                                final currentUser =
-                                    await firebaseAuthInstance.currentUser;
-                                if (currentUser != null) {
-                                  final uid = currentUser!.uid;
-				  print(userName + userEmail);
-                                  Response response = await post(
-                                      Uri.parse(
-                                          "http://10.0.2.2:3000/api/book-haircut-appointment"),
-                                      headers: <String, String>{
-                                        'Content-Type':
-                                            'application/json; charset=UTF-8',
-                                            'Auth': 'Bearer ${uid}'
-                                      },
-                                      body: jsonEncode(<String, dynamic>{
-                                        'userdisplayname': userName,
-                                        'useremail': userEmail,
-                                        'date': widget.date,
-                                        'time': widget.time,
-                                        'userphonenumber': userPhoneNumber
-                                      }));
-                                  print(response.statusCode);
-                                  if (response.statusCode == 200) {
-				    print("H");
-                                    await storeHaircutBooking();
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (centext) => DonePage(
-                                                success:
-							true,
-						date: 
-							widget.date,
-						time:
-							widget.time,
-
-						    )));
-                                  } else {
-				    print("F");
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (centext) =>
-                                                DonePage(success: false,
-						date: 
-							widget.date,
-						time:
-							widget.time
-
-						)));
+                                try {
+                                  final firebaseAuthInstance =
+                                      FirebaseAuth.instance;
+                                  final currentUser =
+                                      await firebaseAuthInstance.currentUser;
+                                  if (currentUser != null) {
+                                    final uid = currentUser!.uid;
+                                    print(userName + userEmail);
+                                    Response response = await post(
+                                        Uri.parse(
+                                            "${API_BASE_URL}/book-haircut-appointment"),
+                                        headers: <String, String>{
+                                          'Content-Type':
+                                              'application/json; charset=UTF-8',
+                                          'Auth': 'Bearer ${uid}'
+                                        },
+                                        body: jsonEncode(<String, dynamic>{
+                                          'userdisplayname': userName,
+                                          'useremail': userEmail,
+                                          'date': widget.date,
+                                          'time': widget.time,
+                                          'userphonenumber': userPhoneNumber
+                                        }));
+                                    print(response.statusCode);
+                                    if (response.statusCode == 200) {
+                                      print("H");
+                                      await storeHaircutBooking();
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (centext) => DonePage(
+                                                    success: true,
+                                                    date: widget.date,
+                                                    time: widget.time,
+                                                  )));
+                                    } else {
+                                      print("F");
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (centext) => DonePage(
+                                                  success: false,
+                                                  date: widget.date,
+                                                  time: widget.time)));
+                                    }
                                   }
+                                } catch (e) {
+                                  Fluttertoast.showToast(
+                                      msg: "Failed to make the appointment");
                                 }
-			      } catch(e) {
-
-				Fluttertoast.showToast(
-					msg: "Failed to make the appointment"
-				);
-			      	
-			        }
                               }),
                         ])));
           }
         });
   }
 }
+
 class DonePage extends StatelessWidget {
   const DonePage({
     super.key,
@@ -193,8 +183,9 @@ class DonePage extends StatelessWidget {
   final String time;
 
   Future<void> _addReminder(BuildContext context) async {
-  	NotificationHelper.init();
-	NotificationHelper.scheduledNotification('Haircut Reminder', 'You have an haircut scheduled for ${time}', '${date} ${time}');
+    NotificationHelper.init();
+    NotificationHelper.scheduledNotification('Haircut Reminder',
+        'You have an haircut scheduled for ${time}', '${date} ${time}');
   }
 
   @override
@@ -223,9 +214,11 @@ class DonePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text("Booking failed")),
       body: Center(
-        child: Padding(padding: EdgeInsets.all(8.0), child: Text(
-          "Booking failed for some reason. Please contact the Metis team",
-        )),
+        child: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              "Booking failed for some reason. Please contact the Metis team",
+            )),
       ),
     );
   }
@@ -236,10 +229,9 @@ class DonePage extends StatelessWidget {
 //   final String date;
 //   final String time;
 
-
 //   void _addReminder() {
 //   	final startTime = DateTime.parse(date + " " + time + ":00");
-  	
+
 // 	final Event event = Event(
 // 		title: 'Event title',
 // 		description: 'Event description',

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import 'package:insiit/constants.dart';
+
 class Outlet {
   final String id;
   final String name;
@@ -96,12 +98,7 @@ class MenuItem {
 }
 
 Future<Outlet?> fetchOutlet() async {
-  var response =
-      await http.get(Uri.parse('http://10.0.138.244:3000/api/outlets'));
-  if (response.statusCode != 200) {
-    response = await http.get(Uri.parse(
-        'https://insiit-backend-node.vercel.app/api/outlets'));
-  }
+  final response = await http.get(Uri.parse('${API_BASE_URL}/outlets'));
   if (response.statusCode == 200) {
     Map<String, dynamic> responseData = json.decode(response.body);
     return Outlet.fromJson(responseData);

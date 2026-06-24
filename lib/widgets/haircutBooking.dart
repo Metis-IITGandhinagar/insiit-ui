@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import './detailsPage.dart';
 
+import 'package:insiit/constants.dart';
 
 enum DataState { loading, loaded, failed }
 
@@ -25,8 +26,7 @@ class _TimeSlotPageState extends State<TimeSlotPage> {
   }
 
   Future<void> fetchData() async {
-    Response response =
-        await get(Uri.parse("http://10.0.2.2:3000/api/haircut-slots"));
+    Response response = await get(Uri.parse("${API_BASE_URL}/haircut-slots"));
     if (response.body != null) {
       var fetchedData = jsonDecode(response.body);
       setState(() {
@@ -55,7 +55,8 @@ class _TimeSlotPageState extends State<TimeSlotPage> {
           title: Text("Haircut Bookings"),
           bottom: TabBar(isScrollable: true, tabs: [
             ...data.map((dateInfo) {
-              return Tab(text: dateInfo['date']); // Use date from the new structure
+              return Tab(
+                  text: dateInfo['date']); // Use date from the new structure
             })
           ]),
         ),
@@ -74,9 +75,8 @@ class _TimeSlotPageState extends State<TimeSlotPage> {
                             Padding(
                               padding: EdgeInsets.all(16.0),
                               child: Text(
-                                // Format time as needed
-				entry['time']
-                              ),
+                                  // Format time as needed
+                                  entry['time']),
                             ),
                             Padding(
                               padding: EdgeInsets.all(16.0),
@@ -88,9 +88,8 @@ class _TimeSlotPageState extends State<TimeSlotPage> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => DetailsPage(
-                                              date: entry['date'],
-                                              time: entry['time']
-                                            ),
+                                                date: entry['date'],
+                                                time: entry['time']),
                                           ),
                                         );
                                       },
@@ -111,4 +110,3 @@ class _TimeSlotPageState extends State<TimeSlotPage> {
     );
   }
 }
-

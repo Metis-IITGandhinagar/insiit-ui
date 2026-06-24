@@ -2,6 +2,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:insiit/constants.dart';
+
 class MessMenu {
   final String id;
   final String messName;
@@ -71,12 +73,7 @@ class MenuService {
       }
     }
 
-    var response =
-        await http.get(Uri.parse('http://10.0.138.244:3000/api/mess-menu'));
-    if (response.statusCode != 200) {
-      response = await http.get(
-          Uri.parse('https://insiit-backend-node.vercel.app/api/mess-menu'));
-    }
+    final response = await http.get(Uri.parse('${API_BASE_URL}/mess-menu'));
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       final messMenu = MessMenu.fromJson(responseData);

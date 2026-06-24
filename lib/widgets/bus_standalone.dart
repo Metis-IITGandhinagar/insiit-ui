@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
+import 'package:insiit/constants.dart';
+
 class BusPageStandalone extends StatefulWidget {
   const BusPageStandalone({super.key});
 
@@ -35,12 +37,7 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
   }
 
   void fetchTowns() async {
-    Response response =
-        await get(Uri.parse('http://10.0.138.244:3000/api/towns'));
-    if (response.statusCode != 200 && response.statusCode != 201) {
-      response = await get(
-          Uri.parse('https://insiit-backend-node.vercel.app/api/towns'));
-    }
+    Response response = await get(Uri.parse('${API_BASE_URL}/towns'));
     List result = jsonDecode(response.body) as List;
     setState(() {
       towns.clear();
@@ -62,12 +59,8 @@ class _BusPageStandaloneState extends State<BusPageStandalone> {
       searching = true;
     });
 
-    Response response = await get(Uri.parse(
-        'http://10.0.138.244:3000/api/search?source=$src&destination=$des'));
-    if (response.statusCode != 200 && response.statusCode != 201) {
-      response = await get(Uri.parse(
-          'https://insiit-backend-node.vercel.app/api/search?source=$src&destination=$des'));
-    }
+    Response response = await get(
+        Uri.parse('${API_BASE_URL}/search?source=$src&destination=$des'));
     print(response.body);
     setState(() {
       searching = false;

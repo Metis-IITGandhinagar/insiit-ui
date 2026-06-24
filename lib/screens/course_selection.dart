@@ -56,22 +56,21 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
     });
     try {
       final response = await http
-          .get(Uri.parse('https://timetable-ky2z.onrender.com/api/courses'));
+          .get(Uri.parse('https://timetable.metis-iitgn.tech/api/courses'));
       if (response.statusCode == 200) {
         final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
         final List<dynamic> coursesData =
             decodedResponse['courses'] as List<dynamic>;
-	
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-	List<String>? storedCourses = prefs.getStringList('courses');
-	if (storedCourses != null) {
-		for (int i = 0; i < storedCourses!.length; i++) {
-			_selectedCourseCodes.add(storedCourses![i]);
-		}
-	}
-	print(storedCourses);
-	print(_selectedCourseCodes);
 
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        List<String>? storedCourses = prefs.getStringList('courses');
+        if (storedCourses != null) {
+          for (int i = 0; i < storedCourses!.length; i++) {
+            _selectedCourseCodes.add(storedCourses![i]);
+          }
+        }
+        print(storedCourses);
+        print(_selectedCourseCodes);
 
         setState(() {
           _allCourses =
@@ -110,7 +109,7 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('https://timetable-ky2z.onrender.com/api/timetable'),
+        Uri.parse('https://timetable.metis-iitgn.tech/api/timetable'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'courses': _selectedCourseCodes.toList()}),
       );
@@ -123,7 +122,7 @@ class _CourseSelectionPageState extends State<CourseSelectionPage> {
         final String responseBody = response.body;
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('timetable', responseBody);
-	await prefs.setStringList('courses', _selectedCourseCodes.toList());
+        await prefs.setStringList('courses', _selectedCourseCodes.toList());
 
         if (!mounted) return;
         showDialog(

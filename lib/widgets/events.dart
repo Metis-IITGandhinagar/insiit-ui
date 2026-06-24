@@ -7,6 +7,8 @@ import 'dart:async';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_event_calendar/flutter_event_calendar.dart';
 
+import 'package:insiit/constants.dart';
+
 class EventWidget extends StatefulWidget {
   const EventWidget({Key? key});
 
@@ -26,17 +28,9 @@ class _EventWidgetState extends State<EventWidget> {
   }
 
   Future<List<Events>> getPosts() async {
-    var url = Uri.parse("http://10.0.138.244:3000/api/events");
-    // var url = Uri.parse("http://10.0.2.2:3000/api/events");
-    var response =
+    final url = Uri.parse("${API_BASE_URL}/events");
+    final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
-    if (response.statusCode != 200 && response.statusCode != 201) {
-      url = Uri.parse(
-          "https://insiit-backend-node.vercel.app/api/events");
-      // var url = Uri.parse("http://10.0.2.2:3000/api/events");
-      response =
-          await http.get(url, headers: {"Content-Type": "application/json"});
-    }
     final List body = json.decode(response.body);
     return body.map((e) => Events.fromJson(e)).toList();
   }

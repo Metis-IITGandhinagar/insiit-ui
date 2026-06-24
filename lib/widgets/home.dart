@@ -19,6 +19,7 @@ import 'dart:math';
 import '../model/timetable_entry_model.dart';
 import '../screens/course_selection.dart';
 import '../screens/timetablePage.dart';
+import 'package:insiit/constants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -209,20 +210,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   static Future<List<Events>> getPosts() async {
-    var url = Uri.parse("http://10.0.138.244:3000/api/events");
-    // var url = Uri.parse("http://10.0.2.2:3000/api/events");
-    var response = await http.get(
-      url,
-      headers: {"Content-Type": "application/json"},
-    );
-    if (response.statusCode != 200 && response.statusCode != 201) {
-      url = Uri.parse(
-          "https://insiit-backend-node.vercel.app/api/events");
-      response = await http.get(
-        url,
-        headers: {"Content-Type": "application/json"},
-      );
-    }
+    final url = Uri.parse("${API_BASE_URL}/events");
+    final response =
+        await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(response.body);
     return body.map((e) => Events.fromJson(e)).toList();
   }
