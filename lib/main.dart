@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
                 if (snapshot.data == null) {
                   return const LoginScreen();
                 } else {
+                  print(snapshot.data.email);
                   return const HomeScreen();
                 }
               }
@@ -98,6 +99,5 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
-  
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:insiit/TLBooking/tl.dart';
 import 'package:insiit/screens/about_insiit.dart';
 import 'package:insiit/screens/complaints.dart';
@@ -8,8 +9,9 @@ import 'package:insiit/screens/quick_links.dart';
 import 'package:insiit/screens/representatives.dart';
 import 'package:insiit/screens/team.dart';
 import 'package:insiit/screens/hostel_cleaning.dart';
-import './haircut.dart';
-import './maps.dart';
+import 'package:insiit/widgets/haircut.dart';
+import 'package:insiit/widgets/maps.dart';
+import 'package:insiit/screens/admin.dart';
 
 class MorePage extends StatefulWidget {
   const MorePage({super.key});
@@ -162,6 +164,27 @@ class _MorePageState extends State<MorePage> {
                     );
                   },
                   child: const Text("Hostel Cleaning"),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 50,
+                width: MediaQuery.of(context).size.width - 50,
+                child: OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AdminPage()),
+                    );
+                  },
+                  child: const Text("Admin"),
                 ),
               ),
             ],

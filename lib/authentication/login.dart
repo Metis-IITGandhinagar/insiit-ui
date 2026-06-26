@@ -96,7 +96,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
 googleSignIn() async {
   GoogleSignInAccount? googleUser =
-      await GoogleSignIn(hostedDomain: 'iitgn.ac.in').signIn();
+      // await GoogleSignIn(hostedDomain: 'iitgn.ac.in').signIn();
+      await GoogleSignIn().signIn();
 
   GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
