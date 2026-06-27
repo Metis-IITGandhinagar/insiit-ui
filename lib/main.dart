@@ -11,7 +11,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:insiit/provider/cart_provider.dart';
-
+// onkar changed START: Add background tasks and workmanager
+import 'package:workmanager/workmanager.dart';
+import 'background_tasks.dart';
+import 'package:permission_handler/permission_handler.dart';
+// onkar changed END
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
@@ -22,6 +26,24 @@ void main() async {
   } catch (e) {
     print("Failed to initialize Firebase: $e");
   }
+
+  // onkar changed START: Initialize workmanager for the auto-updating Menu widget
+  Workmanager().initialize(
+    callbackDispatcher, // The top level function defined in background_tasks.dart
+    isInDebugMode: false,
+  );
+  Workmanager().registerPeriodicTask(
+    "1", 
+    "updateMenuWidgetTask",
+    frequency: const Duration(minutes: 15),
+  );
+
+  // onkar changed START: Request permission to bypass deep sleep so the widget works perfectly in background
+  if (await Permission.ignoreBatteryOptimizations.isDenied) {
+    await Permission.ignoreBatteryOptimizations.request();
+  }
+  // onkar changed END
+  // onkar changed END
 
   // SharedPreferences prefs = await SharedPreferences.getInstance();
   runApp(const MyApp());

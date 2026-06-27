@@ -4,6 +4,9 @@ plugins {
     id 'com.google.gms.google-services'
     // END: FlutterFire Configuration
     id "dev.flutter.flutter-gradle-plugin"
+    // onkar changed START: Add Kotlin Android plugin to fix kotlinOptions not found error
+    id "org.jetbrains.kotlin.android"
+    // onkar changed END
 }
 
 def localProperties = new Properties()

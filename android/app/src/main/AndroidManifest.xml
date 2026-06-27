@@ -1,9 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-<uses-permission android:name="android.permission.INTERNET"/>
-<uses-permission android:name="android.permission.VIBRATE"/>
-<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- Ask for permission to bypass deep sleep battery optimizations so the widget updates perfectly in the background -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
     <application
         android:label="InsIIT"
         android:name="${applicationName}"
@@ -34,5 +37,29 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        
+        <!-- onkar changed START: Register HomeScreenWidgetProvider -->
+        <receiver android:name="com.metis.insiit.HomeScreenWidgetProvider" android:exported="true" android:label="QR">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+            <intent-filter>
+                <action android:name="es.antonborri.home_widget.action.BACKGROUND" />
+            </intent-filter>
+        </receiver>
+        <!-- onkar changed END -->
+
+        <!-- onkar changed START: Register MenuWidgetProvider -->
+        <receiver android:name="com.metis.insiit.MenuWidgetProvider" android:exported="true" android:label="Mess Menu">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/menu_widget_info" />
+        </receiver>
+        <!-- onkar changed END -->
     </application>
 </manifest>

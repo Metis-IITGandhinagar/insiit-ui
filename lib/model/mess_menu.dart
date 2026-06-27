@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:insiit/background_tasks.dart'; // onkar changed: Auto-update widget on app open
 
 import 'package:insiit/constants.dart';
 
@@ -69,6 +70,10 @@ class MenuService {
       if (difference < (24 * 60 * 60 * 1000)) {
         //24hr
 
+        // onkar changed START: Instantly update widget using the cached data when app opens
+        updateMenuWidgetLogic();
+        // onkar changed END
+
         return MessMenu.fromJson(json.decode(cachedData));
       }
     }
@@ -82,6 +87,10 @@ class MenuService {
       await prefs.setString('cachedMenu', response.body);
       await prefs.setInt(
           'cacheTimestamp', DateTime.now().millisecondsSinceEpoch);
+
+      // onkar changed START: Instantly update widget with the fresh data
+      updateMenuWidgetLogic();
+      // onkar changed END
 
       return messMenu;
     } else {

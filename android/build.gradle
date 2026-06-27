@@ -1,4 +1,3 @@
-
 allprojects {
     repositories {
         google()
@@ -13,6 +12,22 @@ subprojects {
     def newSubprojectBuildDir = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
+
+// onkar changed START: Force compileSdkVersion to 36 for all subprojects to fix fluttertoast compile error
+subprojects {
+    afterEvaluate { project ->
+        if (project.hasProperty('android')) {
+            project.android {
+                if (namespace == null) {
+                    namespace project.group
+                }
+                compileSdkVersion 36
+            }
+        }
+    }
+}
+// onkar changed END
+
 subprojects {
     project.evaluationDependsOn(':app')
 }
